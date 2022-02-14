@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Torch5
+  m_Shader: {fileID: 4800000, guid: a49dd2fba12886c499261512c6eaaa80, type: 3}
+  m_ShaderKeywords: ETC1_EXTERNAL_ALPHA
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: 1995
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs: []
+    m_Floats:
+    - _Cull: 2
+    - _DestinationBlend: 10
+    - _SourceBlend: 5
+    - _StencilCompareFunction: 8
+    - _StencilFailOp: 0
+    - _StencilPassOp: 2
+    - _StencilRef: 5
+    - _StencilZFailOp: 0
+    - _ZTest: 4
+    - _ZWrite: 1
+    - m_StencilPassOptions: 0
+    - m_renderingOptions: 0
+    m_Colors: []
+  m_BuildTextureStacks: []
