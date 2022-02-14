@@ -1,9 +1,9 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 
-public class GamePlayer : NetworkBehaviour
+public class TestPlayer : NetworkBehaviour
 {
     public float moveSpeed = 15f;
 	public float myGravityScale;
@@ -34,7 +34,7 @@ public class GamePlayer : NetworkBehaviour
 
     // Start is called before the first frame update
     public override void OnStartAuthority()
-    {
+	{
 		rigidBody = this.GetComponent<Rigidbody2D>();
 		myGravityScale = rigidBody.mass * 50f;		// F = m * g
 		boxCollider = this.GetComponent<BoxCollider2D>();
@@ -185,29 +185,5 @@ public class GamePlayer : NetworkBehaviour
 	{
 		this.displayName = displayName;
 	}
-
-	private MyNetworkManager room;
-	private MyNetworkManager Room
-	{
-		get
-		{
-			if (room != null) { return room; }
-			return room = NetworkManager.singleton as MyNetworkManager;
-		}
-	}
-
-	public override void OnStartClient()
-	{
-		DontDestroyOnLoad(gameObject);
-
-		Room.GamePlayers.Add(this);
-	}
-
-	public override void OnStopClient()
-	{
-		Room.GamePlayers.Remove(this);
-	}
-
-	
 
 }
