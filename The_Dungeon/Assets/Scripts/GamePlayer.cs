@@ -30,7 +30,6 @@ public class GamePlayer : NetworkBehaviour
     private Rigidbody2D rigidBody;
     private BoxCollider2D boxCollider;
     private SpriteRenderer spriteRenderer;
-    private Animator animator;
 
     // Start is called before the first frame update
     void Start()
@@ -39,7 +38,7 @@ public class GamePlayer : NetworkBehaviour
 		myGravityScale = rigidBody.mass * 50f;		// F = m * g
 		boxCollider = this.GetComponent<BoxCollider2D>();
         spriteRenderer = this.GetComponent<SpriteRenderer>();
-        animator = this.GetComponent<Animator>();
+
 		SwitchGravity("down");
         dashTime = dashFullTime;
     }
@@ -94,22 +93,6 @@ public class GamePlayer : NetworkBehaviour
 			if (hasAuthority)
 			{
 				HandleInput();
-			}
-
-			// Animmations
-			if (isDashing) {								// dash
-				animator.SetBool("Dashing", true);
-			} else {
-				animator.SetBool("Dashing", false);
-				if (moveLeftRight < 0) {					// moving Left
-					spriteRenderer.flipX = true;
-					animator.SetFloat("Speed", moveSpeed);
-				} else if (moveLeftRight > 0) {				// moving Right
-					spriteRenderer.flipX = false;
-					animator.SetFloat("Speed", moveSpeed);
-				} else {									// not moving L/R/dash
-					animator.SetFloat("Speed", 0);
-				}
 			}
 		
 	}

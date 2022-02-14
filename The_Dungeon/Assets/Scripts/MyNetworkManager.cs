@@ -91,7 +91,9 @@ public class MyNetworkManager : NetworkManager
             
 			NetworkServer.AddPlayerForConnection(conn, roomPlayerInstance.gameObject);
 			Debug.Log("Server: OnServerAddPlayer, added player for connection");
-        }
+        } else {
+			base.OnServerAddPlayer(conn);
+		}
     }
 
     public override void OnServerDisconnect(NetworkConnection conn)

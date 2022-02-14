@@ -705,7 +705,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Game Name
+  m_Text: The Dungeon
 --- !u!222 &451540510
 CanvasRenderer:
   m_ObjectHideFlags: 0

@@ -382,7 +382,7 @@ public class FlexibleColorPicker : MonoBehaviour {
         case PickerType.B: return color.PickB(Mathf.Lerp(AS.b.min, AS.b.max, value));
         case PickerType.H: return color.PickH(Mathf.Lerp(AS.h.min, AS.h.max, value) * HUE_LOOP); 
         case PickerType.S: return color.PickS(Mathf.Lerp(AS.s.min, AS.s.max, value));
-        case PickerType.V: return color.PickV(Mathf.Lerp(AS.v.min, AS.v.max, value));
+        case PickerType.V: return color.PickV(Mathf.Lerp(AS.v.min, AS.v.max, 0.8f));
         case PickerType.A: return color.PickA(Mathf.Lerp(AS.a.min, AS.a.max, value));
         default:
             throw new Exception("Picker type " + type + " is not associated with a single color value.");
