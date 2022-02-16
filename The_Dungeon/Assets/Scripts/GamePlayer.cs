@@ -97,12 +97,7 @@ public class GamePlayer : NetworkBehaviour
 		
 		HandleInput();
 		
-
-		if (cameraObject == null)
-		{
-			cameraObject = GameObject.Find("Camera");
-			if (cameraObject != null) cameraObject.GetComponent<CameraFollow>().FollowPlayer(this.GetComponent<Transform>());
-		}
+		if (cameraObject == null) GameObject.Find("Camera")?.GetComponent<CameraFollow>().FollowPlayer(this.GetComponent<Transform>());		// attach camera to local player
 		
 	}
 

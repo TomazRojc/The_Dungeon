@@ -42,7 +42,7 @@ public class MyNetworkManager : NetworkManager
 		for (int i = 0; i < initialLevelSelectButtons.Length; i++)
 		{
 			int x = i + 1;
-			initialLevelSelectButtons[i].onClick.AddListener(delegate{StartGame(x);});
+			initialLevelSelectButtons[i].onClick.AddListener(delegate{StartLevel(x);});
 		}
 
 		base.Start();
@@ -139,7 +139,7 @@ public class MyNetworkManager : NetworkManager
         return true;
     }
 
-    public void StartGame(int levelNumber)
+    public void StartLevel(int levelNumber)
     {
 		
         if (NetworkServer.active && SceneManager.GetActiveScene().name == menuScene)

@@ -173,8 +173,8 @@ public class RoomPlayer : NetworkBehaviour
 		MyColor = color;
 	}
 
-	[Command]
-	public void CmdStartGame()
+	// [Command]
+	public void CmdShowLevelsUI()
 	{
 		RpcShowLevelsUI();
 		
