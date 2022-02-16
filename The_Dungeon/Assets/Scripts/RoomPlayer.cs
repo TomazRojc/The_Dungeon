@@ -176,8 +176,16 @@ public class RoomPlayer : NetworkBehaviour
 	[Command]
 	public void CmdStartGame()
 	{
-		if (Room.RoomPlayers[0].connectionToClient != connectionToClient) { return; }
+		RpcShowLevelsUI();
+		
+		// if (Room.RoomPlayers[0].connectionToClient != connectionToClient) { return; }
 
-		Room.StartGame();
+		// Room.StartGame();
+	}
+
+	[ClientRpc]
+	public void RpcShowLevelsUI()
+	{
+		GameObject.Find("LevelsUI").transform.GetChild(0).gameObject.SetActive(true);
 	}
 }
