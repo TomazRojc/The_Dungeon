@@ -9,7 +9,7 @@ public class Portal : MonoBehaviour
     public void OnTriggerEnter2D(Collider2D coll) {
         if (coll.CompareTag("Player")) {
             
-            GameObject.Find("GamePlayer(Clone)").transform.position = portal2.transform.position;
+            GameObject.Find("TestPlayer(Clone)").transform.position = portal2.transform.position;
         }
     }
 }

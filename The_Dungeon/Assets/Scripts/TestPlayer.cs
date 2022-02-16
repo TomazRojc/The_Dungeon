@@ -162,7 +162,7 @@ public class TestPlayer : NetworkBehaviour
 	}
 
     private bool IsGrounded() {
-        int layerMask = ~(1 << 8);
+        int layerMask = ~(3 << 8); // 0000000011 -> 1100000000
 		RaycastHit2D raycast = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.size, 0f, -myVectorUp, 0.1f, layerMask);
         return (raycast.collider != null);
     }
