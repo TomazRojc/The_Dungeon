@@ -8,8 +8,11 @@ public class Portal : MonoBehaviour
 
     public void OnTriggerEnter2D(Collider2D coll) {
         if (coll.CompareTag("Player")) {
-            
-            GameObject.Find("TestPlayer(Clone)").transform.position = portal2.transform.position;
+            GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+            foreach (GameObject player in players) {
+                if (coll.gameObject.GetInstanceID() == player.GetInstanceID())
+                GameObject.Find("GamePlayer(Clone)").transform.position = portal2.transform.position;
+            }
         }
     }
 }
