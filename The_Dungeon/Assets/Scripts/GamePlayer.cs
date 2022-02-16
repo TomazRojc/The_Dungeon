@@ -30,15 +30,17 @@ public class GamePlayer : NetworkBehaviour
 	private Vector2 myVectorRight = new Vector2(1, 0);
     private Rigidbody2D rigidBody;
     private BoxCollider2D boxCollider;
-    private SpriteRenderer spriteRenderer;
+    private GameObject cameraObject = null;
 
     // Start is called before the first frame update
-    public override void OnStartAuthority()
+    void Start()
     {
+		
+		if(!hasAuthority) { return; }
+		
 		rigidBody = this.GetComponent<Rigidbody2D>();
 		myGravityScale = rigidBody.mass * 50f;		// F = m * g
 		boxCollider = this.GetComponent<BoxCollider2D>();
-		GameObject.Find("Camera").GetComponent<CameraFollow>().FollowPlayer(this.GetComponent<Transform>());
 
 		SwitchGravity("down");
         dashTime = dashFullTime;
@@ -91,10 +93,16 @@ public class GamePlayer : NetworkBehaviour
 	[Client]
 	void Update() {
 		
-			if (hasAuthority)
-			{
-				HandleInput();
-			}
+		if (!hasAuthority) { return; }
+		
+		HandleInput();
+		
+
+		if (cameraObject == null)
+		{
+			cameraObject = GameObject.Find("Camera");
+			if (cameraObject != null) cameraObject.GetComponent<CameraFollow>().FollowPlayer(this.GetComponent<Transform>());
+		}
 		
 	}
 
@@ -179,11 +187,16 @@ public class GamePlayer : NetworkBehaviour
 	[SyncVar]
 	private string displayName = "Player";
 
+	[SyncVar]
+	private Color displayColor;
+
 
 	[Server]
-	public void SetDisplayName(string displayName)
+	public void SetNameAndColor(string name, Color color)
 	{
-		this.displayName = displayName;
+		this.displayName = name;
+		this.displayColor = color;
+		this.GetComponent<SpriteRenderer>().color = color;
 	}
 
 	private MyNetworkManager room;
@@ -200,12 +213,12 @@ public class GamePlayer : NetworkBehaviour
 	{
 		DontDestroyOnLoad(gameObject);
 
-		Room.GamePlayers.Add(this);
+		if (Room != null) Room.GamePlayers.Add(this);
 	}
 
 	public override void OnStopClient()
 	{
-		Room.GamePlayers.Remove(this);
+		if (Room != null) Room.GamePlayers.Remove(this);
 	}
 
 	
