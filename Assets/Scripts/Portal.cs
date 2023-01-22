@@ -10,10 +10,11 @@ public class Portal : MonoBehaviour
 		if (coll.CompareTag("Player")) {
 			GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
 			foreach (GameObject player in players) {
-				if (coll.gameObject.GetInstanceID() == player.GetInstanceID())
-				player.transform.position = portal2.transform.position;
-				player.GetComponent<GamePlayer>().doubleJumped = false;
-				player.GetComponent<GamePlayer>().ChangeVelocity();
+				if (coll.gameObject.GetInstanceID() == player.GetInstanceID() && player.GetComponent<GamePlayer>().hasAuthority) {
+					player.transform.position = portal2.transform.position;
+					player.GetComponent<GamePlayer>().doubleJumped = false;
+					player.GetComponent<GamePlayer>().ChangeVelocity();
+				}
 			}
 		}
 	}
