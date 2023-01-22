@@ -35,7 +35,9 @@ public class GamePlayer : NetworkBehaviour
 	// Start is called before the first frame update
 	void Start()
 	{
-		
+		Debug.Log("Start function called");
+		Debug.Log(displayColor);
+		this.GetComponent<SpriteRenderer>().color = displayColor;
 		if(!hasAuthority) { return; }
 		
 		rigidBody = this.GetComponent<Rigidbody2D>();

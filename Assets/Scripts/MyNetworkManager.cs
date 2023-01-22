@@ -167,7 +167,8 @@ public class MyNetworkManager : NetworkManager
 				GameObject previousPlayerObj = conn.identity.gameObject;
 				NetworkServer.ReplacePlayerForConnection(conn, gameplayerInstance.gameObject);
 				NetworkServer.Destroy(previousPlayerObj);
-				Debug.Log(gameplayerInstance);
+				Debug.Log("Server gameplayer object:")
+				Debug.Log(gameplayerInstance.gameObject);
 			}
 		}
 

@@ -11,7 +11,7 @@ public class BuildDebug : MonoBehaviour
 
 	void OnEnable()
 	{
-		if (!Application.isEditor) Application.logMessageReceived += Log;
+		Application.logMessageReceived += Log;
 	}
 
 	void OnDisable()
@@ -23,9 +23,11 @@ public class BuildDebug : MonoBehaviour
 	{
 		if (filename == "")
 		{
-			string dir = Application.dataPath + "/YOUR_LOGS";
+			string dir = Application.dataPath + "/../../LOGS";
 			System.IO.Directory.CreateDirectory(dir);
-			filename = dir + "/log_" + System.DateTime.UtcNow.ToString().Replace(". ", "").Replace(" ", "_").Replace(":", "") + ".txt";
+			string prefix = "/log_";
+			if (!Application.isEditor) prefix += "build_";
+			filename = dir + prefix + System.DateTime.UtcNow.ToString().Replace(". ", "").Replace(" ", "_").Replace(":", "") + ".txt";
 		}
 			try{ System.IO.File.AppendAllText(filename, "- " + logString + "\n"); }
 			catch { }
