@@ -11,7 +11,9 @@ public class Portal : MonoBehaviour
 			GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
 			foreach (GameObject player in players) {
 				if (coll.gameObject.GetInstanceID() == player.GetInstanceID())
-				GameObject.Find("GamePlayer(Clone)").transform.position = portal2.transform.position;
+				player.transform.position = portal2.transform.position;
+				player.GetComponent<GamePlayer>().doubleJumped = false;
+				player.GetComponent<GamePlayer>().ChangeVelocity();
 			}
 		}
 	}

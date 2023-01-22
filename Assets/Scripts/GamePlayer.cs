@@ -28,7 +28,7 @@ public class GamePlayer : NetworkBehaviour
 
 	private Vector2 myVectorUp = new Vector2(0, 1);
 	private Vector2 myVectorRight = new Vector2(1, 0);
-	private Rigidbody2D rigidBody;
+	public Rigidbody2D rigidBody;
 	private BoxCollider2D boxCollider;
 	private GameObject cameraObject = null;
 
@@ -176,7 +176,9 @@ public class GamePlayer : NetworkBehaviour
 		return a;
 	}
 
-
+	public void ChangeVelocity() {
+		rigidBody.velocity = myVectorUp * -rigidBody.velocity.x;
+	}
 
 
 	[SyncVar]
@@ -215,7 +217,4 @@ public class GamePlayer : NetworkBehaviour
 	{
 		if (Room != null) Room.GamePlayers.Remove(this);
 	}
-
-	
-
 }
