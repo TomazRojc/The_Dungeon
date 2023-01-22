@@ -10,25 +10,25 @@ public class MainMenu : MonoBehaviour
 	[SerializeField] private GameObject settingsUI = null;
 	
 
-    public void GoToJoinGame()
-    {
-        joinGameUI.SetActive(true);
-    }
+	public void GoToJoinGame()
+	{
+		joinGameUI.SetActive(true);
+	}
 	
 	public void GoToSettings()
-    {
-        settingsUI.SetActive(true);
-    }
+	{
+		settingsUI.SetActive(true);
+	}
 
 	public void GoBack()
-    {
+	{
 		mainMenuUI.SetActive(true);
-        joinGameUI.SetActive(false);
+		joinGameUI.SetActive(false);
 		settingsUI.SetActive(false);
-    }
+	}
 
-    public void ExitGame()
-    {
-        Application.Quit();
-    }
+	public void ExitGame()
+	{
+		Application.Quit();
+	}
 }

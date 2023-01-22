@@ -5,18 +5,18 @@ using Mirror;
 
 public class TestPlayer : NetworkBehaviour
 {
-    public float moveSpeed = 15f;
+	public float moveSpeed = 15f;
 	public float myGravityScale;
-    public float jumpVelocity = 30f;
+	public float jumpVelocity = 30f;
 
-    public bool doubleJumped = false;
+	public bool doubleJumped = false;
 	public bool stunned = false;
-    public float dashSpeed = 100f;
-    public float dashFullTime = 0.1f;
+	public float dashSpeed = 100f;
+	public float dashFullTime = 0.1f;
 	public float dashCooldown = 0.4f;
-    public float dashTime;
+	public float dashTime;
 	private bool canDash = true;
-    private bool isDashing = false;
+	private bool isDashing = false;
 	private bool grounded = false;
 	private float lastMoveDirection = 1f;
 
@@ -28,12 +28,12 @@ public class TestPlayer : NetworkBehaviour
 
 	private Vector2 myVectorUp = new Vector2(0, 1);
 	private Vector2 myVectorRight = new Vector2(1, 0);
-    private Rigidbody2D rigidBody;
-    private BoxCollider2D boxCollider;
-    private SpriteRenderer spriteRenderer;
+	private Rigidbody2D rigidBody;
+	private BoxCollider2D boxCollider;
+	private SpriteRenderer spriteRenderer;
 
-    // Start is called before the first frame update
-    public override void OnStartAuthority()
+	// Start is called before the first frame update
+	public override void OnStartAuthority()
 	{
 		rigidBody = this.GetComponent<Rigidbody2D>();
 		myGravityScale = rigidBody.mass * 50f;		// F = m * g
@@ -41,12 +41,12 @@ public class TestPlayer : NetworkBehaviour
 		GameObject.Find("Camera").GetComponent<CameraFollow>().FollowPlayer(this.GetComponent<Transform>());
 
 		SwitchGravity("down");
-        dashTime = dashFullTime;
-    }
+		dashTime = dashFullTime;
+	}
 
-    // FixedUpdate is called once per delta t
-    void FixedUpdate()
-    {
+	// FixedUpdate is called once per delta t
+	void FixedUpdate()
+	{
 			if (!hasAuthority)
 			{
 				return;
@@ -84,7 +84,7 @@ public class TestPlayer : NetworkBehaviour
 			// Gravity
 			rigidBody.AddForce(-myVectorUp * myGravityScale, ForceMode2D.Force);
 		
-    }
+	}
 
 	// Update is called once per frame
 	
@@ -140,32 +140,32 @@ public class TestPlayer : NetworkBehaviour
 	private void SwitchGravity(string direction) {
 		switch(direction) {
 			case "down":
-    			myVectorUp = new Vector2(0, 1);
+				myVectorUp = new Vector2(0, 1);
 				myVectorRight = new Vector2(1, 0);
 				break;
 			case "left":
-    			myVectorUp = new Vector2(1, 0);
+				myVectorUp = new Vector2(1, 0);
 				myVectorRight = new Vector2(0, -1);
-    			break;
+				break;
 			case "up":
-    			myVectorUp = new Vector2(0, -1);
+				myVectorUp = new Vector2(0, -1);
 				myVectorRight = new Vector2(-1, 0);
-    			break;
+				break;
 			case "right":
-    			myVectorUp = new Vector2(-1, 0);
+				myVectorUp = new Vector2(-1, 0);
 				myVectorRight = new Vector2(0, 1);
-    			break;
+				break;
   			default:
-    			// Invalid function input
-    			break;
+				// Invalid function input
+				break;
 		}
 	}
 
-    private bool IsGrounded() {
-        int layerMask = ~(3 << 8); // 0000000011 -> 1100000000
+	private bool IsGrounded() {
+		int layerMask = ~(3 << 8); // 0000000011 -> 1100000000
 		RaycastHit2D raycast = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.size, 0f, -myVectorUp, 0.1f, layerMask);
-        return (raycast.collider != null);
-    }
+		return (raycast.collider != null);
+	}
 
 	private Vector2 VecAbs(Vector2 a) {
 		a.x = Mathf.Abs(a.x);

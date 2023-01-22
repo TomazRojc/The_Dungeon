@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class PickUpTorch : MonoBehaviour
 {
-    public Transform destination;
+	public Transform destination;
 
-    public void PickUp() {
-        this.transform.position = destination.position;
-        this.transform.parent = GameObject.Find("TestPlayer").transform;
-    }
+	public void PickUp() {
+		this.transform.position = destination.position;
+		this.transform.parent = GameObject.Find("TestPlayer").transform;
+	}
 
-    public void Drop() {
-        this.transform.parent = null;
-    }
+	public void Drop() {
+		this.transform.parent = null;
+	}
 }

@@ -125,20 +125,20 @@ public class RoomPlayer : NetworkBehaviour
 	}
 
 	public void DisconnectAndGoBack()
-    {
-        if (isLeader) {
+	{
+		if (isLeader) {
 			Room.StopHost();
 		} else {
 			Room.StopClient();
 		}
-    }
+	}
 
 	public void EnableNameInput()
 	{
 		nameInputField.SetActive(true);
 		nameInputField.GetComponent<InputField>().Select();
 	}
-    
+	
 	public void InputEntered(InputField input)
 	{
 		nameInputField.SetActive(false);
