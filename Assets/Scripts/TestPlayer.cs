@@ -35,10 +35,10 @@ public class TestPlayer : NetworkBehaviour
 	// Start is called before the first frame update
 	public override void OnStartAuthority()
 	{
-		rigidBody = this.GetComponent<Rigidbody2D>();
+		rigidBody = GetComponent<Rigidbody2D>();
 		myGravityScale = rigidBody.mass * 50f;		// F = m * g
-		boxCollider = this.GetComponent<BoxCollider2D>();
-		GameObject.Find("Camera").GetComponent<CameraFollow>().FollowPlayer(this.GetComponent<Transform>());
+		boxCollider = GetComponent<BoxCollider2D>();
+		GameObject.Find("Camera").GetComponent<CameraFollow>().FollowPlayer(GetComponent<Transform>());
 
 		SwitchGravity("down");
 		dashTime = dashFullTime;
@@ -183,7 +183,7 @@ public class TestPlayer : NetworkBehaviour
 	[Server]
 	public void SetDisplayName(string displayName)
 	{
-		this.displayName = displayName;
+		displayName = displayName;
 	}
 
 }

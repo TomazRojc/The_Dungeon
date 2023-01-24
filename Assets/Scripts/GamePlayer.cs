@@ -37,12 +37,12 @@ public class GamePlayer : NetworkBehaviour
 	{
 		Debug.Log("Start function called");
 		Debug.Log(displayColor);
-		this.GetComponent<SpriteRenderer>().color = displayColor;
+		GetComponent<SpriteRenderer>().color = displayColor;
 		if(!hasAuthority) { return; }
 		
-		rigidBody = this.GetComponent<Rigidbody2D>();
+		rigidBody = GetComponent<Rigidbody2D>();
 		myGravityScale = rigidBody.mass * 50f;		// F = m * g
-		boxCollider = this.GetComponent<BoxCollider2D>();
+		boxCollider = GetComponent<BoxCollider2D>();
 
 		SwitchGravity("down");
 		dashTime = dashFullTime;
@@ -99,7 +99,7 @@ public class GamePlayer : NetworkBehaviour
 		
 		HandleInput();
 		
-		if (cameraObject == null) GameObject.Find("Camera")?.GetComponent<CameraFollow>().FollowPlayer(this.GetComponent<Transform>());		// attach camera to local player
+		if (cameraObject == null) GameObject.Find("Camera")?.GetComponent<CameraFollow>().FollowPlayer(GetComponent<Transform>());		// attach camera to local player
 		
 	}
 
@@ -193,9 +193,8 @@ public class GamePlayer : NetworkBehaviour
 	[Server]
 	public void SetNameAndColor(string name, Color color)
 	{
-		this.displayName = name;
-		this.displayColor = color;
-		this.GetComponent<SpriteRenderer>().color = color;
+		displayName = name;
+		displayColor = color;
 	}
 
 	private MyNetworkManager room;

@@ -7,11 +7,11 @@ public class PickUpTorch : MonoBehaviour
 	public Transform destination;
 
 	public void PickUp() {
-		this.transform.position = destination.position;
-		this.transform.parent = GameObject.Find("TestPlayer").transform;
+		transform.position = destination.position;
+		transform.parent = GameObject.Find("TestPlayer").transform;
 	}
 
 	public void Drop() {
-		this.transform.parent = null;
+		transform.parent = null;
 	}
 }
