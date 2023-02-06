@@ -6,8 +6,6 @@ using UnityEngine;
 
 public class PlayerSpawnSystem : NetworkBehaviour
 {
-	[SerializeField] private GameObject playerPrefab = null;
-
 	private static List<Transform> spawnPoints = new List<Transform>();
 
 	private int nextIndex = 0;
@@ -36,10 +34,11 @@ public class PlayerSpawnSystem : NetworkBehaviour
 			return;
 		}
 
-		GameObject playerInstance = Instantiate(playerPrefab, spawnPoints[nextIndex].position, spawnPoints[nextIndex].rotation);
-		NetworkServer.Spawn(playerInstance, conn);
-		// Transform playerTransform = conn.identity.GetComponent<Transform>();
-		// playerTransform = spawnPoint;
+		GameObject [] playerObjects = GameObject.FindGameObjectsWithTag("Player");
+		foreach (var playerObject in playerObjects) {
+			GamePlayer gamePlayer = playerObject.GetComponent<GamePlayer>();
+			gamePlayer.TargetTeleportPlayer(conn, spawnPoint.position.x, spawnPoint.position.y);
+		}
 
 		nextIndex++;
 		if (spawnPoints.Count == nextIndex) nextIndex = 0;

@@ -181,9 +181,9 @@ public class TestPlayer : NetworkBehaviour
 
 
 	[Server]
-	public void SetDisplayName(string displayName)
+	public void SetDisplayName(string name)
 	{
-		displayName = displayName;
+		displayName = name;
 	}
 
 }

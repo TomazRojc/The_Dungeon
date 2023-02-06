@@ -61,14 +61,14 @@ public class RoomPlayer : NetworkBehaviour
 		
 		InputField input = nameInputField.GetComponent<InputField>();
 		input.onEndEdit.AddListener(delegate { InputEntered(input); });
+
+		int idx = Room.RoomPlayers.Count + 1;	// my player is not saved in the room yet, but others are
+		CmdSetDisplayName("Player " + idx);
 	}
 
 	public override void OnStartClient()
 	{
 		Room.RoomPlayers.Add(this);
-
-		CmdSetDisplayName("Player " + Room.RoomPlayers.Count);
-
 		UpdateDisplay();
 	}
 
@@ -119,7 +119,7 @@ public class RoomPlayer : NetworkBehaviour
 
 	public void HandleReadyToStart(bool readyToStart)
 	{
-		// if (!isLeader) { return; }
+		if (!isLeader) { return; }
 
 		startGameButton.interactable = readyToStart;
 	}
@@ -173,7 +173,7 @@ public class RoomPlayer : NetworkBehaviour
 		MyColor = color;
 	}
 
-	// [Command]
+	[Command]
 	public void CmdShowLevelsUI()
 	{
 		RpcShowLevelsUI();

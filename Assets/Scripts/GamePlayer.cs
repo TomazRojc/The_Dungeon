@@ -35,8 +35,6 @@ public class GamePlayer : NetworkBehaviour
 	// Start is called before the first frame update
 	void Start()
 	{
-		Debug.Log("Start function called");
-		Debug.Log(displayColor);
 		GetComponent<SpriteRenderer>().color = displayColor;
 		if(!hasAuthority) { return; }
 		
@@ -217,5 +215,12 @@ public class GamePlayer : NetworkBehaviour
 	public override void OnStopClient()
 	{
 		if (Room != null) Room.GamePlayers.Remove(this);
+	}
+
+	[TargetRpc]
+	public void TargetTeleportPlayer(NetworkConnection conn, float new_x, float new_y)
+	{
+		if (!hasAuthority) { return; }
+		transform.position = new Vector3(new_x, new_y, 0);
 	}
 }
