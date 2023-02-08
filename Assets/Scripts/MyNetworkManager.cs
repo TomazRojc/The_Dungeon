@@ -197,4 +197,9 @@ public class MyNetworkManager : NetworkManager
 		OnServerReadied?.Invoke(conn);
 	}
 
+	public void SetTransport(Transport newTransport) {
+		transport = newTransport;
+		Transport.activeTransport = transport;
+	}
+
 }

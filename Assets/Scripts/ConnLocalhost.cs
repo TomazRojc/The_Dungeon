@@ -1,11 +1,12 @@
+using Mirror;
 using UnityEngine;
-using UnityEngine.UI;
 
 
 public class ConnLocalhost : MonoBehaviour
 {
-	[SerializeField] private MyNetworkManager networkManager = null;
-	[SerializeField] private GameObject mainMenuUI = null;
+	[SerializeField] private MyNetworkManager networkManager;
+	[SerializeField] private GameObject mainMenuUI;
+	[SerializeField] private Transport transport;
 
 	private void OnEnable()
 	{
@@ -22,7 +23,7 @@ public class ConnLocalhost : MonoBehaviour
 	public void HostLobby()
 	{
 		mainMenuUI.SetActive(false);
-
+		networkManager.SetTransport(transport);
 		networkManager.StartHost();
 	}
 

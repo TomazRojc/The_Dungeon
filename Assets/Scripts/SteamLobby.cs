@@ -5,9 +5,11 @@ using UnityEngine;
 
 public class SteamLobby : MonoBehaviour
 {
-	[SerializeField] private GameObject mainMenuUI = null;
-	[SerializeField] private GameObject joinGameUI = null;
-	[SerializeField] private GameObject settingsUI = null;
+	[SerializeField] private GameObject mainMenuUI;
+	[SerializeField] private GameObject joinGameUI;
+	[SerializeField] private GameObject settingsUI;
+	[SerializeField] private MyNetworkManager networkManager;
+	[SerializeField] private Transport transport;
 
 	protected Callback<LobbyCreated_t> lobbyCreated;
 	protected Callback<GameLobbyJoinRequested_t> gameLobbyJoinRequested;
@@ -15,12 +17,8 @@ public class SteamLobby : MonoBehaviour
 
 	private const string HostAddressKey = "HostAddress";
 
-	private NetworkManager networkManager;
 
-	private void Start()
-	{
-		networkManager = GetComponent<NetworkManager>();
-
+	private void Start() {
 		if (!SteamManager.Initialized) { return; }
 
 		lobbyCreated = Callback<LobbyCreated_t>.Create(OnLobbyCreated);
@@ -31,7 +29,7 @@ public class SteamLobby : MonoBehaviour
 	public void HostLobby()
 	{
 		mainMenuUI.SetActive(false);
-
+		networkManager.SetTransport(transport);
 		SteamMatchmaking.CreateLobby(ELobbyType.k_ELobbyTypeFriendsOnly, networkManager.maxConnections);
 	}
 
