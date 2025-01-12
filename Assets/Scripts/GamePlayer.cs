@@ -5,6 +5,7 @@ public class GamePlayer : NetworkBehaviour
 {
 	public float moveSpeed = 15f;
 	public float jumpVelocity = 30f;
+	public float speedChangeFactor = 5f;
 
 	private bool doubleJumped = false;
 	private bool stunned = false;
@@ -18,7 +19,6 @@ public class GamePlayer : NetworkBehaviour
 	private bool isDashing = false;
 	private bool grounded = false;
 	private float lastMoveDirection = 1f;
-	public bool wasJustTeleported { get; set; }
 
 	// control variables (on keypress)
 	private bool shouldJump = false;
@@ -69,7 +69,9 @@ public class GamePlayer : NetworkBehaviour
 				isDashing = true;
 				shouldDash = false;
 			} else if (!isDashing) {
-				rigidBody.velocity = (myVectorRight * moveLeftRight) + (VecAbs(myVectorUp) * rigidBody.velocity);
+				//TODO: tomazr slowly decrease left/right speed if controls are not being touched, otherwise give full control to player
+				var targetVelocity = (myVectorRight * moveLeftRight) + (VecAbs(myVectorUp) * rigidBody.velocity);
+				rigidBody.velocity = Vector2.Lerp(rigidBody.velocity, targetVelocity, Time.deltaTime * speedChangeFactor);
 			}
 
 			
@@ -175,11 +177,16 @@ public class GamePlayer : NetworkBehaviour
 		return a;
 	}
 
-	public void PortalChangeVelocityDirection(Quaternion portal1Rotation, Quaternion portal2Rotation)
+	public void PortalChangeVelocityDirection(Vector3 portal1Direction, Vector3 portal2Direction)
 	{
-		var rotationDiff = Quaternion.Inverse(portal1Rotation) * portal2Rotation;
-		var tempVelocity = rigidBody.velocity;
-		rigidBody.velocity = rotationDiff * tempVelocity;
+		var angle1 = Mathf.Atan2(portal1Direction.y, portal1Direction.x) * Mathf.Rad2Deg;
+		var angle2 = Mathf.Atan2(portal2Direction.y, portal2Direction.x) * Mathf.Rad2Deg;
+		var rotationDiff = angle2 - angle1;
+		
+		var velocity = new Vector3(rigidBody.velocity.x, rigidBody.velocity.y, 0);
+		velocity = Quaternion.Euler(0, 0, rotationDiff + 180) * velocity; // rotate velocity vector for portal rotation diff
+		velocity = Vector2.Reflect(velocity, Quaternion.Euler(0f, 0f, 90f) * portal2Direction); // reflect velocity vector over direction vector of portal2
+		rigidBody.velocity = velocity;
 	}
 
 	public void SetDoubleJumped(bool value)
@@ -192,7 +199,7 @@ public class GamePlayer : NetworkBehaviour
 	private string displayName = "Player";
 
 	[SyncVar]
-	private Color displayColor;
+	private Color displayColor = Color.white;
 
 
 	[Server]

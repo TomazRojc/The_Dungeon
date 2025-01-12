@@ -4,24 +4,26 @@ public class Portal : MonoBehaviour
 {
 	[SerializeField]
 	private Portal portal2;
+	[SerializeField]
+	private Vector3 portalLocalDirection = Vector3.right;
 
-	private Vector3 _portalLocalDirection = Vector2.left;
+	private Vector3 PortalGlobalDirection => (transform.rotation * portalLocalDirection).normalized;
 
-	private Vector3 PortalGlobalDirection => (transform.rotation * _portalLocalDirection).normalized;
+	private bool playerJustTeleported { get; set; }
 
 	public void OnTriggerEnter2D(Collider2D coll) {
 		var gamePlayer = GetPlayerFromCollider(coll);
 		if (gamePlayer == null) return;
 
-		if (gamePlayer.wasJustTeleported)
+		if (playerJustTeleported)
 		{
 			return;
 		}
 			
-		gamePlayer.transform.position = portal2.transform.position + PortalGlobalDirection * 0.1f;
+		gamePlayer.transform.position = portal2.transform.position + PortalGlobalDirection;
 		gamePlayer.SetDoubleJumped(false);
-		gamePlayer.PortalChangeVelocityDirection(transform.rotation, portal2.transform.rotation);
-		gamePlayer.wasJustTeleported = true;
+		gamePlayer.PortalChangeVelocityDirection(PortalGlobalDirection, portal2.PortalGlobalDirection);
+		portal2.playerJustTeleported = true;
 	}
 	
 	public void OnTriggerExit2D(Collider2D coll)
@@ -29,7 +31,7 @@ public class Portal : MonoBehaviour
 		var gamePlayer = GetPlayerFromCollider(coll);
 		if (gamePlayer == null) return;
 		
-		gamePlayer.wasJustTeleported = false;
+		playerJustTeleported = false;
 	}
 
 	private GamePlayer GetPlayerFromCollider(Collider2D coll)
@@ -50,6 +52,6 @@ public class Portal : MonoBehaviour
 	private void OnDrawGizmos()
 	{
 		Gizmos.color = Color.red;
-		Gizmos.DrawLine(transform.position, transform.position + PortalGlobalDirection * 2f);
+		Gizmos.DrawLine(transform.position, transform.position + PortalGlobalDirection * 3f);
 	}
 }
