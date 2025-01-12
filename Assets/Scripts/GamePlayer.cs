@@ -1,24 +1,24 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 
 public class GamePlayer : NetworkBehaviour
 {
 	public float moveSpeed = 15f;
-	public float myGravityScale;
 	public float jumpVelocity = 30f;
 
-	public bool doubleJumped = false;
-	public bool stunned = false;
+	private bool doubleJumped = false;
+	private bool stunned = false;
 	public float dashSpeed = 100f;
 	public float dashFullTime = 0.1f;
 	public float dashCooldown = 0.4f;
-	public float dashTime;
+	
+	private float myGravityScale;
+	private float currentDashTime;
 	private bool canDash = true;
 	private bool isDashing = false;
 	private bool grounded = false;
 	private float lastMoveDirection = 1f;
+	public bool wasJustTeleported { get; set; }
 
 	// control variables (on keypress)
 	private bool shouldJump = false;
@@ -38,12 +38,11 @@ public class GamePlayer : NetworkBehaviour
 		GetComponent<SpriteRenderer>().color = displayColor;
 		if(!hasAuthority) { return; }
 		
-		rigidBody = GetComponent<Rigidbody2D>();
 		myGravityScale = rigidBody.mass * 50f;		// F = m * g
 		boxCollider = GetComponent<BoxCollider2D>();
 
 		SwitchGravity("down");
-		dashTime = dashFullTime;
+		currentDashTime = dashFullTime;
 	}
 
 	// FixedUpdate is called once per delta t
@@ -66,7 +65,7 @@ public class GamePlayer : NetworkBehaviour
 			if (shouldDash) {
 				if (lastMoveDirection > 0) rigidBody.velocity = myVectorRight * dashSpeed;
 				if (lastMoveDirection < 0) rigidBody.velocity = -myVectorRight * dashSpeed;
-				dashTime = dashFullTime;
+				currentDashTime = dashFullTime;
 				isDashing = true;
 				shouldDash = false;
 			} else if (!isDashing) {
@@ -75,9 +74,9 @@ public class GamePlayer : NetworkBehaviour
 
 			
 			// handle dashing
-			dashTime -= Time.fixedDeltaTime;
+			currentDashTime -= Time.fixedDeltaTime;
 			if (isDashing) {
-				if (dashTime <= 0) {	// dash just ended
+				if (currentDashTime <= 0) {	// dash just ended
 					isDashing = false;
 					rigidBody.velocity = VecAbs(myVectorUp) * rigidBody.velocity;
 				}
@@ -105,7 +104,7 @@ public class GamePlayer : NetworkBehaviour
 		// Input
 		if (grounded && !stunned && Input.GetKeyDown(KeyCode.Space))									shouldJump = true;
 		if (!grounded && !doubleJumped && !stunned && Input.GetKeyDown(KeyCode.Space))					shouldDoubleJump = true;
-		if (canDash && dashTime <= -dashCooldown && !stunned && Input.GetKeyDown(KeyCode.LeftControl))	shouldDash = true;
+		if (canDash && currentDashTime <= -dashCooldown && !stunned && Input.GetKeyDown(KeyCode.LeftControl))	shouldDash = true;
 		if (!isDashing && !stunned)					moveLeftRight = Input.GetAxis("HorizontalAD") * moveSpeed; else moveLeftRight = 0;
 
 
@@ -117,7 +116,7 @@ public class GamePlayer : NetworkBehaviour
 		}
 		if (shouldDoubleJump) {						// double jump
 			doubleJumped = true;
-			dashTime = -dashCooldown;
+			currentDashTime = -dashCooldown;
 			canDash = true;
 		}
 		if (shouldDash) {							// dash
@@ -176,11 +175,19 @@ public class GamePlayer : NetworkBehaviour
 		return a;
 	}
 
-	public void ChangeVelocity() {
-		rigidBody.velocity = myVectorUp * -rigidBody.velocity.x;
+	public void PortalChangeVelocityDirection(Quaternion portal1Rotation, Quaternion portal2Rotation)
+	{
+		var rotationDiff = Quaternion.Inverse(portal1Rotation) * portal2Rotation;
+		var tempVelocity = rigidBody.velocity;
+		rigidBody.velocity = rotationDiff * tempVelocity;
 	}
 
+	public void SetDoubleJumped(bool value)
+	{
+		doubleJumped = value;
+	}
 
+#region NETWORKING
 	[SyncVar]
 	private string displayName = "Player";
 
@@ -223,4 +230,5 @@ public class GamePlayer : NetworkBehaviour
 		if (!hasAuthority) { return; }
 		transform.position = new Vector3(new_x, new_y, 0);
 	}
+#endregion
 }

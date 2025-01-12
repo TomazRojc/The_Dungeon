@@ -149,14 +149,13 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   moveSpeed: 15
-  myGravityScale: 0
   jumpVelocity: 30
   doubleJumped: 0
   stunned: 0
   dashSpeed: 100
   dashFullTime: 0.1
   dashCooldown: 0.4
-  dashTime: 0
+  rigidBody: {fileID: 1217428939650893469}
 --- !u!114 &3824614775006179854
 MonoBehaviour:
   m_ObjectHideFlags: 0
