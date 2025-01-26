@@ -1,7 +1,6 @@
 using UnityEngine;
-using Mirror;
 
-public class GamePlayer : NetworkBehaviour
+public class PlayerController : MonoBehaviour
 {
 	public float moveSpeed = 15f;
 	public float jumpVelocity = 30f;
@@ -32,11 +31,9 @@ public class GamePlayer : NetworkBehaviour
 	private BoxCollider2D boxCollider;
 	private GameObject cameraObject = null;
 
-	// Start is called before the first frame update
 	void Start()
 	{
-		GetComponent<SpriteRenderer>().color = displayColor;
-		if(!hasAuthority) { return; }
+		// GetComponent<SpriteRenderer>().color = displayColor;
 		
 		myGravityScale = rigidBody.mass * 50f;		// F = m * g
 		boxCollider = GetComponent<BoxCollider2D>();
@@ -45,13 +42,8 @@ public class GamePlayer : NetworkBehaviour
 		currentDashTime = dashFullTime;
 	}
 
-	// FixedUpdate is called once per delta t
 	void FixedUpdate()
 	{
-			if (!hasAuthority)
-			{
-				return;
-			}
 
 			if (shouldJump) {
 				rigidBody.velocity = myVectorUp * jumpVelocity;
@@ -89,12 +81,8 @@ public class GamePlayer : NetworkBehaviour
 		
 	}
 
-	// Update is called once per frame
-	
-	[Client]
-	void Update() {
-		
-		if (!hasAuthority) { return; }
+	void Update()
+	{
 		
 		HandleInput();
 		
@@ -193,49 +181,4 @@ public class GamePlayer : NetworkBehaviour
 	{
 		doubleJumped = value;
 	}
-
-#region NETWORKING
-	[SyncVar]
-	private string displayName = "Player";
-
-	[SyncVar]
-	private Color displayColor = Color.white;
-
-
-	[Server]
-	public void SetNameAndColor(string name, Color color)
-	{
-		displayName = name;
-		displayColor = color;
-	}
-
-	private MyNetworkManager room;
-	private MyNetworkManager Room
-	{
-		get
-		{
-			if (room != null) { return room; }
-			return room = NetworkManager.singleton as MyNetworkManager;
-		}
-	}
-
-	public override void OnStartClient()
-	{
-		DontDestroyOnLoad(gameObject);
-
-		if (Room != null) Room.GamePlayers.Add(this);
-	}
-
-	public override void OnStopClient()
-	{
-		if (Room != null) Room.GamePlayers.Remove(this);
-	}
-
-	[TargetRpc]
-	public void TargetTeleportPlayer(NetworkConnection conn, float new_x, float new_y)
-	{
-		if (!hasAuthority) { return; }
-		transform.position = new Vector3(new_x, new_y, 0);
-	}
-#endregion
 }

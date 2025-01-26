@@ -34,14 +34,14 @@ public class Portal : MonoBehaviour
 		playerJustTeleported = false;
 	}
 
-	private GamePlayer GetPlayerFromCollider(Collider2D coll)
+	private PlayerController GetPlayerFromCollider(Collider2D coll)
 	{
 		if (!coll.CompareTag("Player")) return null;
 		
 		GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
 		foreach (GameObject player in players) {
-			var gamePlayer = player.GetComponent<GamePlayer>();
-			if (coll.gameObject.GetInstanceID() == player.GetInstanceID() && gamePlayer.hasAuthority)
+			var gamePlayer = player.GetComponent<PlayerController>();
+			if (coll.gameObject.GetInstanceID() == player.GetInstanceID())
 			{
 				return gamePlayer;
 			}
