@@ -42,7 +42,6 @@ public class Lobby : MonoBehaviour
 	public void Awake()
 	{
 		startGameButton.interactable = false;
-		GameObject.Find("Main Menu UI").transform.GetChild(0).gameObject.SetActive(true);
 		
 		InputField input = nameInputField.GetComponent<InputField>();
 		input.onEndEdit.AddListener(delegate { InputEntered(input); });

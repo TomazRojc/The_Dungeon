@@ -1,18 +1,16 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class MainMenu : MonoBehaviour
 {
 	[Header("UIs")]
-	[SerializeField] private GameObject mainMenuUI = null;
-	[SerializeField] private GameObject joinGameUI = null;
-	[SerializeField] private GameObject settingsUI = null;
+	[SerializeField] private GameObject mainMenuUI;
+	[SerializeField] private GameObject lobbyUI;
+	[SerializeField] private GameObject settingsUI;
 	
 
-	public void GoToJoinGame()
+	public void GoToLobby()
 	{
-		joinGameUI.SetActive(true);
+		lobbyUI.SetActive(true);
 	}
 	
 	public void GoToSettings()
@@ -23,7 +21,7 @@ public class MainMenu : MonoBehaviour
 	public void GoBack()
 	{
 		mainMenuUI.SetActive(true);
-		joinGameUI.SetActive(false);
+		lobbyUI.SetActive(false);
 		settingsUI.SetActive(false);
 	}
 
