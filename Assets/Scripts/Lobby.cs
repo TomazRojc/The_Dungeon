@@ -5,22 +5,6 @@ using UnityEngine.UI;
 
 public class Lobby : MonoBehaviour
 {
-	
-	private readonly struct PlayerData
-	{
-		public readonly string DisplayName;
-		public readonly bool IsReady;
-		public readonly Color MyColor;
-
-		public PlayerData(string displayName, bool isReady, Color myColor)
-		{
-			DisplayName = displayName;
-			IsReady = isReady;
-			MyColor = myColor;
-		}
-	}
-	
-	[Header("UI")]
 	[SerializeField]
 	private TMP_Text[] playerNameTexts = new TMP_Text[4];
 	[SerializeField]
@@ -37,7 +21,7 @@ public class Lobby : MonoBehaviour
 	[SerializeField] 
 	private GameObject playerAvatarPreview;
 
-	private List<PlayerData> Players;
+	private List<PlayerData> _players;
 
 	public void Awake()
 	{
@@ -46,26 +30,36 @@ public class Lobby : MonoBehaviour
 		InputField input = nameInputField.GetComponent<InputField>();
 		input.onEndEdit.AddListener(delegate { InputEntered(input); });
 
+		_players = Main.Instance.PlayersData;
+		_players[0].SetValues("Player 1", new Color(0,1,0,0.5f), true, false);
+		// UpdateDisplay();
 	}
-	
+
+	public void OnEnable()
+	{
+		UpdateDisplay();
+	}
+
 	private void UpdateDisplay()
 	{
-
-		for (int i = 0; i < playerNameTexts.Length; i++)
+		for (int i = 0; i < _players.Count; i++)
 		{
-			playerNameTexts[i].text = "Waiting for player...";
-			playerReadyTexts[i].text = string.Empty;
-			playerAvatars[i].SetActive(false);
-		}
-
-		for (int i = 0; i < Players.Count; i++)
-		{
-			playerNameTexts[i].text = Players[i].DisplayName;
-			playerReadyTexts[i].text = Players[i].IsReady ?
-				"<color=green>Ready</color>" :
-				"<color=red>Not Ready</color>";
-			playerAvatars[i].SetActive(true);
-			playerAvatars[i].GetComponent<Image>().color = Players[i].MyColor;
+			if (!_players[i].IsJoined)
+			{
+				playerNameTexts[i].text = "Press any key to join...";
+				playerReadyTexts[i].text = string.Empty;
+				playerAvatars[i].SetActive(false);
+			}
+			else
+			{
+				playerNameTexts[i].text = _players[i].DisplayName;
+				playerReadyTexts[i].text = _players[i].IsReady ?
+					"<color=green>Ready</color>" :
+					"<color=red>Not Ready</color>";
+				playerAvatars[i].SetActive(true);
+				playerAvatars[i].GetComponent<Image>().color = _players[i].Color;
+			}
+			
 		}
 	}
 

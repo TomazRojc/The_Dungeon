@@ -18,7 +18,7 @@ public class MainMenu : MonoBehaviour
 		settingsUI.SetActive(true);
 	}
 
-	public void GoBack()
+	public void GoBackToMainMenu()
 	{
 		mainMenuUI.SetActive(true);
 		lobbyUI.SetActive(false);
