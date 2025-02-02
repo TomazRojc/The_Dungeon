@@ -4,10 +4,11 @@ using UnityEngine;
 public class Main : MonoBehaviour
 {
     public static Main Instance;
-    
+
     [SerializeField]
     private int maxPlayers = 4;
 
+    public int MaxPlayers => maxPlayers;
     public List<PlayerData> PlayersData;
 
     private void Awake()

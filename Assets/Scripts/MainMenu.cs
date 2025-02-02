@@ -2,27 +2,35 @@
 
 public class MainMenu : MonoBehaviour
 {
+	[SerializeField]
+	private GameObject _playerInputManager;
+	[SerializeField]
+	private GameObject _lobby;
+
 	[Header("UIs")]
-	[SerializeField] private GameObject mainMenuUI;
-	[SerializeField] private GameObject lobbyUI;
-	[SerializeField] private GameObject settingsUI;
-	
+	[SerializeField] private GameObject _mainMenuPanel;
+	[SerializeField] private GameObject _lobbyPanel;
+	[SerializeField] private GameObject _settingsPanel;
 
 	public void GoToLobby()
 	{
-		lobbyUI.SetActive(true);
+		_lobbyPanel.SetActive(true);
+		_playerInputManager.SetActive(true);
+		_lobby.SetActive(true);
 	}
-	
+
 	public void GoToSettings()
 	{
-		settingsUI.SetActive(true);
+		_settingsPanel.SetActive(true);
 	}
 
 	public void GoBackToMainMenu()
 	{
-		mainMenuUI.SetActive(true);
-		lobbyUI.SetActive(false);
-		settingsUI.SetActive(false);
+		_mainMenuPanel.SetActive(true);
+		_lobbyPanel.SetActive(false);
+		_settingsPanel.SetActive(false);
+		_playerInputManager.SetActive(false);
+		_lobby.SetActive(false);
 	}
 
 	public void ExitGame()

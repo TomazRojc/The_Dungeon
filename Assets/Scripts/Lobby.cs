@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -21,18 +22,19 @@ public class Lobby : MonoBehaviour
 	[SerializeField] 
 	private GameObject playerAvatarPreview;
 
+	[SerializeField]
+	private List<Color> defaultPlayerColors;
+
 	private List<PlayerData> _players;
 
 	public void Awake()
 	{
 		startGameButton.interactable = false;
-		
+
 		InputField input = nameInputField.GetComponent<InputField>();
 		input.onEndEdit.AddListener(delegate { InputEntered(input); });
 
 		_players = Main.Instance.PlayersData;
-		_players[0].SetValues("Player 1", new Color(0,1,0,0.5f), true, false);
-		// UpdateDisplay();
 	}
 
 	public void OnEnable()
@@ -59,8 +61,49 @@ public class Lobby : MonoBehaviour
 				playerAvatars[i].SetActive(true);
 				playerAvatars[i].GetComponent<Image>().color = _players[i].Color;
 			}
-			
 		}
+	}
+
+	public void OnPlayerJoined(int playerInputIndex)
+	{
+		var firstFreeIdx = -1;
+		for (int i = 0; i < _players.Count; i++)
+		{
+			if (firstFreeIdx == -1 && !_players[i].IsJoined)
+			{
+				firstFreeIdx = i;
+			}
+
+			// player with this input index was already joined before
+			if (_players[i].InputIndex == playerInputIndex)
+			{
+				_players[i].IsJoined = true;
+				return;
+			}
+		}
+
+		if (firstFreeIdx == -1)
+		{
+			throw new ArgumentException("Cannot join a player in a full lobby");
+		}
+
+		// new player joined
+		_players[firstFreeIdx].SetValues($"Player {firstFreeIdx+1}", defaultPlayerColors[firstFreeIdx], true, false, playerInputIndex);
+		UpdateDisplay();
+	}
+
+	public void OnPlayerLeft(int playerInputIndex)
+	{
+		for (var i = 0; i < _players.Count; i++)
+		{
+			if (_players[i].InputIndex == playerInputIndex)
+			{
+				_players[i].IsJoined = false;
+				_players[i].IsReady = false;
+				break;
+			}
+		}
+		UpdateDisplay();
 	}
 
 	public void HandleReadyToStart(bool readyToStart)
@@ -73,7 +116,7 @@ public class Lobby : MonoBehaviour
 		nameInputField.SetActive(true);
 		nameInputField.GetComponent<InputField>().Select();
 	}
-	
+
 	public void InputEntered(InputField input)
 	{
 		nameInputField.SetActive(false);
