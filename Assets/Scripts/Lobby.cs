@@ -48,7 +48,7 @@ public class Lobby : MonoBehaviour
 		{
 			if (!_players[i].IsJoined)
 			{
-				playerNameTexts[i].text = "Press any key to join...";
+				playerNameTexts[i].text = "Press X to join...";
 				playerReadyTexts[i].text = string.Empty;
 				playerAvatars[i].SetActive(false);
 			}
