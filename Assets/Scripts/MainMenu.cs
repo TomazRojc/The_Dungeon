@@ -1,9 +1,10 @@
 ﻿using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class MainMenu : MonoBehaviour
 {
 	[SerializeField]
-	private GameObject _playerInputManager;
+	private PlayerInputManager _playerInputManager;
 	[SerializeField]
 	private GameObject _lobby;
 
@@ -15,7 +16,7 @@ public class MainMenu : MonoBehaviour
 	public void GoToLobby()
 	{
 		_lobbyPanel.SetActive(true);
-		_playerInputManager.SetActive(true);
+		_playerInputManager.EnableJoining();
 		_lobby.SetActive(true);
 	}
 
@@ -29,7 +30,7 @@ public class MainMenu : MonoBehaviour
 		_mainMenuPanel.SetActive(true);
 		_lobbyPanel.SetActive(false);
 		_settingsPanel.SetActive(false);
-		_playerInputManager.SetActive(false);
+		_playerInputManager.DisableJoining();
 		_lobby.SetActive(false);
 	}
 

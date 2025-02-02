@@ -4553,7 +4553,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2aa6116ddff2a694fbf751b124c3e2e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _playerInputManager: {fileID: 2110455153}
+  _playerInputManager: {fileID: 0}
   _lobby: {fileID: 303290703}
   _mainMenuPanel: {fileID: 1306513116}
   _lobbyPanel: {fileID: 7963712139352903058}
@@ -5378,7 +5378,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_NotificationBehavior: 2
   m_MaxPlayerCount: 4
-  m_AllowJoining: 1
+  m_AllowJoining: 0
   m_JoinBehavior: 0
   m_PlayerJoinedEvent:
     m_PersistentCalls:
