@@ -1,12 +1,10 @@
 ﻿using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class MainMenu : MonoBehaviour
 {
+	
 	[SerializeField]
-	private PlayerInputManager _playerInputManager;
-	[SerializeField]
-	private GameObject _lobby;
+	private Lobby _lobby;
 
 	[Header("UIs")]
 	[SerializeField] private GameObject _mainMenuPanel;
@@ -16,8 +14,7 @@ public class MainMenu : MonoBehaviour
 	public void GoToLobby()
 	{
 		_lobbyPanel.SetActive(true);
-		_playerInputManager.EnableJoining();
-		_lobby.SetActive(true);
+		_lobby.OnEnter();
 	}
 
 	public void GoToSettings()
@@ -30,8 +27,7 @@ public class MainMenu : MonoBehaviour
 		_mainMenuPanel.SetActive(true);
 		_lobbyPanel.SetActive(false);
 		_settingsPanel.SetActive(false);
-		_playerInputManager.DisableJoining();
-		_lobby.SetActive(false);
+		_lobby.OnExit();
 	}
 
 	public void ExitGame()

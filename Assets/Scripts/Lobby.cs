@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class Lobby : MonoBehaviour
@@ -24,22 +25,28 @@ public class Lobby : MonoBehaviour
 
 	[SerializeField]
 	private List<Color> defaultPlayerColors;
+	
+	[SerializeField]
+	private PlayerInputManager _playerInputManager;
 
 	private List<PlayerData> _players;
 
-	public void Awake()
+	public void OnEnter()
 	{
+		_playerInputManager.EnableJoining();
+			
 		startGameButton.interactable = false;
 
 		InputField input = nameInputField.GetComponent<InputField>();
 		input.onEndEdit.AddListener(delegate { InputEntered(input); });
 
 		_players = Main.Instance.PlayersData;
+		UpdateDisplay();
 	}
 
-	public void OnEnable()
+	public void OnExit()
 	{
-		UpdateDisplay();
+		_playerInputManager.DisableJoining();
 	}
 
 	private void UpdateDisplay()
