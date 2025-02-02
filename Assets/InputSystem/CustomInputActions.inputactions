@@ -211,7 +211,7 @@
                     "isPartOfComposite": false
                 },
                 {
-                    "name": "WASD",
+                    "name": "Arrows",
                     "id": "04d50d95-f766-4251-ac8e-22d0220356c3",
                     "path": "Dpad",
                     "interactions": "",
