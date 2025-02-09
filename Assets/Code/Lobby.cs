@@ -16,12 +16,15 @@ public class Lobby : MonoBehaviour
 	[SerializeField]
 	private GameObject[] playerReadyButtons = new GameObject[4];
 
-	[SerializeField] 
+	[SerializeField]
+	private List<Color> defaultPlayerColors;
+
+	[SerializeField]
 	private Button startGameButton;
 
 	[SerializeField]
-	private List<Color> defaultPlayerColors;
-	
+	private GameObject levelsUI;
+
 	[SerializeField]
 	private PlayerInputManager _playerInputManager;
 
@@ -130,7 +133,7 @@ public class Lobby : MonoBehaviour
 
 	public void ShowLevelsUI()
 	{
-		GameObject.Find("LevelsUI").transform.GetChild(0).gameObject.SetActive(true);
+		levelsUI.SetActive(true);
 	}
 
 }

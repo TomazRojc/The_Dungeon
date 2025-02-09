@@ -1486,15 +1486,13 @@ MonoBehaviour:
   - {fileID: 4871083}
   - {fileID: 1624224312}
   - {fileID: 1149381198}
-  startGameButton: {fileID: 6889064967486905972}
-  nameInputField: {fileID: 0}
-  colorPickerObject: {fileID: 0}
-  playerAvatarPreview: {fileID: 0}
   defaultPlayerColors:
   - {r: 0.8862745, g: 0.9411765, b: 0.79607844, a: 1}
   - {r: 0.78039217, g: 0.80784315, b: 0.91764706, a: 1}
   - {r: 1, g: 0.85490197, b: 0.75686276, a: 1}
   - {r: 1, g: 0.7176471, b: 0.69803923, a: 1}
+  startGameButton: {fileID: 6889064967486905972}
+  levelsUI: {fileID: 1281623357}
   _playerInputManager: {fileID: 2110455154}
 --- !u!4 &303290705
 Transform:
@@ -8152,9 +8150,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: RoomPlayer, Assembly-CSharp
-        m_MethodName: CmdReadyUp
+      - m_Target: {fileID: 303290704}
+        m_TargetAssemblyTypeName: Lobby, Assembly-CSharp
+        m_MethodName: ShowLevelsUI
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
