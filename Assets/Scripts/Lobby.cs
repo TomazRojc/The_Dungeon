@@ -21,8 +21,6 @@ public class Lobby : MonoBehaviour
 	[SerializeField] 
 	private GameObject nameInputField;
 	[SerializeField] 
-	private GameObject colorPickerObject;
-	[SerializeField] 
 	private GameObject playerAvatarPreview;
 
 	[SerializeField]
