@@ -13,6 +13,8 @@ public class Lobby : MonoBehaviour
 	private TMP_Text[] playerReadyTexts = new TMP_Text[4];
 	[SerializeField]
 	private GameObject[] playerAvatars = new GameObject[4];
+	[SerializeField]
+	private GameObject[] playerReadyButtons = new GameObject[4];
 
 	[SerializeField] 
 	private Button startGameButton;
@@ -58,6 +60,7 @@ public class Lobby : MonoBehaviour
 				playerNameTexts[i].text = "Press X to join...";
 				playerReadyTexts[i].text = string.Empty;
 				playerAvatars[i].SetActive(false);
+				playerReadyButtons[i].SetActive(false);
 			}
 			else
 			{
@@ -67,6 +70,7 @@ public class Lobby : MonoBehaviour
 					"<color=red>Not Ready</color>";
 				playerAvatars[i].SetActive(true);
 				playerAvatars[i].GetComponent<Image>().color = _players[i].Color;
+				playerReadyButtons[i].SetActive(true);
 			}
 		}
 	}
@@ -113,8 +117,23 @@ public class Lobby : MonoBehaviour
 		UpdateDisplay();
 	}
 
-	public void HandleReadyToStart(bool readyToStart)
+	public void OnPlayerReady(int buttonIndex)
 	{
+		_players[buttonIndex].IsReady = !_players[buttonIndex].IsReady;
+		HandleReadyToStart();
+		UpdateDisplay();
+	}
+
+	public void HandleReadyToStart()
+	{
+		var readyToStart = true;
+		for (int i = 0; i < _players.Count; i++)
+		{
+			if (_players[i].IsJoined && !_players[i].IsReady)
+			{
+				readyToStart = false;
+			}
+		}
 		startGameButton.interactable = readyToStart;
 	}
 
