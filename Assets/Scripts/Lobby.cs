@@ -18,10 +18,6 @@ public class Lobby : MonoBehaviour
 
 	[SerializeField] 
 	private Button startGameButton;
-	[SerializeField] 
-	private GameObject nameInputField;
-	[SerializeField] 
-	private GameObject playerAvatarPreview;
 
 	[SerializeField]
 	private List<Color> defaultPlayerColors;
@@ -35,12 +31,9 @@ public class Lobby : MonoBehaviour
 	{
 		_playerInputManager.EnableJoining();
 			
-		startGameButton.interactable = false;
-
-		InputField input = nameInputField.GetComponent<InputField>();
-		input.onEndEdit.AddListener(delegate { InputEntered(input); });
-
 		_players = Main.Instance.PlayersData;
+
+		HandleReadyToStart();
 		UpdateDisplay();
 	}
 
@@ -133,17 +126,6 @@ public class Lobby : MonoBehaviour
 			}
 		}
 		startGameButton.interactable = readyToStart;
-	}
-
-	public void EnableNameInput()
-	{
-		nameInputField.SetActive(true);
-		nameInputField.GetComponent<InputField>().Select();
-	}
-
-	public void InputEntered(InputField input)
-	{
-		nameInputField.SetActive(false);
 	}
 
 	public void ShowLevelsUI()
