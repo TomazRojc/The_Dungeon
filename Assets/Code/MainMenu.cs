@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using TheDungeon.Utils;
+using UnityEngine;
 
 public class MainMenu : MonoBehaviour
 {
@@ -8,8 +9,16 @@ public class MainMenu : MonoBehaviour
 
 	[Header("UIs")]
 	[SerializeField] private GameObject _mainMenuPanel;
-	[SerializeField] private GameObject _lobbyPanel;
 	[SerializeField] private GameObject _settingsPanel;
+	[SerializeField] private GameObject _lobbyPanel;
+	[SerializeField] private GameObject _levelsPanel;
+
+	private SimpleTimer _timer = new SimpleTimer();
+
+	private void Update()
+	{
+		_timer.Update(Time.deltaTime);
+	}
 
 	public void GoToLobby()
 	{
@@ -17,6 +26,18 @@ public class MainMenu : MonoBehaviour
 		_lobby.OnEnter();
 	}
 
+	public void GoToLevelSelection()
+	{
+		_mainMenuPanel.SetActive(false);
+		_lobbyPanel.SetActive(false);
+		
+		_timer.OnComplete += () =>
+		{
+			_levelsPanel.SetActive(true);
+		};
+		_timer.Start(0.7f);
+	}
+	
 	public void GoToSettings()
 	{
 		_settingsPanel.SetActive(true);

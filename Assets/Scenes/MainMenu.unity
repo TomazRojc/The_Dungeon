@@ -1492,7 +1492,6 @@ MonoBehaviour:
   - {r: 1, g: 0.85490197, b: 0.75686276, a: 1}
   - {r: 1, g: 0.7176471, b: 0.69803923, a: 1}
   startGameButton: {fileID: 6889064967486905972}
-  levelsUI: {fileID: 1281623357}
   _playerInputManager: {fileID: 2110455154}
 --- !u!4 &303290705
 Transform:
@@ -5192,8 +5191,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _lobby: {fileID: 303290704}
   _mainMenuPanel: {fileID: 1306513116}
-  _lobbyPanel: {fileID: 7963712139352903058}
   _settingsPanel: {fileID: 25067441}
+  _lobbyPanel: {fileID: 7963712139352903058}
+  _levelsPanel: {fileID: 1281623357}
 --- !u!1 &1539232144
 GameObject:
   m_ObjectHideFlags: 0
@@ -8150,9 +8150,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 303290704}
-        m_TargetAssemblyTypeName: Lobby, Assembly-CSharp
-        m_MethodName: ShowLevelsUI
+      - m_Target: {fileID: 1508411021}
+        m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
+        m_MethodName: GoToLevelSelection
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

@@ -23,9 +23,6 @@ public class Lobby : MonoBehaviour
 	private Button startGameButton;
 
 	[SerializeField]
-	private GameObject levelsUI;
-
-	[SerializeField]
 	private PlayerInputManager _playerInputManager;
 
 	private List<PlayerData> _players;
@@ -129,11 +126,6 @@ public class Lobby : MonoBehaviour
 			}
 		}
 		startGameButton.interactable = readyToStart;
-	}
-
-	public void ShowLevelsUI()
-	{
-		levelsUI.SetActive(true);
 	}
 
 }
