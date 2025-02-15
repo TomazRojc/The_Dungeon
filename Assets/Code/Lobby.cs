@@ -30,20 +30,25 @@ public class Lobby : MonoBehaviour
 	public void OnEnter()
 	{
 		_playerInputManager.EnableJoining();
-			
-		_players = Main.Instance.PlayersData;
 
-		HandleReadyToStart();
+		if (_players == null)
+		{
+			_players = Main.Instance.PlayersData;
+		}
+
 		UpdateDisplay();
 	}
 
 	public void OnExit()
 	{
 		_playerInputManager.DisableJoining();
+		ResetPlayersReady();
 	}
 
 	private void UpdateDisplay()
 	{
+		HandleReadyToStart();
+		
 		for (int i = 0; i < _players.Count; i++)
 		{
 			if (!_players[i].IsJoined)
@@ -108,24 +113,38 @@ public class Lobby : MonoBehaviour
 		UpdateDisplay();
 	}
 
+	public void ResetPlayersReady()
+	{
+		for (int i = 0; i < _players.Count; i++)
+		{
+			_players[i].IsReady = false;
+		}
+
+		startGameButton.interactable = false;
+	}
+
 	public void OnPlayerReady(int buttonIndex)
 	{
 		_players[buttonIndex].IsReady = !_players[buttonIndex].IsReady;
-		HandleReadyToStart();
 		UpdateDisplay();
 	}
 
 	public void HandleReadyToStart()
 	{
-		var readyToStart = true;
+		var allReady = true;
+		var lobbyEmpty = true;
 		for (int i = 0; i < _players.Count; i++)
 		{
-			if (_players[i].IsJoined && !_players[i].IsReady)
+			if (_players[i].IsJoined)
 			{
-				readyToStart = false;
+				lobbyEmpty = false;
+				if (!_players[i].IsReady)
+				{
+					allReady = false;
+				}
 			}
 		}
-		startGameButton.interactable = readyToStart;
+		startGameButton.interactable = allReady && !lobbyEmpty;
 	}
 
 }
