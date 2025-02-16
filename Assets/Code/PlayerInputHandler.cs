@@ -5,6 +5,9 @@ using UnityEngine.InputSystem;
 public class PlayerInputHandler : MonoBehaviour
 {
     private PlayerInput _playerInput;
+    
+    private Vector2 _moveInput;
+    private Vector2 _lookInput;
 
     public Action<int> onDeviceLost;
     public Action<int> onDeviceRegained;
@@ -14,21 +17,23 @@ public class PlayerInputHandler : MonoBehaviour
         _playerInput = GetComponent<PlayerInput>();
     }
 
+    void Update()
+    {
+        // invoke player movement/look
+        Debug.Log("Move: " + _moveInput);
+        Debug.Log("Look: " + _lookInput);
+    }
+
     // WASD or Left Stick
     public void OnMove(InputAction.CallbackContext context)
     {
-        // context.started and context.cancelled are called on the first and last frame of performing an action (this function is called twice on those frames)
-        // if (!context.performed) return;
-        Debug.Log("Move: " + context.ReadValue<Vector2>());
-        Debug.Log(context);
-        
-        // handle movement based on _playerInput.playerIndex
+        _moveInput = context.ReadValue<Vector2>();
     }
     
     // Arrows or Right Stick
     public void OnLook(InputAction.CallbackContext context)
     {
-        Debug.Log("Look: " + context.ReadValue<Vector2>());
+        _lookInput = context.ReadValue<Vector2>();
     }
     
     // Q or North Button
