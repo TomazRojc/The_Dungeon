@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   defaultColor: {r: 0.8, g: 0.8, b: 0.8, a: 1}
   highlightedColor: {r: 0.36692336, g: 0.6132076, b: 0.3326362, a: 1}
-  animationDuration: 0.15
+  animationDuration: 0.3
   selectedScale: 1.1
   selectedOffset: {x: 70, y: 5, z: 0}
   animationCurve:

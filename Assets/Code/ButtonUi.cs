@@ -1,4 +1,5 @@
 using TheDungeon.Utils;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
@@ -13,13 +14,24 @@ namespace Code
         [SerializeField]
         private Transform animationTransform;
         [SerializeField]
-        private Image backgroundImage;
+        private Image lineImage;
+        [SerializeField]
+        private Image arrowImage;
         [SerializeField]
         private Text text;
         [SerializeField]
         private UnityEvent onClick;
         
         private SimpleTimer _animationTimer;
+
+        protected override void Awake()
+        {
+            if (Application.isPlaying)
+            {
+                lineImage.transform.localScale = Vector3.zero;
+                arrowImage.transform.localScale = Vector3.zero;
+            }
+        }
         
         private void Update()
         {
@@ -46,12 +58,12 @@ namespace Code
         
         private void PlayEnterAnimation()
         {
-            PlayAnimation(buttonConfig.SelectedScale, buttonConfig.SelectedOffset, buttonConfig.HighlightedColor);
+            PlayAnimation(buttonConfig.SelectedScale, buttonConfig.SelectedOffset, buttonConfig.HighlightedColor, 1f, -1f);
         }
         
         private void PlayExitAnimation()
         {
-            PlayAnimation(1f, Vector3.zero, buttonConfig.DefaultColor);
+            PlayAnimation(1f, Vector3.zero, buttonConfig.DefaultColor, 0f, 1f);
         }
         
         private void OnClick()
@@ -59,31 +71,36 @@ namespace Code
             onClick.Invoke();
         }
         
-        private void PlayAnimation(float endScale, Vector3 endPos, Color endColor)
+        private void PlayAnimation(float buttonScale, Vector3 position, Color color, float imagesScale, float direction)
         {
-            var startScale = animationTransform.localScale.x;
             var startPos = animationTransform.localPosition;
-            var startColor = backgroundImage.color;
+            var startColor = lineImage.color;
+            var startImagesScale = lineImage.transform.localScale.x;
+            var vectorStartScale = Vector3.one * animationTransform.localScale.x;
+            var vectorEndScale = Vector3.one * buttonScale;
             _animationTimer = new SimpleTimer();
             _animationTimer.OnUpdate += UpdateAnimation;
             _animationTimer.Start(buttonConfig.AnimationDuration);
 
             void UpdateAnimation(float normalizedTime)
             {
-                var vectorStartScale = Vector3.one * startScale;
-                var vectorEndScale = Vector3.one * endScale;
                 var eval = buttonConfig.AnimationCurve.Evaluate(normalizedTime);
                 animationTransform.localScale = Vector3.Lerp(vectorStartScale, vectorEndScale, eval);
-                animationTransform.localPosition = Vector3.Lerp(startPos, endPos, eval);
-                backgroundImage.color = Color.Lerp(startColor, endColor, eval);
-                text.color = Color.Lerp(startColor, endColor, eval);
+                animationTransform.localPosition = Vector3.Lerp(startPos, position, eval);
+                lineImage.color = Color.Lerp(startColor, color, eval);
+                lineImage.transform.localScale = new Vector3(Mathf.Lerp(startImagesScale, imagesScale, eval), 1, 1);
+                arrowImage.color = Color.Lerp(startColor, color, eval);
+                arrowImage.transform.rotation = Quaternion.Euler(Vector3.Lerp(Vector3.zero, new Vector3(0, 0, direction * 360f), eval));
+                arrowImage.transform.localScale = Vector3.Lerp(Vector3.one * startImagesScale, Vector3.one * imagesScale, eval);
+                text.color = Color.Lerp(startColor, color, eval);
             }
         }
 
         protected override void OnValidate()
         {
             base.OnValidate();
-            backgroundImage.color = buttonConfig.DefaultColor;
+            lineImage.color = buttonConfig.DefaultColor;
+            arrowImage.color = buttonConfig.DefaultColor;
             text.color = buttonConfig.DefaultColor;
         }
     }
