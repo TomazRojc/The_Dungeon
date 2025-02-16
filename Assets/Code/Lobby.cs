@@ -21,8 +21,6 @@ namespace Code
 		private List<PlayerData> _players;
 		private bool _active;
 		
-		public bool Active => _active;
-
 		private void Awake()
 		{
 			GameplaySession = Main.Instance.GameplaySession;
