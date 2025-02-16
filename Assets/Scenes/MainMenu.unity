@@ -464,7 +464,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9687e268ad06bc4eb56d907fb516993, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxPlayers: 4
+  _gameplayConfig: {fileID: 11400000, guid: 8490df732db180043a88c184815b1e5b, type: 2}
 --- !u!4 &28944455
 Transform:
   m_ObjectHideFlags: 0
@@ -1493,6 +1493,7 @@ MonoBehaviour:
   - {r: 1, g: 0.7176471, b: 0.69803923, a: 1}
   startGameButton: {fileID: 6889064967486905972}
   _playerInputManager: {fileID: 2110455154}
+  _mainMenu: {fileID: 1508411021}
 --- !u!4 &303290705
 Transform:
   m_ObjectHideFlags: 0
@@ -8063,9 +8064,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1508411021}
-        m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
-        m_MethodName: GoToLevelSelection
+      - m_Target: {fileID: 303290704}
+        m_TargetAssemblyTypeName: Code.Lobby, Assembly-CSharp
+        m_MethodName: StartGame
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

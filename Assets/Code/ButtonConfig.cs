@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Code
 {
-    [CreateAssetMenu(fileName = "ButtonConfig", menuName = "ScriptableObjects/ButtonConfig", order = 1)]
+    [CreateAssetMenu(fileName = "ButtonConfig", menuName = "ScriptableObjects/ButtonConfig", order = 2)]
     public class ButtonConfig : ScriptableObject
     {
         [SerializeField]

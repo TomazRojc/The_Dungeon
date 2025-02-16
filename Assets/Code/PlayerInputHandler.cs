@@ -6,17 +6,20 @@ namespace Code
 {
     public class PlayerInputHandler : MonoBehaviour
     {
-        private PlayerInput _playerInput;
-
+        private PlayerController _player;
+        
         private Vector2 _moveInput;
         private Vector2 _lookInput;
+        private int _inputIndex;
+
+        public int InputIndex;
 
         public Action<int> onDeviceLost;
         public Action<int> onDeviceRegained;
 
         private void Awake()
         {
-            _playerInput = GetComponent<PlayerInput>();
+            _inputIndex = GetComponent<PlayerInput>().playerIndex;
         }
 
         void Update()
@@ -24,6 +27,11 @@ namespace Code
             // invoke player movement/look
             Debug.Log("Move: " + _moveInput);
             Debug.Log("Look: " + _lookInput);
+        }
+
+        public void ConnectPlayerController(PlayerController player)
+        {
+            _player = player;
         }
 
         // WASD or Left Stick

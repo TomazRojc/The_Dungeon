@@ -1,4 +1,5 @@
-﻿using JetBrains.Annotations;
+﻿using Code.Gameplay;
+using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -8,7 +9,15 @@ namespace Code
     public class PlayerConnections : MonoBehaviour
     {
 
-        [SerializeField] private Lobby lobby;
+        [SerializeField]
+        private Lobby lobby;
+        
+        private GameplaySession gameplaySession;
+
+        private void Awake()
+        {
+            gameplaySession = Main.Instance.GameplaySession;
+        }
 
         [UsedImplicitly]
         public void AddPlayerConnection(PlayerInput playerInput)
@@ -18,6 +27,7 @@ namespace Code
             var inputHandler = playerInput.GetComponent<PlayerInputHandler>();
             inputHandler.onDeviceLost += HandleDeviceLost;
             inputHandler.onDeviceRegained += HandleDeviceRegained;
+            gameplaySession.AddPlayerInput(inputHandler);
         }
 
         [UsedImplicitly]
@@ -28,6 +38,7 @@ namespace Code
             var inputHandler = playerInput.GetComponent<PlayerInputHandler>();
             inputHandler.onDeviceLost -= HandleDeviceLost;
             inputHandler.onDeviceRegained -= HandleDeviceRegained;
+            gameplaySession.RemovePlayerInput(inputHandler);
         }
 
         private void HandleDeviceLost(int playerInputIndex)

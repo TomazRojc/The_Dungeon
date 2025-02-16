@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using Code.Gameplay;
 using UnityEngine;
 
 namespace Code
@@ -7,19 +7,18 @@ namespace Code
     {
         public static Main Instance;
 
-        [SerializeField] private int maxPlayers = 4;
-
-        public int MaxPlayers => maxPlayers;
-        public List<PlayerData> PlayersData;
+        [SerializeField]
+        private GameplayConfig _gameplayConfig;
+        
+        private GameplaySession _gameplaySession;
+        
+        public GameplayConfig GameplayConfig => _gameplayConfig;
+        public GameplaySession GameplaySession => _gameplaySession;
 
         private void Awake()
         {
             Instance = this;
-            PlayersData = new List<PlayerData>(maxPlayers);
-            for (int i = 0; i < maxPlayers; i++)
-            {
-                PlayersData.Add(new PlayerData());
-            }
+            _gameplaySession = new GameplaySession(_gameplayConfig.MaxPlayers);
         }
     }
 }

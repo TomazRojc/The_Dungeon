@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Code.Gameplay;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -19,20 +20,29 @@ namespace Code
 		[SerializeField] private Button startGameButton;
 
 		[SerializeField] private PlayerInputManager _playerInputManager;
+		
+		[SerializeField] private MainMenu _mainMenu;
 
+		private GameplaySession GameplaySession;
 		private List<PlayerData> _players;
+		private bool _active;
+		
+		public bool Active => _active;
 
-		public bool Active;
+		private void Awake()
+		{
+			GameplaySession = Main.Instance.GameplaySession;
+		}
 
 		public void OnEnter()
 		{
-			Active = true;
+			_active = true;
 
 			_playerInputManager.EnableJoining();
 
 			if (_players == null)
 			{
-				_players = Main.Instance.PlayersData;
+				_players = Main.Instance.GameplaySession.PlayersData;
 			}
 
 			UpdateDisplay();
@@ -42,12 +52,12 @@ namespace Code
 		{
 			_playerInputManager.DisableJoining();
 			ResetPlayersReady();
-			Active = false;
+			_active = false;
 		}
 
 		private void UpdateDisplay()
 		{
-			if (!Active) return;
+			if (!_active) return;
 
 			HandleReadyToStart();
 
@@ -150,6 +160,12 @@ namespace Code
 			}
 
 			startGameButton.interactable = allReady && !lobbyEmpty;
+		}
+
+		public void StartGame()
+		{
+			GameplaySession.OnEnterLevelsGameplay(Main.Instance.GameplayConfig.PlayerPrefab);
+			_mainMenu.GoToLevelSelection();
 		}
 	}
 }
