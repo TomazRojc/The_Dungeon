@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Code.Gameplay;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Serialization;
 
 namespace Code
 {
@@ -10,8 +11,8 @@ namespace Code
 	{
 		[SerializeField]
 		private LobbyUI _lobbyUI;
-		[SerializeField]
-		private MainMenu _mainMenu;
+		[FormerlySerializedAs("_mainMenu")] [SerializeField]
+		private UIController uiController;
 		[SerializeField]
 		private List<Color> defaultPlayerColors;
 		[SerializeField]
@@ -123,13 +124,13 @@ namespace Code
 		public void StartGame()
 		{
 			GameplaySession.OnEnterLevelsGameplay(Main.Instance.GameplayConfig.PlayerPrefab);
-			_mainMenu.GoToLevelSelection();
+			uiController.GoToLevelSelection();
 			OnExit();
 		}
 
 		public void BackToMainMenu()
 		{
-			_mainMenu.GoBackToMainMenu();
+			uiController.GoBackToMainMenu();
 			OnExit();
 		}
 	}

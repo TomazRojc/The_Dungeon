@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Code
 {
 
-	public class MainMenu : MonoBehaviour
+	public class UIController : MonoBehaviour
 	{
 
 		[SerializeField] private Lobby _lobby;
@@ -14,7 +14,7 @@ namespace Code
 		[SerializeField] private GameObject _lobbyPanel;
 		[SerializeField] private GameObject _levelsPanel;
 
-		private SimpleTimer _timer = new SimpleTimer();
+		private SimpleTimer _timer;
 
 		private void Update()
 		{
@@ -34,6 +34,11 @@ namespace Code
 
 			_timer.OnComplete += () => { _levelsPanel.SetActive(true); };
 			_timer.Start(0.7f);
+		}
+
+		public void StartLevel(int levelNumber)
+		{
+			Main.Instance.LevelManager.StartLevel(levelNumber-1);
 		}
 
 		public void GoToSettings()

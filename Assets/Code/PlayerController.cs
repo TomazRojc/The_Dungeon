@@ -96,10 +96,10 @@ namespace Code
 		void Update()
 		{
 
-			HandleInput();
+			// HandleInput();
 
 			if (cameraObject == null)
-				GameObject.Find("Camera")?.GetComponent<CameraFollow>()
+				GameObject.Find("LevelCamera")?.GetComponent<CameraFollow>()
 					.FollowPlayer(GetComponent<Transform>()); // attach camera to local player
 
 		}

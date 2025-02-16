@@ -9,6 +9,8 @@ namespace Code
 
         [SerializeField]
         private GameplayConfig _gameplayConfig;
+        [SerializeField]
+        private LevelsConfig _levelsConfig;
         
         private GameplaySession _gameplaySession;
         private LevelManager _levelManager;
@@ -21,7 +23,7 @@ namespace Code
         {
             Instance = this;
             _gameplaySession = new GameplaySession(_gameplayConfig.MaxPlayers);
-            _levelManager = new LevelManager();
+            _levelManager = new LevelManager(_levelsConfig.LevelPrefabs);
         }
     }
 }

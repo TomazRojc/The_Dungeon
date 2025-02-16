@@ -9,21 +9,21 @@ namespace Code
 		[Range(1, 10)] public float smoothFactor;
 		public Vector3 minValue, maxValue;
 
-		void Update()
-		{
-			if (Input.GetKey(KeyCode.W))
-			{
-				offset[1] = 10;
-			}
-			else if (Input.GetKey(KeyCode.S))
-			{
-				offset[1] = -5;
-			}
-			else
-			{
-				offset[1] = 5;
-			}
-		}
+		// void Update()
+		// {
+		// 	if (Input.GetKey(KeyCode.W))
+		// 	{
+		// 		offset[1] = 10;
+		// 	}
+		// 	else if (Input.GetKey(KeyCode.S))
+		// 	{
+		// 		offset[1] = -5;
+		// 	}
+		// 	else
+		// 	{
+		// 		offset[1] = 5;
+		// 	}
+		// }
 
 		void FixedUpdate()
 		{
