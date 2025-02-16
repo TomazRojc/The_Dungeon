@@ -210,11 +210,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 5171688581846925651}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: df5ff450e9484f96a9efff1fb22ad689, type: 3}
+  m_Script: {fileID: 11500000, guid: 8c9af3808ec841318791454a39b96ef3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 0
+    m_Mode: 3
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
@@ -240,15 +240,15 @@ MonoBehaviour:
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
   m_Interactable: 1
-  m_TargetGraphic: {fileID: 7203130864889187203}
+  m_TargetGraphic: {fileID: 0}
+  onClick:
+    m_PersistentCalls:
+      m_Calls: []
   buttonConfig: {fileID: 11400000, guid: 98eb14e22fcd80d4997883c7c5506504, type: 2}
   animationTransform: {fileID: 355888797356020265}
   lineImage: {fileID: 8949811818094703818}
   arrowImage: {fileID: 8674869116024016723}
   text: {fileID: 8933273749994590954}
-  onClick:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!114 &7203130864889187203
 MonoBehaviour:
   m_ObjectHideFlags: 0

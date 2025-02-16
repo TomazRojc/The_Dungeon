@@ -3,7 +3,7 @@ using UnityEngine;
 namespace Code
 {
     [CreateAssetMenu(fileName = "ButtonConfig", menuName = "ScriptableObjects/ButtonConfig", order = 2)]
-    public class ButtonConfig : ScriptableObject
+    public class TextButtonConfig : ScriptableObject
     {
         [SerializeField]
         private Color defaultColor;

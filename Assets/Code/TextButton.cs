@@ -1,16 +1,13 @@
 using Code.Utils;
-using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.Events;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace Code
 {
-    public class ButtonUi : Selectable
+    public class TextButton : ButtonBase
     {
         [SerializeField]
-        private ButtonConfig buttonConfig;
+        private TextButtonConfig buttonConfig;
         [SerializeField]
         private Transform animationTransform;
         [SerializeField]
@@ -19,8 +16,6 @@ namespace Code
         private Image arrowImage;
         [SerializeField]
         private Text text;
-        [SerializeField]
-        private UnityEvent onClick;
         
         private SimpleTimer _animationTimer;
 
@@ -37,38 +32,15 @@ namespace Code
         {
             _animationTimer.Update(Time.deltaTime);
         }
-
-        public override void OnPointerEnter(PointerEventData eventData)
-        {
-            base.OnPointerEnter(eventData);
-            PlayEnterAnimation();
-        }
         
-        public override void OnPointerExit(PointerEventData eventData)
-        {
-            base.OnPointerExit(eventData);
-            PlayExitAnimation();
-        }
-        
-        public override void OnPointerUp(PointerEventData eventData)
-        {
-            base.OnPointerUp(eventData);
-            OnClick();
-        }
-        
-        private void PlayEnterAnimation()
+        protected override void PlayEnterAnimation()
         {
             PlayAnimation(buttonConfig.SelectedScale, buttonConfig.SelectedOffset, buttonConfig.HighlightedColor, 1f, -1f);
         }
         
-        private void PlayExitAnimation()
+        protected override void PlayExitAnimation()
         {
             PlayAnimation(1f, Vector3.zero, buttonConfig.DefaultColor, 0f, 1f);
-        }
-        
-        private void OnClick()
-        {
-            onClick.Invoke();
         }
         
         private void PlayAnimation(float buttonScale, Vector3 position, Color color, float imagesScale, float direction)

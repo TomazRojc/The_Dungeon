@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 11916db33aa54d3cafe7a3d7e79b5b63, type: 3}
-  m_Name: ButtonConfig
+  m_Name: TextButtonConfig
   m_EditorClassIdentifier: 
   defaultColor: {r: 0.8, g: 0.8, b: 0.8, a: 1}
   highlightedColor: {r: 0.36692336, g: 0.6132076, b: 0.3326362, a: 1}
-  animationDuration: 0.3
+  animationDuration: 0.2
   selectedScale: 1.1
-  selectedOffset: {x: 70, y: 5, z: 0}
+  selectedOffset: {x: 85, y: 5, z: 0}
   animationCurve:
     serializedVersion: 2
     m_Curve:
