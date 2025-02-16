@@ -1466,34 +1466,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3766f6271c6a0fb4eb0e4ebb3cd6299d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerNameTexts:
-  - {fileID: 6249408823944086058}
-  - {fileID: 4434606506205768723}
-  - {fileID: 4526972027325060054}
-  - {fileID: 833902998509693291}
-  playerReadyTexts:
-  - {fileID: 1392436058030889292}
-  - {fileID: 1505674327753566971}
-  - {fileID: 6859546479078895036}
-  - {fileID: 6083297581846689540}
-  playerAvatars:
-  - {fileID: 8344369109495192791}
-  - {fileID: 441648632518732920}
-  - {fileID: 2905175420487457052}
-  - {fileID: 1165432856846279560}
-  playerReadyButtons:
-  - {fileID: 89668650}
-  - {fileID: 4871083}
-  - {fileID: 1624224312}
-  - {fileID: 1149381198}
+  _lobbyUI: {fileID: 7963712139352903059}
+  _mainMenu: {fileID: 1508411021}
   defaultPlayerColors:
   - {r: 0.8862745, g: 0.9411765, b: 0.79607844, a: 1}
   - {r: 0.78039217, g: 0.80784315, b: 0.91764706, a: 1}
   - {r: 1, g: 0.85490197, b: 0.75686276, a: 1}
   - {r: 1, g: 0.7176471, b: 0.69803923, a: 1}
-  startGameButton: {fileID: 6889064967486905972}
   _playerInputManager: {fileID: 2110455154}
-  _mainMenu: {fileID: 1508411021}
 --- !u!4 &303290705
 Transform:
   m_ObjectHideFlags: 0
@@ -8304,6 +8284,7 @@ GameObject:
   - component: {fileID: 6198247627901834687}
   - component: {fileID: 5012252067383964704}
   - component: {fileID: 1302629359643724800}
+  - component: {fileID: 7963712139352903059}
   m_Layer: 0
   m_Name: LobbyPanel
   m_TagString: Untagged
@@ -8311,6 +8292,39 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 0
+--- !u!114 &7963712139352903059
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7963712139352903058}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f6ceabbb353477e96dde1b6deaa2f47, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerNameTexts:
+  - {fileID: 6249408823944086058}
+  - {fileID: 4434606506205768723}
+  - {fileID: 4526972027325060054}
+  - {fileID: 833902998509693291}
+  playerReadyTexts:
+  - {fileID: 1392436058030889292}
+  - {fileID: 1505674327753566971}
+  - {fileID: 6859546479078895036}
+  - {fileID: 6083297581846689540}
+  playerAvatars:
+  - {fileID: 8344369109495192791}
+  - {fileID: 441648632518732920}
+  - {fileID: 2905175420487457052}
+  - {fileID: 1165432856846279560}
+  playerReadyButtons:
+  - {fileID: 89668650}
+  - {fileID: 4871083}
+  - {fileID: 1624224312}
+  - {fileID: 1149381198}
+  startGameButton: {fileID: 6889064967486905972}
 --- !u!224 &8020206877338263721
 RectTransform:
   m_ObjectHideFlags: 0

@@ -1,27 +1,21 @@
 using System;
 using System.Collections.Generic;
 using Code.Gameplay;
-using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.UI;
 
 namespace Code
 {
 	public class Lobby : MonoBehaviour
 	{
-		[SerializeField] private TMP_Text[] playerNameTexts = new TMP_Text[4];
-		[SerializeField] private TMP_Text[] playerReadyTexts = new TMP_Text[4];
-		[SerializeField] private GameObject[] playerAvatars = new GameObject[4];
-		[SerializeField] private GameObject[] playerReadyButtons = new GameObject[4];
-
-		[SerializeField] private List<Color> defaultPlayerColors;
-
-		[SerializeField] private Button startGameButton;
-
-		[SerializeField] private PlayerInputManager _playerInputManager;
-		
-		[SerializeField] private MainMenu _mainMenu;
+		[SerializeField]
+		private LobbyUI _lobbyUI;
+		[SerializeField]
+		private MainMenu _mainMenu;
+		[SerializeField]
+		private List<Color> defaultPlayerColors;
+		[SerializeField]
+		private PlayerInputManager _playerInputManager;
 
 		private GameplaySession GameplaySession;
 		private List<PlayerData> _players;
@@ -45,7 +39,7 @@ namespace Code
 				_players = Main.Instance.GameplaySession.PlayersData;
 			}
 
-			UpdateDisplay();
+			_lobbyUI.UpdateDisplay(_players);
 		}
 
 		public void OnExit()
@@ -53,34 +47,6 @@ namespace Code
 			_playerInputManager.DisableJoining();
 			ResetPlayersReady();
 			_active = false;
-		}
-
-		private void UpdateDisplay()
-		{
-			if (!_active) return;
-
-			HandleReadyToStart();
-
-			for (int i = 0; i < _players.Count; i++)
-			{
-				if (!_players[i].IsJoined)
-				{
-					playerNameTexts[i].text = "Press X to join...";
-					playerReadyTexts[i].text = string.Empty;
-					playerAvatars[i].SetActive(false);
-					playerReadyButtons[i].SetActive(false);
-				}
-				else
-				{
-					playerNameTexts[i].text = _players[i].DisplayName;
-					playerReadyTexts[i].text = _players[i].IsReady
-						? "<color=green>Ready</color>"
-						: "<color=red>Not Ready</color>";
-					playerAvatars[i].SetActive(true);
-					playerAvatars[i].GetComponent<Image>().color = _players[i].Color;
-					playerReadyButtons[i].SetActive(true);
-				}
-			}
 		}
 
 		public void OnPlayerJoined(int playerInputIndex)
@@ -109,7 +75,11 @@ namespace Code
 			// new player joined
 			_players[firstFreeIdx].SetValues($"Player {firstFreeIdx + 1}", defaultPlayerColors[firstFreeIdx], true,
 				false, playerInputIndex);
-			UpdateDisplay();
+			
+			if (_active)
+			{
+				_lobbyUI.UpdateDisplay(_players);
+			}
 		}
 
 		public void OnPlayerLeft(int playerInputIndex)
@@ -124,7 +94,10 @@ namespace Code
 				}
 			}
 
-			UpdateDisplay();
+			if (_active)
+			{
+				_lobbyUI.UpdateDisplay(_players);
+			}
 		}
 
 		public void ResetPlayersReady()
@@ -134,34 +107,21 @@ namespace Code
 				_players[i].IsReady = false;
 			}
 
-			startGameButton.interactable = false;
+			if (_active)
+			{
+				_lobbyUI.UpdateDisplay(_players);
+			}
 		}
 
 		public void OnPlayerReady(int buttonIndex)
 		{
 			_players[buttonIndex].IsReady = !_players[buttonIndex].IsReady;
-			UpdateDisplay();
-		}
-
-		public void HandleReadyToStart()
-		{
-			var allReady = true;
-			var lobbyEmpty = true;
-			for (int i = 0; i < _players.Count; i++)
+			if (_active)
 			{
-				if (_players[i].IsJoined)
-				{
-					lobbyEmpty = false;
-					if (!_players[i].IsReady)
-					{
-						allReady = false;
-					}
-				}
+				_lobbyUI.UpdateDisplay(_players);
 			}
-
-			startGameButton.interactable = allReady && !lobbyEmpty;
 		}
-
+		
 		public void StartGame()
 		{
 			GameplaySession.OnEnterLevelsGameplay(Main.Instance.GameplayConfig.PlayerPrefab);
