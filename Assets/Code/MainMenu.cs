@@ -27,19 +27,10 @@ namespace Code
 			_lobby.OnEnter();
 		}
 
-		private void TryExitLobby()
-		{
-			if (_lobby.Active)
-			{
-				_lobbyPanel.SetActive(false);
-				_lobby.OnExit();
-			}
-		}
-
 		public void GoToLevelSelection()
 		{
 			_mainMenuPanel.SetActive(false);
-			TryExitLobby();
+			_lobbyPanel.SetActive(false);
 
 			_timer.OnComplete += () => { _levelsPanel.SetActive(true); };
 			_timer.Start(0.7f);
@@ -54,7 +45,7 @@ namespace Code
 		{
 			_mainMenuPanel.SetActive(true);
 			_settingsPanel.SetActive(false);
-			TryExitLobby();
+			_lobbyPanel.SetActive(false);
 		}
 
 		public void ExitGame()

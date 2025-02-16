@@ -126,6 +126,13 @@ namespace Code
 		{
 			GameplaySession.OnEnterLevelsGameplay(Main.Instance.GameplayConfig.PlayerPrefab);
 			_mainMenu.GoToLevelSelection();
+			OnExit();
+		}
+
+		public void BackToMainMenu()
+		{
+			_mainMenu.GoBackToMainMenu();
+			OnExit();
 		}
 	}
 }
