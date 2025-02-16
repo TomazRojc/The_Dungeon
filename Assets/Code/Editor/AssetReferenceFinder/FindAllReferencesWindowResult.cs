@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace TheDungeon.AssetReferenceFinder {
+namespace Code.AssetReferenceFinder {
 
     public class FindAllReferencesWindowResult {
 

@@ -1,66 +1,65 @@
-﻿using TheDungeon.Utils;
+﻿using Code.Utils;
 using UnityEngine;
 
-public class MainMenu : MonoBehaviour
+namespace Code
 {
-	
-	[SerializeField]
-	private Lobby _lobby;
 
-	[Header("UIs")]
-	[SerializeField] private GameObject _mainMenuPanel;
-	[SerializeField] private GameObject _settingsPanel;
-	[SerializeField] private GameObject _lobbyPanel;
-	[SerializeField] private GameObject _levelsPanel;
-
-	private SimpleTimer _timer = new SimpleTimer();
-
-	private void Update()
+	public class MainMenu : MonoBehaviour
 	{
-		_timer.Update(Time.deltaTime);
-	}
 
-	public void GoToLobby()
-	{
-		_lobbyPanel.SetActive(true);
-		_lobby.OnEnter();
-	}
+		[SerializeField] private Lobby _lobby;
 
-	private void TryExitLobby()
-	{
-		if (_lobby.Active)
+		[Header("UIs")] [SerializeField] private GameObject _mainMenuPanel;
+		[SerializeField] private GameObject _settingsPanel;
+		[SerializeField] private GameObject _lobbyPanel;
+		[SerializeField] private GameObject _levelsPanel;
+
+		private SimpleTimer _timer = new SimpleTimer();
+
+		private void Update()
 		{
-			_lobbyPanel.SetActive(false);
-			_lobby.OnExit();
+			_timer.Update(Time.deltaTime);
 		}
-	}
 
-	public void GoToLevelSelection()
-	{
-		_mainMenuPanel.SetActive(false);
-		TryExitLobby();
-		
-		_timer.OnComplete += () =>
+		public void GoToLobby()
 		{
-			_levelsPanel.SetActive(true);
-		};
-		_timer.Start(0.7f);
-	}
-	
-	public void GoToSettings()
-	{
-		_settingsPanel.SetActive(true);
-	}
+			_lobbyPanel.SetActive(true);
+			_lobby.OnEnter();
+		}
 
-	public void GoBackToMainMenu()
-	{
-		_mainMenuPanel.SetActive(true);
-		_settingsPanel.SetActive(false);
-		TryExitLobby();
-	}
+		private void TryExitLobby()
+		{
+			if (_lobby.Active)
+			{
+				_lobbyPanel.SetActive(false);
+				_lobby.OnExit();
+			}
+		}
 
-	public void ExitGame()
-	{
-		Application.Quit();
+		public void GoToLevelSelection()
+		{
+			_mainMenuPanel.SetActive(false);
+			TryExitLobby();
+
+			_timer.OnComplete += () => { _levelsPanel.SetActive(true); };
+			_timer.Start(0.7f);
+		}
+
+		public void GoToSettings()
+		{
+			_settingsPanel.SetActive(true);
+		}
+
+		public void GoBackToMainMenu()
+		{
+			_mainMenuPanel.SetActive(true);
+			_settingsPanel.SetActive(false);
+			TryExitLobby();
+		}
+
+		public void ExitGame()
+		{
+			Application.Quit();
+		}
 	}
 }

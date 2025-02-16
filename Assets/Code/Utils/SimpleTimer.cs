@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
 
-namespace TheDungeon.Utils
+namespace Code.Utils
 {
 
     public struct SimpleTimer

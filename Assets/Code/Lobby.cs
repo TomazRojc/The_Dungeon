@@ -5,153 +5,151 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
-public class Lobby : MonoBehaviour
+namespace Code
 {
-	[SerializeField]
-	private TMP_Text[] playerNameTexts = new TMP_Text[4];
-	[SerializeField]
-	private TMP_Text[] playerReadyTexts = new TMP_Text[4];
-	[SerializeField]
-	private GameObject[] playerAvatars = new GameObject[4];
-	[SerializeField]
-	private GameObject[] playerReadyButtons = new GameObject[4];
-
-	[SerializeField]
-	private List<Color> defaultPlayerColors;
-
-	[SerializeField]
-	private Button startGameButton;
-
-	[SerializeField]
-	private PlayerInputManager _playerInputManager;
-
-	private List<PlayerData> _players;
-
-	public bool Active;
-
-	public void OnEnter()
+	public class Lobby : MonoBehaviour
 	{
-		Active = true;
-		
-		_playerInputManager.EnableJoining();
+		[SerializeField] private TMP_Text[] playerNameTexts = new TMP_Text[4];
+		[SerializeField] private TMP_Text[] playerReadyTexts = new TMP_Text[4];
+		[SerializeField] private GameObject[] playerAvatars = new GameObject[4];
+		[SerializeField] private GameObject[] playerReadyButtons = new GameObject[4];
 
-		if (_players == null)
+		[SerializeField] private List<Color> defaultPlayerColors;
+
+		[SerializeField] private Button startGameButton;
+
+		[SerializeField] private PlayerInputManager _playerInputManager;
+
+		private List<PlayerData> _players;
+
+		public bool Active;
+
+		public void OnEnter()
 		{
-			_players = Main.Instance.PlayersData;
-		}
+			Active = true;
 
-		UpdateDisplay();
-	}
+			_playerInputManager.EnableJoining();
 
-	public void OnExit()
-	{
-		_playerInputManager.DisableJoining();
-		ResetPlayersReady();
-		Active = false;
-	}
-
-	private void UpdateDisplay()
-	{
-		if (!Active) return;
-		
-		HandleReadyToStart();
-		
-		for (int i = 0; i < _players.Count; i++)
-		{
-			if (!_players[i].IsJoined)
+			if (_players == null)
 			{
-				playerNameTexts[i].text = "Press X to join...";
-				playerReadyTexts[i].text = string.Empty;
-				playerAvatars[i].SetActive(false);
-				playerReadyButtons[i].SetActive(false);
-			}
-			else
-			{
-				playerNameTexts[i].text = _players[i].DisplayName;
-				playerReadyTexts[i].text = _players[i].IsReady ?
-					"<color=green>Ready</color>" :
-					"<color=red>Not Ready</color>";
-				playerAvatars[i].SetActive(true);
-				playerAvatars[i].GetComponent<Image>().color = _players[i].Color;
-				playerReadyButtons[i].SetActive(true);
-			}
-		}
-	}
-
-	public void OnPlayerJoined(int playerInputIndex)
-	{
-		var firstFreeIdx = -1;
-		for (int i = 0; i < _players.Count; i++)
-		{
-			if (firstFreeIdx == -1 && !_players[i].IsJoined)
-			{
-				firstFreeIdx = i;
+				_players = Main.Instance.PlayersData;
 			}
 
-			// player with this input index was already joined before
-			if (_players[i].InputIndex == playerInputIndex)
+			UpdateDisplay();
+		}
+
+		public void OnExit()
+		{
+			_playerInputManager.DisableJoining();
+			ResetPlayersReady();
+			Active = false;
+		}
+
+		private void UpdateDisplay()
+		{
+			if (!Active) return;
+
+			HandleReadyToStart();
+
+			for (int i = 0; i < _players.Count; i++)
 			{
-				_players[i].IsJoined = true;
-				return;
-			}
-		}
-
-		if (firstFreeIdx == -1)
-		{
-			throw new ArgumentException("Cannot join a player in a full lobby");
-		}
-
-		// new player joined
-		_players[firstFreeIdx].SetValues($"Player {firstFreeIdx+1}", defaultPlayerColors[firstFreeIdx], true, false, playerInputIndex);
-		UpdateDisplay();
-	}
-
-	public void OnPlayerLeft(int playerInputIndex)
-	{
-		for (var i = 0; i < _players.Count; i++)
-		{
-			if (_players[i].InputIndex == playerInputIndex)
-			{
-				_players[i].IsJoined = false;
-				_players[i].IsReady = false;
-				break;
-			}
-		}
-		UpdateDisplay();
-	}
-
-	public void ResetPlayersReady()
-	{
-		for (int i = 0; i < _players.Count; i++)
-		{
-			_players[i].IsReady = false;
-		}
-
-		startGameButton.interactable = false;
-	}
-
-	public void OnPlayerReady(int buttonIndex)
-	{
-		_players[buttonIndex].IsReady = !_players[buttonIndex].IsReady;
-		UpdateDisplay();
-	}
-
-	public void HandleReadyToStart()
-	{
-		var allReady = true;
-		var lobbyEmpty = true;
-		for (int i = 0; i < _players.Count; i++)
-		{
-			if (_players[i].IsJoined)
-			{
-				lobbyEmpty = false;
-				if (!_players[i].IsReady)
+				if (!_players[i].IsJoined)
 				{
-					allReady = false;
+					playerNameTexts[i].text = "Press X to join...";
+					playerReadyTexts[i].text = string.Empty;
+					playerAvatars[i].SetActive(false);
+					playerReadyButtons[i].SetActive(false);
+				}
+				else
+				{
+					playerNameTexts[i].text = _players[i].DisplayName;
+					playerReadyTexts[i].text = _players[i].IsReady
+						? "<color=green>Ready</color>"
+						: "<color=red>Not Ready</color>";
+					playerAvatars[i].SetActive(true);
+					playerAvatars[i].GetComponent<Image>().color = _players[i].Color;
+					playerReadyButtons[i].SetActive(true);
 				}
 			}
 		}
-		startGameButton.interactable = allReady && !lobbyEmpty;
-	}
 
+		public void OnPlayerJoined(int playerInputIndex)
+		{
+			var firstFreeIdx = -1;
+			for (int i = 0; i < _players.Count; i++)
+			{
+				if (firstFreeIdx == -1 && !_players[i].IsJoined)
+				{
+					firstFreeIdx = i;
+				}
+
+				// player with this input index was already joined before
+				if (_players[i].InputIndex == playerInputIndex)
+				{
+					_players[i].IsJoined = true;
+					return;
+				}
+			}
+
+			if (firstFreeIdx == -1)
+			{
+				throw new ArgumentException("Cannot join a player in a full lobby");
+			}
+
+			// new player joined
+			_players[firstFreeIdx].SetValues($"Player {firstFreeIdx + 1}", defaultPlayerColors[firstFreeIdx], true,
+				false, playerInputIndex);
+			UpdateDisplay();
+		}
+
+		public void OnPlayerLeft(int playerInputIndex)
+		{
+			for (var i = 0; i < _players.Count; i++)
+			{
+				if (_players[i].InputIndex == playerInputIndex)
+				{
+					_players[i].IsJoined = false;
+					_players[i].IsReady = false;
+					break;
+				}
+			}
+
+			UpdateDisplay();
+		}
+
+		public void ResetPlayersReady()
+		{
+			for (int i = 0; i < _players.Count; i++)
+			{
+				_players[i].IsReady = false;
+			}
+
+			startGameButton.interactable = false;
+		}
+
+		public void OnPlayerReady(int buttonIndex)
+		{
+			_players[buttonIndex].IsReady = !_players[buttonIndex].IsReady;
+			UpdateDisplay();
+		}
+
+		public void HandleReadyToStart()
+		{
+			var allReady = true;
+			var lobbyEmpty = true;
+			for (int i = 0; i < _players.Count; i++)
+			{
+				if (_players[i].IsJoined)
+				{
+					lobbyEmpty = false;
+					if (!_players[i].IsReady)
+					{
+						allReady = false;
+					}
+				}
+			}
+
+			startGameButton.interactable = allReady && !lobbyEmpty;
+		}
+	}
 }

@@ -4,7 +4,7 @@ using UnityEditor.Experimental.SceneManagement;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace TheDungeon.AssetReferenceFinder {
+namespace Code.AssetReferenceFinder {
 
     public class FindAllReferencesWindow : EditorWindow {
 
@@ -14,7 +14,7 @@ namespace TheDungeon.AssetReferenceFinder {
 
         private const string WindowTitle = "Find References in Project";
         
-        private const string MenuItem = "Assets/" + WindowTitle + " #F12";
+        private const string MenuItem = "Tools/" + WindowTitle + " #F12";
         
         private const float RowHeight = 18f;
         

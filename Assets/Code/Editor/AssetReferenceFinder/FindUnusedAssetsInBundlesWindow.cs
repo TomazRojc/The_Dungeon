@@ -7,7 +7,7 @@ using UnityEngine;
 using Debug = UnityEngine.Debug;
 using Object = UnityEngine.Object;
 
-namespace TheDungeon.AssetReferenceFinder {
+namespace Code.AssetReferenceFinder {
 
     public class FindUnusedAssetsInBundlesWindow : EditorWindow {
 
@@ -15,7 +15,7 @@ namespace TheDungeon.AssetReferenceFinder {
 
         private List<List<Object>> _unusedObjectReferencesByType;
 
-        [MenuItem("Outfit7/Find Unused Assets In Bundles", false, 200)]
+        [MenuItem("Tools/Find Unused Assets In Bundles", false, 200)]
         public static void FindUnusedAssets() {
             var window = GetWindow<FindUnusedAssetsInBundlesWindow>("Find Unused Assets In Bundles");
 

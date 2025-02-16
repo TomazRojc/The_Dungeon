@@ -2,7 +2,7 @@ using System;
 using UnityEditor;
 using Object = UnityEngine.Object;
 
-namespace TheDungeon.AssetReferenceFinder {
+namespace Code.AssetReferenceFinder {
 
     public class FindAllReferencesWindowAsset {
         

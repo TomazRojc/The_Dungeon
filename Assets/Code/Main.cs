@@ -1,23 +1,25 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class Main : MonoBehaviour
+namespace Code
 {
-    public static Main Instance;
-
-    [SerializeField]
-    private int maxPlayers = 4;
-
-    public int MaxPlayers => maxPlayers;
-    public List<PlayerData> PlayersData;
-
-    private void Awake()
+    public class Main : MonoBehaviour
     {
-        Instance = this;
-        PlayersData = new List<PlayerData>(maxPlayers);
-        for (int i = 0; i < maxPlayers; i++)
+        public static Main Instance;
+
+        [SerializeField] private int maxPlayers = 4;
+
+        public int MaxPlayers => maxPlayers;
+        public List<PlayerData> PlayersData;
+
+        private void Awake()
         {
-            PlayersData.Add(new PlayerData());
+            Instance = this;
+            PlayersData = new List<PlayerData>(maxPlayers);
+            for (int i = 0; i < maxPlayers; i++)
+            {
+                PlayersData.Add(new PlayerData());
+            }
         }
     }
 }

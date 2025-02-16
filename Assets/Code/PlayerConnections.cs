@@ -2,39 +2,42 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerConnections : MonoBehaviour
+namespace Code
 {
 
-    [SerializeField]
-    private Lobby lobby;
+    public class PlayerConnections : MonoBehaviour
+    {
 
-    [UsedImplicitly]
-    public void AddPlayerConnection(PlayerInput playerInput)
-    {
-        lobby.OnPlayerJoined(playerInput.playerIndex);
+        [SerializeField] private Lobby lobby;
 
-        var inputHandler = playerInput.GetComponent<PlayerInputHandler>();
-        inputHandler.onDeviceLost += HandleDeviceLost;
-        inputHandler.onDeviceRegained += HandleDeviceRegained;
-    }
-    
-    [UsedImplicitly]
-    public void RemovePlayerConnection(PlayerInput playerInput)
-    {
-        lobby.OnPlayerLeft(playerInput.playerIndex);
-        
-        var inputHandler = playerInput.GetComponent<PlayerInputHandler>();
-        inputHandler.onDeviceLost -= HandleDeviceLost;
-        inputHandler.onDeviceRegained -= HandleDeviceRegained;
-    }
+        [UsedImplicitly]
+        public void AddPlayerConnection(PlayerInput playerInput)
+        {
+            lobby.OnPlayerJoined(playerInput.playerIndex);
 
-    private void HandleDeviceLost(int playerInputIndex)
-    {
-        lobby.OnPlayerLeft(playerInputIndex);
-    }
-    
-    private void HandleDeviceRegained(int playerInputIndex)
-    {
-        lobby.OnPlayerJoined(playerInputIndex);
+            var inputHandler = playerInput.GetComponent<PlayerInputHandler>();
+            inputHandler.onDeviceLost += HandleDeviceLost;
+            inputHandler.onDeviceRegained += HandleDeviceRegained;
+        }
+
+        [UsedImplicitly]
+        public void RemovePlayerConnection(PlayerInput playerInput)
+        {
+            lobby.OnPlayerLeft(playerInput.playerIndex);
+
+            var inputHandler = playerInput.GetComponent<PlayerInputHandler>();
+            inputHandler.onDeviceLost -= HandleDeviceLost;
+            inputHandler.onDeviceRegained -= HandleDeviceRegained;
+        }
+
+        private void HandleDeviceLost(int playerInputIndex)
+        {
+            lobby.OnPlayerLeft(playerInputIndex);
+        }
+
+        private void HandleDeviceRegained(int playerInputIndex)
+        {
+            lobby.OnPlayerJoined(playerInputIndex);
+        }
     }
 }

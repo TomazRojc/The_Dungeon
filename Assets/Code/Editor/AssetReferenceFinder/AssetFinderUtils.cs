@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using UnityEditor;
 using UnityEngine;
 
-namespace TheDungeon.AssetReferenceFinder {
+namespace Code.AssetReferenceFinder {
 
     internal static class AssetFinderUtils {
 
