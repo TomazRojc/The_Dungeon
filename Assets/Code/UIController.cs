@@ -9,10 +9,17 @@ namespace Code
 
 		[SerializeField] private Lobby _lobby;
 
-		[Header("UIs")] [SerializeField] private GameObject _mainMenuPanel;
-		[SerializeField] private GameObject _settingsPanel;
-		[SerializeField] private GameObject _lobbyPanel;
-		[SerializeField] private GameObject _levelsPanel;
+		[Header("UIs")]
+		[SerializeField]
+		private GameObject _loadingPanel;
+		[SerializeField]
+		private GameObject _mainMenuPanel;
+		[SerializeField]
+		private GameObject _settingsPanel;
+		[SerializeField]
+		private GameObject _lobbyPanel;
+		[SerializeField]
+		private GameObject _levelsPanel;
 
 		private SimpleTimer _timer;
 
@@ -31,13 +38,19 @@ namespace Code
 		{
 			_mainMenuPanel.SetActive(false);
 			_lobbyPanel.SetActive(false);
-
-			_timer.OnComplete += () => { _levelsPanel.SetActive(true); };
-			_timer.Start(0.7f);
+			_levelsPanel.SetActive(true);
 		}
 
 		public void StartLevel(int levelNumber)
 		{
+			_loadingPanel.SetActive(true);
+			_levelsPanel.SetActive(false);
+			_timer.OnComplete += () =>
+			{
+				_loadingPanel.SetActive(false);
+			};
+			_timer.Start(0.7f);
+			
 			Main.Instance.LevelManager.StartLevel(levelNumber-1);
 		}
 
