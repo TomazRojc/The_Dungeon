@@ -93,16 +93,16 @@ namespace Code
 
 		}
 
-		void Update()
-		{
-
-			// HandleInput();
-
-			if (cameraObject == null)
-				GameObject.Find("LevelCamera")?.GetComponent<CameraFollow>()
-					.FollowPlayer(GetComponent<Transform>()); // attach camera to local player
-
-		}
+		// void Update()
+		// {
+		//
+		// 	HandleInput();
+		//
+		// 	if (cameraObject == null)
+		// 		GameObject.Find("LevelCamera")?.GetComponent<CameraFollow>()
+		// 			.FollowPlayer(GetComponent<Transform>()); // attach camera to local player
+		//
+		// }
 
 		private void HandleInput()
 		{
