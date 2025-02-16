@@ -11,14 +11,17 @@ namespace Code
         private GameplayConfig _gameplayConfig;
         
         private GameplaySession _gameplaySession;
+        private LevelManager _levelManager;
         
         public GameplayConfig GameplayConfig => _gameplayConfig;
         public GameplaySession GameplaySession => _gameplaySession;
+        public LevelManager LevelManager => _levelManager;
 
         private void Awake()
         {
             Instance = this;
             _gameplaySession = new GameplaySession(_gameplayConfig.MaxPlayers);
+            _levelManager = new LevelManager();
         }
     }
 }

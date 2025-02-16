@@ -37,24 +37,29 @@ namespace Code.Gameplay
 
         public void OnEnterLevelsGameplay(GameObject playerPrefab)
         {
+            var playerGameobjects = new List<GameObject>();
             foreach (var playerData in PlayersData)
             {
                 if (!playerData.IsJoined) continue;
                 
                 var inputHandler = GetInputHandler(playerData.InputIndex);
-                var playerController = SpawnPlayer(playerPrefab, playerData.Color);
+                var playerGameobject = SpawnPlayer(playerPrefab, playerData.Color);
+                playerGameobjects.Add(playerGameobject);
+                
+                var playerController = playerGameobject.GetComponent<PlayerController>();
                 inputHandler.ConnectPlayerController(playerController);
                 PlayerControllers.Add(playerController);
             }
+            
+            Main.Instance.LevelManager.Init(playerGameobjects);
         }
 
-        private PlayerController SpawnPlayer(GameObject playerPrefab, Color color)
+        private GameObject SpawnPlayer(GameObject playerPrefab, Color color)
         {
             var playerObject = Object.Instantiate(playerPrefab, Vector3.zero, Quaternion.identity);
             var spriteRenderer = playerObject.GetComponent<SpriteRenderer>();
             spriteRenderer.color = color;
-            var playerController = playerObject.GetComponent<PlayerController>();
-            return playerController;
+            return playerObject;
         }
 
         private PlayerInputHandler GetInputHandler(int inputIndex)

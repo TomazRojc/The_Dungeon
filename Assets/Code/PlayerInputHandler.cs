@@ -12,7 +12,7 @@ namespace Code
         private Vector2 _lookInput;
         private int _inputIndex;
 
-        public int InputIndex;
+        public int InputIndex => _inputIndex;
 
         public Action<int> onDeviceLost;
         public Action<int> onDeviceRegained;
