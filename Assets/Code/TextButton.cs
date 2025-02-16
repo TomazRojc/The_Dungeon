@@ -21,6 +21,7 @@ namespace Code
 
         protected override void Awake()
         {
+            base.Awake();
             if (Application.isPlaying)
             {
                 lineImage.transform.localScale = Vector3.zero;
@@ -28,8 +29,9 @@ namespace Code
             }
         }
         
-        private void Update()
+        protected override void Update()
         {
+            base.Update();
             _animationTimer.Update(Time.deltaTime);
         }
         
@@ -41,6 +43,21 @@ namespace Code
         protected override void PlayExitAnimation()
         {
             PlayAnimation(1f, Vector3.zero, buttonConfig.DefaultColor, 0f, 1f);
+        }
+        
+        protected override void PlayIdleBreakAnimation()
+        {
+            _animationTimer = new SimpleTimer();
+            _animationTimer.OnUpdate += UpdateAnimation;
+            _animationTimer.Start(buttonConfig.IdleBreakAnimationDuration);
+
+            void UpdateAnimation(float normalizedTime)
+            {
+                var eval = buttonConfig.AnimationCurve.Evaluate(normalizedTime);
+                var scaleEval = buttonConfig.ScaleCurve.Evaluate(normalizedTime);
+                arrowImage.transform.rotation = Quaternion.Euler(Vector3.Lerp(Vector3.zero, new Vector3(0, 0, -360f), eval));
+                arrowImage.transform.localScale = Vector3.one + Vector3.one * ((buttonConfig.IdleBreakArrowScale - 1) * scaleEval);
+            }
         }
         
         private void PlayAnimation(float buttonScale, Vector3 position, Color color, float imagesScale, float direction)
