@@ -26,10 +26,19 @@ public class MainMenu : MonoBehaviour
 		_lobby.OnEnter();
 	}
 
+	private void TryExitLobby()
+	{
+		if (_lobbyPanel.activeSelf)
+		{
+			_lobbyPanel.SetActive(false);
+			_lobby.OnExit();
+		}
+	}
+
 	public void GoToLevelSelection()
 	{
 		_mainMenuPanel.SetActive(false);
-		_lobbyPanel.SetActive(false);
+		TryExitLobby();
 		
 		_timer.OnComplete += () =>
 		{
@@ -46,9 +55,8 @@ public class MainMenu : MonoBehaviour
 	public void GoBackToMainMenu()
 	{
 		_mainMenuPanel.SetActive(true);
-		_lobbyPanel.SetActive(false);
 		_settingsPanel.SetActive(false);
-		_lobby.OnExit();
+		TryExitLobby();
 	}
 
 	public void ExitGame()
