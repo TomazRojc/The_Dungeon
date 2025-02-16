@@ -24,9 +24,11 @@ namespace Code
 
         void Update()
         {
+            if (_player == null) return;
+            
             // invoke player movement/look
-            Debug.Log("Move: " + _moveInput);
-            Debug.Log("Look: " + _lookInput);
+            _player.HandleMoveInput(_moveInput);
+            _player.HandleLookInput(_lookInput);
         }
 
         public void ConnectPlayerController(PlayerController player)
@@ -49,6 +51,8 @@ namespace Code
         // Q or North Button
         public void OnDropItem(InputAction.CallbackContext context)
         {
+            if (_player == null) return;
+
             if (context.started)
             {
                 Debug.Log("Drop Item started");
@@ -63,6 +67,8 @@ namespace Code
         // E or West Button
         public void OnUseItem(InputAction.CallbackContext context)
         {
+            if (_player == null) return;
+
             if (context.started)
             {
                 Debug.Log("Use Item started");
@@ -77,28 +83,22 @@ namespace Code
         // Ctrl or East Button
         public void OnDash(InputAction.CallbackContext context)
         {
+            if (_player == null) return;
+
             if (context.started)
             {
-                Debug.Log("Dash started");
-            }
-
-            if (context.canceled)
-            {
-                Debug.Log("Dash ended");
+                _player.HandleDashInput();
             }
         }
 
         // Space or South Button
         public void OnJump(InputAction.CallbackContext context)
         {
+            if (_player == null) return;
+
             if (context.started)
             {
-                Debug.Log("Jump started");
-            }
-
-            if (context.canceled)
-            {
-                Debug.Log("Jump ended");
+                _player.HandleJumpInput();
             }
         }
 

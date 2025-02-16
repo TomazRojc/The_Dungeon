@@ -17,15 +17,15 @@ namespace Code
 		private float myGravityScale;
 		private float currentDashTime;
 		private bool canDash = true;
-		private bool isDashing = false;
-		private bool grounded = false;
+		private bool isDashing;
+		private bool grounded;
 		private float lastMoveDirection = 1f;
 
 		// control variables (on keypress)
-		private bool shouldJump = false;
-		private bool shouldDoubleJump = false;
-		private bool shouldDash = false;
-		private float moveLeftRight = 0f;
+		private bool shouldJump;
+		private bool shouldDoubleJump;
+		private bool shouldDash;
+		private float moveLeftRight;
 
 		private Vector2 myVectorUp = new Vector2(0, 1);
 		private Vector2 myVectorRight = new Vector2(1, 0);
@@ -46,7 +46,14 @@ namespace Code
 
 		void FixedUpdate()
 		{
-
+			grounded = IsGrounded();
+			if (grounded)
+			{
+				// jump/dash available
+				doubleJumped = false;
+				canDash = true;
+			}
+			
 			if (shouldJump)
 			{
 				rigidBody.velocity = myVectorUp * jumpVelocity;
@@ -57,6 +64,8 @@ namespace Code
 			{
 				rigidBody.velocity = myVectorUp * jumpVelocity;
 				shouldDoubleJump = false;
+				doubleJumped = true;
+				canDash = true;
 			}
 
 			if (shouldDash)
@@ -66,6 +75,7 @@ namespace Code
 				currentDashTime = dashFullTime;
 				isDashing = true;
 				shouldDash = false;
+				canDash = false;
 			}
 			else if (!isDashing)
 			{
@@ -93,73 +103,57 @@ namespace Code
 
 		}
 
-		// void Update()
-		// {
-		//
-		// 	HandleInput();
-		//
-		// 	if (cameraObject == null)
-		// 		GameObject.Find("LevelCamera")?.GetComponent<CameraFollow>()
-		// 			.FollowPlayer(GetComponent<Transform>()); // attach camera to local player
-		//
-		// }
-
-		private void HandleInput()
+		public void HandleJumpInput()
 		{
-			// Input
-			if (grounded && !stunned && Input.GetKeyDown(KeyCode.Space)) shouldJump = true;
-			if (!grounded && !doubleJumped && !stunned && Input.GetKeyDown(KeyCode.Space)) shouldDoubleJump = true;
-			if (canDash && currentDashTime <= -dashCooldown && !stunned && Input.GetKeyDown(KeyCode.LeftControl))
+			if (grounded && !stunned)
+			{
+				shouldJump = true;
+			}
+
+			if (!grounded && !doubleJumped && !stunned)
+			{
+				shouldDoubleJump = true;
+			}
+		}
+		
+		public void HandleDashInput()
+		{
+			if (canDash && currentDashTime <= -dashCooldown && !stunned)
+			{
 				shouldDash = true;
-			if (!isDashing && !stunned) moveLeftRight = Input.GetAxis("HorizontalAD") * moveSpeed;
-			else moveLeftRight = 0;
-
-
-			// Player movement logic
-			grounded = IsGrounded();
-			if (grounded)
-			{
-				// jump/dash available
-				doubleJumped = false;
-				canDash = true;
 			}
-
-			if (shouldDoubleJump)
+		}
+		
+		public void HandleMoveInput(Vector2 direction)
+		{
+			if (!isDashing && !stunned)
 			{
-				// double jump
-				doubleJumped = true;
-				currentDashTime = -dashCooldown;
-				canDash = true;
-			}
-
-			if (shouldDash)
-			{
-				// dash
-				canDash = false;
-			}
-
-			if (moveLeftRight != 0)
-			{
-				// last direction
+				moveLeftRight = direction.x * moveSpeed;
 				lastMoveDirection = moveLeftRight;
 			}
-
-			// Gravity
-			if (Input.GetKeyDown(KeyCode.DownArrow))
+			else
 			{
-				SwitchGravity("down");
+				moveLeftRight = 0;
 			}
-			else if (Input.GetKeyDown(KeyCode.LeftArrow))
+		}
+		
+		public void HandleLookInput(Vector2 direction)
+		{
+			if (direction.x < -0.9)
 			{
 				SwitchGravity("left");
 			}
-			else if (Input.GetKeyDown(KeyCode.UpArrow))
-			{
-				SwitchGravity("up");
-			}
-			else if (Input.GetKeyDown(KeyCode.RightArrow))
+			else if (direction.x > 0.9)
 			{
 				SwitchGravity("right");
+			}
+			else if (direction.y < -0.9)
+			{
+				SwitchGravity("down");
+			}
+			else if (direction.y > 0.9)
+			{
+				SwitchGravity("up");
 			}
 		}
 
