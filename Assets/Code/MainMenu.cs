@@ -28,7 +28,7 @@ public class MainMenu : MonoBehaviour
 
 	private void TryExitLobby()
 	{
-		if (_lobbyPanel.activeSelf)
+		if (_lobby.Active)
 		{
 			_lobbyPanel.SetActive(false);
 			_lobby.OnExit();

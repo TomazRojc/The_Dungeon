@@ -27,8 +27,12 @@ public class Lobby : MonoBehaviour
 
 	private List<PlayerData> _players;
 
+	public bool Active;
+
 	public void OnEnter()
 	{
+		Active = true;
+		
 		_playerInputManager.EnableJoining();
 
 		if (_players == null)
@@ -43,10 +47,13 @@ public class Lobby : MonoBehaviour
 	{
 		_playerInputManager.DisableJoining();
 		ResetPlayersReady();
+		Active = false;
 	}
 
 	private void UpdateDisplay()
 	{
+		if (!Active) return;
+		
 		HandleReadyToStart();
 		
 		for (int i = 0; i < _players.Count; i++)
