@@ -9,6 +9,8 @@ namespace Code
         [SerializeField]
         private ArrowButtonConfig buttonConfig;
         [SerializeField]
+        private Transform animationTransform;
+        [SerializeField]
         private Image arrowImage;
         
         private SimpleTimer _animationTimer;
@@ -31,7 +33,7 @@ namespace Code
         
         protected override void PlayIdleBreakAnimation()
         {
-            var startScale = arrowImage.transform.localScale;
+            var startScale = animationTransform.localScale;
             _animationTimer = new SimpleTimer();
             _animationTimer.OnUpdate += UpdateAnimation;
             _animationTimer.Start(buttonConfig.IdleBreakAnimationDuration);
@@ -40,15 +42,15 @@ namespace Code
             {
                 var eval = buttonConfig.AnimationCurve.Evaluate(normalizedTime);
                 var scaleEval = buttonConfig.ScaleCurve.Evaluate(normalizedTime);
-                arrowImage.transform.localRotation = Quaternion.Euler(Vector3.Lerp(Vector3.zero, new Vector3(0, 0, -360f), eval));
-                arrowImage.transform.localScale = startScale + Vector3.one * ((buttonConfig.IdleBreakArrowScale - startScale.x) * scaleEval);
+                animationTransform.localRotation = Quaternion.Euler(Vector3.Lerp(Vector3.zero, new Vector3(0, 0, -360f), eval));
+                animationTransform.localScale = startScale + Vector3.one * ((buttonConfig.IdleBreakArrowScale - startScale.x) * scaleEval);
             }
         }
         
         private void PlayAnimation(float buttonScale, Color color)
         {
             var startColor = arrowImage.color;
-            var startScale = arrowImage.transform.localScale.x;
+            var startScale = animationTransform.localScale.x;
             _animationTimer = new SimpleTimer();
             _animationTimer.OnUpdate += UpdateAnimation;
             _animationTimer.Start(buttonConfig.AnimationDuration);
@@ -57,7 +59,7 @@ namespace Code
             {
                 var eval = buttonConfig.AnimationCurve.Evaluate(normalizedTime);
                 arrowImage.color = Color.Lerp(startColor, color, eval);
-                arrowImage.transform.localScale = Vector3.Lerp(Vector3.one * startScale, Vector3.one * buttonScale, eval);
+                animationTransform.localScale = Vector3.Lerp(Vector3.one * startScale, Vector3.one * buttonScale, eval);
             }
         }
 
