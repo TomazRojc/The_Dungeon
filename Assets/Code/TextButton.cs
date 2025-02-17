@@ -55,7 +55,7 @@ namespace Code
             {
                 var eval = buttonConfig.AnimationCurve.Evaluate(normalizedTime);
                 var scaleEval = buttonConfig.ScaleCurve.Evaluate(normalizedTime);
-                arrowImage.transform.rotation = Quaternion.Euler(Vector3.Lerp(Vector3.zero, new Vector3(0, 0, -360f), eval));
+                arrowImage.transform.localRotation = Quaternion.Euler(Vector3.Lerp(Vector3.zero, new Vector3(0, 0, -360f), eval));
                 arrowImage.transform.localScale = Vector3.one + Vector3.one * ((buttonConfig.IdleBreakArrowScale - 1) * scaleEval);
             }
         }
@@ -79,7 +79,7 @@ namespace Code
                 lineImage.color = Color.Lerp(startColor, color, eval);
                 lineImage.transform.localScale = new Vector3(Mathf.Lerp(startImagesScale, imagesScale, eval), 1, 1);
                 arrowImage.color = Color.Lerp(startColor, color, eval);
-                arrowImage.transform.rotation = Quaternion.Euler(Vector3.Lerp(Vector3.zero, new Vector3(0, 0, direction * 360f), eval));
+                arrowImage.transform.localRotation = Quaternion.Euler(Vector3.Lerp(Vector3.zero, new Vector3(0, 0, direction * 360f), eval));
                 arrowImage.transform.localScale = Vector3.Lerp(Vector3.one * startImagesScale, Vector3.one * imagesScale, eval);
                 text.color = Color.Lerp(startColor, color, eval);
             }
