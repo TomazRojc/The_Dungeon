@@ -7,8 +7,6 @@ namespace Code
 	public class UIController : MonoBehaviour
 	{
 
-		[SerializeField] private Lobby _lobby;
-
 		[Header("UIs")]
 		[SerializeField]
 		private GameObject _loadingPanel;
@@ -31,7 +29,6 @@ namespace Code
 		public void GoToLobby()
 		{
 			_lobbyPanel.SetActive(true);
-			_lobby.OnEnter();
 		}
 
 		public void GoToLevelSelection()

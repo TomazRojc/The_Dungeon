@@ -11,7 +11,7 @@ namespace Code
 	{
 		[SerializeField]
 		private LobbyUI _lobbyUI;
-		[FormerlySerializedAs("_mainMenu")] [SerializeField]
+		[SerializeField]
 		private UIController uiController;
 		[SerializeField]
 		private List<Color> defaultPlayerColors;
@@ -119,6 +119,12 @@ namespace Code
 			{
 				_lobbyUI.UpdateDisplay(_players);
 			}
+		}
+
+		public void GoToLobby()
+		{
+			uiController.GoToLobby();
+			OnEnter();
 		}
 		
 		public void StartGame()
