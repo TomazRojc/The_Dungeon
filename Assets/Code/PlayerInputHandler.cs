@@ -102,6 +102,28 @@ namespace Code
             }
         }
 
+#region UI
+
+        public void OnNavigateUI(InputAction.CallbackContext context) {
+            if (context.performed) {
+                Main.UiManager.OnNavigate?.Invoke(GetDirection(context.ReadValue<Vector2>()), _inputIndex);
+            }
+        }
+
+        public void OnSubmitUI(InputAction.CallbackContext context) {
+             if (context.performed) {
+                Main.UiManager.OnSubmit?.Invoke(_inputIndex);
+            }
+        }
+        
+        public void OnBackUI(InputAction.CallbackContext context) {
+            if (context.performed) {
+                Main.UiManager.OnBack?.Invoke(_inputIndex);
+            }
+        }
+        
+        #endregion
+
         public void OnDeviceLost(PlayerInput playerInput)
         {
             onDeviceLost?.Invoke(playerInput.playerIndex);
@@ -110,6 +132,23 @@ namespace Code
         public void OnDeviceRegained(PlayerInput playerInput)
         {
             onDeviceRegained?.Invoke(playerInput.playerIndex);
+        }
+
+        private Direction GetDirection(Vector2 direction) {
+            if (direction.x < -0.9)
+            {
+                return Direction.Left;
+            }
+            if (direction.x > 0.9)
+            {
+                return Direction.Right;
+            }
+            if (direction.y < -0.9)
+            {
+                return Direction.Down;
+            }
+            
+            return Direction.Up;
         }
     }
 }

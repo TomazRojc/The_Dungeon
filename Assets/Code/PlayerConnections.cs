@@ -16,7 +16,7 @@ namespace Code
 
         private void Awake()
         {
-            gameplaySession = Main.Instance.GameplaySession;
+            gameplaySession = Main.GameplaySession;
         }
 
         [UsedImplicitly]

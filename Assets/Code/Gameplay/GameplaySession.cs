@@ -51,7 +51,7 @@ namespace Code.Gameplay
                 PlayerControllers.Add(playerController);
             }
             
-            Main.Instance.LevelManager.Init(playerGameobjects);
+            Main.LevelManager.Init(playerGameobjects);
         }
 
         private GameObject SpawnPlayer(GameObject playerPrefab, Color color)

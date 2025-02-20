@@ -24,7 +24,8 @@ namespace Code
 		
 		private void Awake()
 		{
-			GameplaySession = Main.Instance.GameplaySession;
+			GameplaySession = Main.GameplaySession;
+			_players = Main.GameplaySession.PlayersData;
 		}
 
 		public void OnEnter()
@@ -33,10 +34,6 @@ namespace Code
 
 			_playerInputManager.EnableJoining();
 
-			if (_players == null)
-			{
-				_players = Main.Instance.GameplaySession.PlayersData;
-			}
 
 			_lobbyUI.UpdateDisplay(_players);
 		}

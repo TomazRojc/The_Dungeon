@@ -36,17 +36,17 @@ namespace Code
             }
         }
 
-        public override void OnPointerEnter(PointerEventData eventData)
+        public override void OnSelect(BaseEventData eventData)
         {
-            base.OnPointerEnter(eventData);
+            base.OnSelect(eventData);
             _isSelected = true;
             PlayEnterAnimation();
             _idleBreakTimer.Start(idleBreakTime, true);
         }
         
-        public override void OnPointerExit(PointerEventData eventData)
+        public override void OnDeselect(BaseEventData eventData)
         {
-            base.OnPointerExit(eventData);
+            base.OnDeselect(eventData);
             _isSelected = false;
             PlayExitAnimation();
         }

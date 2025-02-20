@@ -48,7 +48,7 @@ namespace Code
 			};
 			_timer.Start(0.7f);
 			
-			Main.Instance.LevelManager.StartLevel(levelNumber-1);
+			Main.LevelManager.StartLevel(levelNumber-1);
 		}
 
 		public void GoToSettings()
