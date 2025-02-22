@@ -45,6 +45,7 @@ namespace Code
 			_active = false;
 		}
 
+		// TODO JanR: fix this to work with new way of connecting players
 		public void OnPlayerJoined(int playerInputIndex)
 		{
 			var firstFreeIdx = -1;
@@ -78,6 +79,7 @@ namespace Code
 			}
 		}
 
+		// TODO JanR: fix this to work with new way of connecting players
 		public void OnPlayerLeft(int playerInputIndex)
 		{
 			for (var i = 0; i < _players.Count; i++)
