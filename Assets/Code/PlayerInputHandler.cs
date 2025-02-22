@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace Code
@@ -13,9 +12,7 @@ namespace Code
         private int _inputIndex;
 
         public int InputIndex => _inputIndex;
-
-        public Action<int> onDeviceLost;
-        public Action<int> onDeviceRegained;
+        public PlayerController Player => _player;
 
         private void Awake()
         {
@@ -123,16 +120,6 @@ namespace Code
         }
         
         #endregion
-
-        public void OnDeviceLost(PlayerInput playerInput)
-        {
-            onDeviceLost?.Invoke(playerInput.playerIndex);
-        }
-
-        public void OnDeviceRegained(PlayerInput playerInput)
-        {
-            onDeviceRegained?.Invoke(playerInput.playerIndex);
-        }
 
         private Direction GetDirection(Vector2 direction) {
             if (direction.x < -0.9)

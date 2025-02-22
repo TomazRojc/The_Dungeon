@@ -1,7 +1,8 @@
-﻿using Code.Gameplay;
-using JetBrains.Annotations;
+﻿using System.Collections.Generic;
+using Code.Gameplay;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using InputDevice = UnityEngine.InputSystem.InputDevice;
 
 namespace Code
 {
@@ -12,43 +13,73 @@ namespace Code
         [SerializeField]
         private Lobby lobby;
         
+        [SerializeField]
+        private GameObject _playerInputPrefab;
+
+        private Dictionary<InputDevice, PlayerInputHandler> deviceToInputHandler = new Dictionary<InputDevice, PlayerInputHandler>(4);
+        
         private GameplaySession gameplaySession;
 
         private void Awake()
         {
             gameplaySession = Main.GameplaySession;
+            InputSystem.onDeviceChange += OnDeviceChange;
+            AssignExistingDevices();
+        }
+        
+        private void OnDeviceChange(InputDevice device, InputDeviceChange change)
+        {
+            switch (change)
+            {
+                case InputDeviceChange.Removed:
+                    RemoveDeviceAndPlayerInput(device);
+                    break;
+                case InputDeviceChange.Added:
+                    AssignDeviceToPlayerInput(device);
+                    break;
+            }
         }
 
-        [UsedImplicitly]
-        public void AddPlayerConnection(PlayerInput playerInput)
+        private void AssignExistingDevices()
         {
-            lobby.OnPlayerJoined(playerInput.playerIndex);
-
-            var inputHandler = playerInput.GetComponent<PlayerInputHandler>();
-            inputHandler.onDeviceLost += HandleDeviceLost;
-            inputHandler.onDeviceRegained += HandleDeviceRegained;
-            gameplaySession.AddPlayerInput(inputHandler);
+            foreach (var device in InputSystem.devices)
+            {
+                AssignDeviceToPlayerInput(device);
+            }
+        }
+        
+        private void RemoveDeviceAndPlayerInput(InputDevice device)
+        {
+            if (deviceToInputHandler.TryGetValue(device, out var playerInputHandler))
+            {
+                deviceToInputHandler.Remove(device);
+                gameplaySession.RemovePlayerInput(playerInputHandler);
+                gameplaySession.DespawnPlayer(playerInputHandler);
+                Destroy(playerInputHandler.gameObject);
+            }
         }
 
-        [UsedImplicitly]
-        public void RemovePlayerConnection(PlayerInput playerInput)
+        private void AssignDeviceToPlayerInput(InputDevice device)
         {
-            lobby.OnPlayerLeft(playerInput.playerIndex);
+            PlayerInput playerInput = null;
+            if (device is Keyboard)
+            {
+                playerInput = PlayerInput.Instantiate(_playerInputPrefab, controlScheme: "Keyboard&Mouse");
+            }
+            else if (device is Gamepad)
+            {
+                playerInput = PlayerInput.Instantiate(_playerInputPrefab, controlScheme: "Gamepad", pairWithDevice: device);
+            }
 
-            var inputHandler = playerInput.GetComponent<PlayerInputHandler>();
-            inputHandler.onDeviceLost -= HandleDeviceLost;
-            inputHandler.onDeviceRegained -= HandleDeviceRegained;
-            gameplaySession.RemovePlayerInput(inputHandler);
-        }
+            if (playerInput == null)
+            {
+                Debug.LogWarning($"Input device {device} not supported");
+                return;
+            }
 
-        private void HandleDeviceLost(int playerInputIndex)
-        {
-            lobby.OnPlayerLeft(playerInputIndex);
-        }
-
-        private void HandleDeviceRegained(int playerInputIndex)
-        {
-            lobby.OnPlayerJoined(playerInputIndex);
+            var playerInputHandler = playerInput.GetComponent<PlayerInputHandler>();
+            deviceToInputHandler.Add(device, playerInputHandler);
+            gameplaySession.AddPlayerInput(playerInputHandler);
         }
     }
 }

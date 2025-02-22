@@ -62,6 +62,24 @@ namespace Code.Gameplay
             return playerObject;
         }
 
+        public void DespawnPlayer(int inputIndex)
+        {
+            foreach (var playerInputHandler in _playerInputHandlers)
+            {
+                if (playerInputHandler.InputIndex != inputIndex) continue;
+                DespawnPlayer(playerInputHandler);                
+            }
+        }
+        
+        public void DespawnPlayer(PlayerInputHandler playerInputHandler)
+        {
+            var player = playerInputHandler.Player;
+            if (playerInputHandler.Player != null)
+            {
+                Object.Destroy(player);
+            }
+        }
+
         private PlayerInputHandler GetInputHandler(int inputIndex)
         {
             foreach (var playerInputHandler in _playerInputHandlers)
