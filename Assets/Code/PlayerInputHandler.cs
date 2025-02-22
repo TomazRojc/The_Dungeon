@@ -101,20 +101,26 @@ namespace Code
 
 #region UI
 
-        public void OnNavigateUI(InputAction.CallbackContext context) {
-            if (context.performed) {
+        public void OnNavigateUI(InputAction.CallbackContext context) 
+        {
+            if (context.performed) 
+            {
                 Main.UiManager.OnNavigate?.Invoke(GetDirection(context.ReadValue<Vector2>()), _inputIndex);
             }
         }
 
-        public void OnSubmitUI(InputAction.CallbackContext context) {
-             if (context.performed) {
+        public void OnSubmitUI(InputAction.CallbackContext context) 
+        {
+             if (context.performed) 
+             {
                 Main.UiManager.OnSubmit?.Invoke(_inputIndex);
-            }
+             }
         }
         
-        public void OnBackUI(InputAction.CallbackContext context) {
-            if (context.performed) {
+        public void OnBackUI(InputAction.CallbackContext context) 
+        {
+            if (context.performed) 
+            {
                 Main.UiManager.OnBack?.Invoke(_inputIndex);
             }
         }
