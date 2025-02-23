@@ -11,7 +11,8 @@ namespace Code {
         
         public Action<Direction, int> OnNavigate;
         public Action<int> OnSubmit;
-        public Action<int> OnBack;
+        public Action<int> OnCancel;
+        public Action<int> OnEscape;
 
     }
 }
