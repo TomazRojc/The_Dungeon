@@ -8,132 +8,131 @@ namespace Code
 		public float jumpVelocity = 30f;
 		public float speedChangeFactor = 5f;
 
-		private bool doubleJumped = false;
+		private bool _doubleJumped = false;
 		private bool stunned = false;
 		public float dashSpeed = 100f;
 		public float dashFullTime = 0.1f;
 		public float dashCooldown = 0.4f;
 
-		private float myGravityScale;
-		private float currentDashTime;
-		private bool canDash = true;
-		private bool isDashing;
-		private bool grounded;
-		private float lastMoveDirection = 1f;
+		private float _myGravityScale;
+		private float _currentDashTime;
+		private bool _canDash = true;
+		private bool _isDashing;
+		private bool _grounded;
+		private float _lastMoveDirection = 1f;
 
 		// control variables (on keypress)
-		private bool shouldJump;
-		private bool shouldDoubleJump;
-		private bool shouldDash;
-		private float moveLeftRight;
+		private bool _shouldJump;
+		private bool _shouldDoubleJump;
+		private bool _shouldDash;
+		private float _moveLeftRight;
 
-		private Vector2 myVectorUp = new Vector2(0, 1);
-		private Vector2 myVectorRight = new Vector2(1, 0);
+		private Vector2 _myVectorUp = new Vector2(0, 1);
+		private Vector2 _myVectorRight = new Vector2(1, 0);
 		public Rigidbody2D rigidBody;
-		private BoxCollider2D boxCollider;
-		private GameObject cameraObject = null;
+		private BoxCollider2D _boxCollider;
 
 		void Start()
 		{
 			// GetComponent<SpriteRenderer>().color = displayColor;
 
-			myGravityScale = rigidBody.mass * 50f; // F = m * g
-			boxCollider = GetComponent<BoxCollider2D>();
+			_myGravityScale = rigidBody.mass * 50f; // F = m * g
+			_boxCollider = GetComponent<BoxCollider2D>();
 
 			SwitchGravity("down");
-			currentDashTime = dashFullTime;
+			_currentDashTime = dashFullTime;
 		}
 
 		void FixedUpdate()
 		{
-			grounded = IsGrounded();
-			if (grounded)
+			_grounded = IsGrounded();
+			if (_grounded)
 			{
 				// jump/dash available
-				doubleJumped = false;
-				canDash = true;
+				_doubleJumped = false;
+				_canDash = true;
 			}
 			
-			if (shouldJump)
+			if (_shouldJump)
 			{
-				rigidBody.velocity = myVectorUp * jumpVelocity;
-				shouldJump = false;
+				rigidBody.velocity = _myVectorUp * jumpVelocity;
+				_shouldJump = false;
 			}
 
-			if (shouldDoubleJump)
+			if (_shouldDoubleJump)
 			{
-				rigidBody.velocity = myVectorUp * jumpVelocity;
-				shouldDoubleJump = false;
-				doubleJumped = true;
-				canDash = true;
+				rigidBody.velocity = _myVectorUp * jumpVelocity;
+				_shouldDoubleJump = false;
+				_doubleJumped = true;
+				_canDash = true;
 			}
 
-			if (shouldDash)
+			if (_shouldDash)
 			{
-				if (lastMoveDirection > 0) rigidBody.velocity = myVectorRight * dashSpeed;
-				if (lastMoveDirection < 0) rigidBody.velocity = -myVectorRight * dashSpeed;
-				currentDashTime = dashFullTime;
-				isDashing = true;
-				shouldDash = false;
-				canDash = false;
+				if (_lastMoveDirection > 0) rigidBody.velocity = _myVectorRight * dashSpeed;
+				if (_lastMoveDirection < 0) rigidBody.velocity = -_myVectorRight * dashSpeed;
+				_currentDashTime = dashFullTime;
+				_isDashing = true;
+				_shouldDash = false;
+				_canDash = false;
 			}
-			else if (!isDashing)
+			else if (!_isDashing)
 			{
 				//TODO: tomazr slowly decrease left/right speed if controls are not being touched, otherwise give full control to player
-				var targetVelocity = (myVectorRight * moveLeftRight) + (VecAbs(myVectorUp) * rigidBody.velocity);
+				var targetVelocity = (_myVectorRight * _moveLeftRight) + (VecAbs(_myVectorUp) * rigidBody.velocity);
 				rigidBody.velocity =
 					Vector2.Lerp(rigidBody.velocity, targetVelocity, Time.deltaTime * speedChangeFactor);
 			}
 
 
 			// handle dashing
-			currentDashTime -= Time.fixedDeltaTime;
-			if (isDashing)
+			_currentDashTime -= Time.fixedDeltaTime;
+			if (_isDashing)
 			{
-				if (currentDashTime <= 0)
+				if (_currentDashTime <= 0)
 				{
 					// dash just ended
-					isDashing = false;
-					rigidBody.velocity = VecAbs(myVectorUp) * rigidBody.velocity;
+					_isDashing = false;
+					rigidBody.velocity = VecAbs(_myVectorUp) * rigidBody.velocity;
 				}
 			}
 
 			// Gravity
-			rigidBody.AddForce(-myVectorUp * myGravityScale, ForceMode2D.Force);
+			rigidBody.AddForce(-_myVectorUp * _myGravityScale, ForceMode2D.Force);
 
 		}
 
 		public void HandleJumpInput()
 		{
-			if (grounded && !stunned)
+			if (_grounded && !stunned)
 			{
-				shouldJump = true;
+				_shouldJump = true;
 			}
 
-			if (!grounded && !doubleJumped && !stunned)
+			if (!_grounded && !_doubleJumped && !stunned)
 			{
-				shouldDoubleJump = true;
+				_shouldDoubleJump = true;
 			}
 		}
 		
 		public void HandleDashInput()
 		{
-			if (canDash && currentDashTime <= -dashCooldown && !stunned)
+			if (_canDash && _currentDashTime <= -dashCooldown && !stunned)
 			{
-				shouldDash = true;
+				_shouldDash = true;
 			}
 		}
 		
 		public void HandleMoveInput(Vector2 direction)
 		{
-			if (!isDashing && !stunned)
+			if (!_isDashing && !stunned)
 			{
-				moveLeftRight = direction.x * moveSpeed;
-				lastMoveDirection = moveLeftRight;
+				_moveLeftRight = direction.x * moveSpeed;
+				_lastMoveDirection = _moveLeftRight;
 			}
 			else
 			{
-				moveLeftRight = 0;
+				_moveLeftRight = 0;
 			}
 		}
 		
@@ -162,20 +161,20 @@ namespace Code
 			switch (direction)
 			{
 				case "down":
-					myVectorUp = new Vector2(0, 1);
-					myVectorRight = new Vector2(1, 0);
+					_myVectorUp = new Vector2(0, 1);
+					_myVectorRight = new Vector2(1, 0);
 					break;
 				case "left":
-					myVectorUp = new Vector2(1, 0);
-					myVectorRight = new Vector2(0, -1);
+					_myVectorUp = new Vector2(1, 0);
+					_myVectorRight = new Vector2(0, -1);
 					break;
 				case "up":
-					myVectorUp = new Vector2(0, -1);
-					myVectorRight = new Vector2(-1, 0);
+					_myVectorUp = new Vector2(0, -1);
+					_myVectorRight = new Vector2(-1, 0);
 					break;
 				case "right":
-					myVectorUp = new Vector2(-1, 0);
-					myVectorRight = new Vector2(0, 1);
+					_myVectorUp = new Vector2(-1, 0);
+					_myVectorRight = new Vector2(0, 1);
 					break;
 				default:
 					// Invalid function input
@@ -186,8 +185,8 @@ namespace Code
 		private bool IsGrounded()
 		{
 			int layerMask = ~(3 << 8); // 0000000011 -> 1100000000
-			RaycastHit2D raycast = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.size, 0f,
-				-myVectorUp, 0.1f, layerMask);
+			RaycastHit2D raycast = Physics2D.BoxCast(_boxCollider.bounds.center, _boxCollider.bounds.size, 0f,
+				-_myVectorUp, 0.1f, layerMask);
 			return (raycast.collider != null);
 		}
 
@@ -215,7 +214,7 @@ namespace Code
 
 		public void SetDoubleJumped(bool value)
 		{
-			doubleJumped = value;
+			_doubleJumped = value;
 		}
 	}
 }
