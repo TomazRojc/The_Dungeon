@@ -9,20 +9,19 @@ namespace Code
 
     public class PlayerConnections : MonoBehaviour
     {
-
         [SerializeField]
         private Lobby lobby;
-        
+
         [SerializeField]
         private GameObject _playerInputPrefab;
 
         private Dictionary<InputDevice, PlayerInputHandler> deviceToInputHandler = new Dictionary<InputDevice, PlayerInputHandler>(4);
         
-        private GameplaySession gameplaySession;
+        private GameplaySession _gameplaySession;
 
         private void Awake()
         {
-            gameplaySession = Main.GameplaySession;
+            _gameplaySession = Main.GameplaySession;
             InputSystem.onDeviceChange += OnDeviceChange;
             AssignExistingDevices();
         }
@@ -53,8 +52,10 @@ namespace Code
             if (deviceToInputHandler.TryGetValue(device, out var playerInputHandler))
             {
                 deviceToInputHandler.Remove(device);
-                gameplaySession.RemovePlayerInput(playerInputHandler);
-                gameplaySession.DespawnPlayer(playerInputHandler);
+                _gameplaySession.RemovePlayerData(playerInputHandler.InputIndex);
+                lobby.OnPlayerLeft();
+                _gameplaySession.RemovePlayerInput(playerInputHandler);
+                _gameplaySession.DespawnPlayer(playerInputHandler);
                 Destroy(playerInputHandler.gameObject);
             }
         }
@@ -79,7 +80,8 @@ namespace Code
 
             var playerInputHandler = playerInput.GetComponent<PlayerInputHandler>();
             deviceToInputHandler.Add(device, playerInputHandler);
-            gameplaySession.AddPlayerInput(playerInputHandler);
+            _gameplaySession.AddPlayerData(playerInputHandler.InputIndex);
+            _gameplaySession.AddPlayerInput(playerInputHandler);
         }
     }
 }

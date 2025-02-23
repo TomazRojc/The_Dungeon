@@ -23,25 +23,27 @@ namespace Code
         {
             HandleReadyToStart(players);
 
+            for (int i = 0; i < playerNameTexts.Length; i++)
+            {
+                playerNameTexts[i].text = "Press X to join...";
+                playerReadyTexts[i].text = string.Empty;
+                playerAvatars[i].SetActive(false);
+                playerReadyButtons[i].SetActive(false);
+            }
+            
             for (int i = 0; i < players.Count; i++)
             {
-                if (!players[i].IsJoined)
-                {
-                    playerNameTexts[i].text = "Press X to join...";
-                    playerReadyTexts[i].text = string.Empty;
-                    playerAvatars[i].SetActive(false);
-                    playerReadyButtons[i].SetActive(false);
-                }
-                else
-                {
-                    playerNameTexts[i].text = players[i].DisplayName;
-                    playerReadyTexts[i].text = players[i].IsReady
-                        ? "<color=green>Ready</color>"
-                        : "<color=red>Not Ready</color>";
-                    playerAvatars[i].SetActive(true);
-                    playerAvatars[i].GetComponent<Image>().color = players[i].Color;
-                    playerReadyButtons[i].SetActive(true);
-                }
+                if (!players[i].IsJoined) continue;
+
+                var lobbyIndex = players[i].LobbyIndex;
+
+                playerNameTexts[lobbyIndex].text = players[i].DisplayName;
+                playerReadyTexts[lobbyIndex].text = players[i].IsReady
+                    ? "<color=green>Ready</color>"
+                    : "<color=red>Not Ready</color>";
+                playerAvatars[lobbyIndex].SetActive(true);
+                playerAvatars[lobbyIndex].GetComponent<Image>().color = players[i].Color;
+                playerReadyButtons[lobbyIndex].SetActive(true);
             }
         }
         

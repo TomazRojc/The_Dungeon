@@ -1,4 +1,5 @@
-﻿using Code.Utils;
+﻿using System;
+using Code.Utils;
 using UnityEngine;
 
 namespace Code
@@ -6,6 +7,8 @@ namespace Code
 
 	public class UIController : MonoBehaviour
 	{
+		[SerializeField]
+		private Lobby _lobby;
 
 		[Header("UIs")]
 		[SerializeField]
@@ -21,9 +24,38 @@ namespace Code
 
 		private SimpleTimer _timer;
 
+		private void Awake()
+		{
+			Main.UiManager.OnNavigate += HandleNavigate;
+			Main.UiManager.OnSubmit += HandleSubmit;
+			Main.UiManager.OnCancel += HandleCancel;
+			Main.UiManager.OnEscape += HandleEscape;
+		}
+		
 		private void Update()
 		{
 			_timer.Update(Time.deltaTime);
+		}
+		
+
+		private void HandleNavigate(Direction inputDirection, int inputIndex)
+		{
+			throw new NotImplementedException();
+		}
+        
+		private void HandleSubmit(int inputIndex)
+		{
+			_lobby.TryJoinPlayer(inputIndex);
+		}
+        
+		private void HandleCancel(int inputIndex)
+		{
+			throw new NotImplementedException();
+		}
+        
+		private void HandleEscape(int inputIndex)
+		{
+			throw new NotImplementedException();
 		}
 
 		public void GoToLobby()

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Code.Gameplay;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.Serialization;
 
 namespace Code
 {
@@ -18,13 +17,13 @@ namespace Code
 		[SerializeField]
 		private PlayerInputManager _playerInputManager;
 
-		private GameplaySession GameplaySession;
+		private GameplaySession _gameplaySession;
 		private List<PlayerData> _players;
 		private bool _active;
 		
 		private void Awake()
 		{
-			GameplaySession = Main.GameplaySession;
+			_gameplaySession = Main.GameplaySession;
 			_players = Main.GameplaySession.PlayersData;
 		}
 
@@ -45,60 +44,65 @@ namespace Code
 			_active = false;
 		}
 
-		// TODO JanR: fix this to work with new way of connecting players
-		public void OnPlayerJoined(int playerInputIndex)
+		public void TryJoinPlayer(int inputIndex)
 		{
-			var firstFreeIdx = -1;
+			if (!_active) return;
+
+			var playerDataIdx = GetPlayerDataIdx(inputIndex);
+			if (_players[playerDataIdx].IsJoined) return;
+
+			var lobbyIndex = GetFirstFreePanelIndex();
+			if (lobbyIndex == Int32.MaxValue)
+			{
+				Debug.LogWarning("Trying to join player but lobby is full.");
+				return;
+			}
+
+			_players[playerDataIdx].SetValues($"Player {lobbyIndex + 1}", defaultPlayerColors[lobbyIndex], true, false, lobbyIndex, inputIndex);
+			_lobbyUI.UpdateDisplay(_players);
+		}
+
+		public void OnPlayerLeft()
+		{
+			if (_active)
+			{
+				_lobbyUI.UpdateDisplay(_players);
+			}
+		}
+
+		private int GetFirstFreePanelIndex()
+		{
+			var firstFreeIndex = -1;
+			for (int i = 0; i < 4; i++)
+			{
+				firstFreeIndex = i;
+				foreach (var player in _players)
+				{
+					if (player.LobbyIndex == firstFreeIndex)
+					{
+						firstFreeIndex = -1;
+						break;
+					}
+				}
+				if (firstFreeIndex != -1) return firstFreeIndex;
+			}
+			
+			return firstFreeIndex;
+		}
+
+		private int GetPlayerDataIdx(int inputIndex)
+		{
 			for (int i = 0; i < _players.Count; i++)
 			{
-				if (firstFreeIdx == -1 && !_players[i].IsJoined)
+				if (_players[i].InputIndex == inputIndex)
 				{
-					firstFreeIdx = i;
-				}
-
-				// player with this input index was already joined before
-				if (_players[i].InputIndex == playerInputIndex)
-				{
-					_players[i].IsJoined = true;
-					return;
+					return i;
 				}
 			}
-
-			if (firstFreeIdx == -1)
-			{
-				throw new ArgumentException("Cannot join a player in a full lobby");
-			}
-
-			// new player joined
-			_players[firstFreeIdx].SetValues($"Player {firstFreeIdx + 1}", defaultPlayerColors[firstFreeIdx], true,
-				false, playerInputIndex);
-			
-			if (_active)
-			{
-				_lobbyUI.UpdateDisplay(_players);
-			}
+			return -1;
 		}
 
-		// TODO JanR: fix this to work with new way of connecting players
-		public void OnPlayerLeft(int playerInputIndex)
-		{
-			for (var i = 0; i < _players.Count; i++)
-			{
-				if (_players[i].InputIndex == playerInputIndex)
-				{
-					_players[i].IsJoined = false;
-					_players[i].IsReady = false;
-					break;
-				}
-			}
-
-			if (_active)
-			{
-				_lobbyUI.UpdateDisplay(_players);
-			}
-		}
-
-		public void ResetPlayersReady()
+		private void ResetPlayersReady()
 		{
 			for (int i = 0; i < _players.Count; i++)
 			{
@@ -128,7 +132,7 @@ namespace Code
 		
 		public void StartGame()
 		{
-			GameplaySession.OnEnterLevelsGameplay(Main.Instance.GameplayConfig.PlayerPrefab);
+			_gameplaySession.OnEnterLevelsGameplay(Main.Instance.GameplayConfig.PlayerPrefab);
 			uiController.GoToLevelSelection();
 			OnExit();
 		}

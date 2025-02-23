@@ -473,6 +473,17 @@
                 },
                 {
                     "name": "",
+                    "id": "8ce7f9dd-732e-4854-883f-9527f8246dd7",
+                    "path": "<Keyboard>/numpadEnter",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard&Mouse",
+                    "action": "Submit",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "2c381cb4-6250-4b8a-9cec-13a013d73296",
                     "path": "<Gamepad>/buttonEast",
                     "interactions": "",

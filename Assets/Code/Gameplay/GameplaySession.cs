@@ -19,10 +19,6 @@ namespace Code.Gameplay
             PlayerControllers = new List<PlayerController>(maxPlayers);
             _playerInputHandlers = new List<PlayerInputHandler>(maxPlayers);
             PlayersData = new List<PlayerData>(maxPlayers);
-            for (int i = 0; i < maxPlayers; i++)
-            {
-                PlayersData.Add(new PlayerData());
-            }
         }
 
         public void AddPlayerInput(PlayerInputHandler inputHandler)
@@ -33,6 +29,23 @@ namespace Code.Gameplay
         public void RemovePlayerInput(PlayerInputHandler inputHandler)
         {
             _playerInputHandlers.Remove(inputHandler);
+        }
+        
+        public void AddPlayerData(int inputIndex)
+        {
+            PlayersData.Add(new PlayerData("Player", Color.white, false, false, -1, inputIndex));
+        }
+        
+        public void RemovePlayerData(int inputIndex)
+        {
+            for (int i = 0; i < PlayersData.Count; i++)
+            {
+                if (PlayersData[i].InputIndex == inputIndex)
+                {
+                    PlayersData.RemoveAt(i);
+                    return;
+                }
+            }
         }
 
         public void OnEnterLevelsGameplay(GameObject playerPrefab)
