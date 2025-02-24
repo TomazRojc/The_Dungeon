@@ -63,7 +63,8 @@ namespace Code.UI
                 }
             }
 
-            startGameButton.interactable = allReady && !lobbyEmpty;
+            // TODO JanR: fix this to work with new buttons
+            // startGameButton.interactable = allReady && !lobbyEmpty;
         }
     }
 }

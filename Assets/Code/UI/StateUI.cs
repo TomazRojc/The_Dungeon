@@ -68,12 +68,18 @@ namespace Code.UI
 
         public ButtonBase GetCurrentlySelectedButton(int inputIndex)
         {
-            return _inputIndexToSelectedButton[inputIndex];
+            _inputIndexToSelectedButton.TryGetValue(inputIndex, out var button);
+            return button;
         }
 
         public void SetCurrentlySelectedButton(int inputIndex, ButtonBase button)
         {
             _inputIndexToSelectedButton[inputIndex] = button;
+        }
+
+        public bool HasButtonAuthority(int inputIndex, ButtonBase button)
+        {
+            return !button.IsSharedButton || _inputIndexInControl == -1 || _inputIndexInControl == inputIndex;
         }
     }
 }

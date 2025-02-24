@@ -45,22 +45,23 @@ namespace Code
 			_active = false;
 		}
 
-		public void TryJoinPlayer(int inputIndex)
+		public bool TryJoinPlayer(int inputIndex)
 		{
-			if (!_active) return;
+			if (!_active) return false;
 
 			var playerDataIdx = GetPlayerDataIdx(inputIndex);
-			if (_players[playerDataIdx].IsJoined) return;
+			if (_players[playerDataIdx].IsJoined) return false;
 
 			var lobbyIndex = GetFirstFreePanelIndex();
 			if (lobbyIndex == Int32.MaxValue)
 			{
 				Debug.LogWarning("Trying to join player but lobby is full.");
-				return;
+				return false;
 			}
 
 			_players[playerDataIdx].SetValues($"Player {lobbyIndex + 1}", defaultPlayerColors[lobbyIndex], true, false, lobbyIndex, inputIndex);
 			_lobbyUI.UpdateDisplay(_players);
+			return true;
 		}
 
 		public void OnPlayerLeft()
@@ -125,23 +126,10 @@ namespace Code
 			}
 		}
 
-		public void GoToLobby()
-		{
-			uiController.GoToLobby();
-			OnEnter();
-		}
-		
 		public void StartGame()
 		{
 			_gameplaySession.OnEnterLevelsGameplay(Main.Instance.GameplayConfig.PlayerPrefab);
-			uiController.GoToLevelSelection();
-			OnExit();
 		}
 
-		public void BackToMainMenu()
-		{
-			uiController.GoToMainMenu();
-			OnExit();
-		}
 	}
 }

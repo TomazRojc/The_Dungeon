@@ -58,7 +58,7 @@ namespace Code.UI
 			var nextButton = currentButton.GetNextButton(inputDirection);
 			if (nextButton == null) return;
 			
-			if (nextButton.IsSharedButton && _currentState.InputIndexInControl != -1 && _currentState.InputIndexInControl != inputIndex) return;
+			if (!_currentState.HasButtonAuthority(inputIndex, nextButton)) return;
 
 			if (nextButton.IsSharedButton)
 			{
@@ -77,7 +77,14 @@ namespace Code.UI
         
 		private void HandleSubmit(int inputIndex)
 		{
-			_lobby.TryJoinPlayer(inputIndex);
+			if (_lobby.TryJoinPlayer(inputIndex)) return;
+			var currentButton = _currentState.GetCurrentlySelectedButton(inputIndex);
+			
+			if (currentButton == null) return;
+
+			if (!_currentState.HasButtonAuthority(inputIndex, currentButton)) return;
+
+			currentButton.OnSubmit();
 		}
         
 		private void HandleCancel(int inputIndex)
@@ -100,6 +107,10 @@ namespace Code.UI
 			}
 			_currentState = newState;
 			newState.OnEnter();
+			
+			// TODO JanR: move this
+			if (_currentState == _lobbyPanelState) _lobby.OnExit();
+			if (newState == _lobbyPanelState) _lobby.OnEnter();
 		}
 		
 		public void GoToLobby()

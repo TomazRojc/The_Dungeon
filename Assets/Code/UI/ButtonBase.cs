@@ -13,7 +13,7 @@ namespace Code.UI
         [SerializeField]
         private float idleBreakTime;
         [SerializeField]
-        private bool _isSharedButton;
+        private bool _isSharedButton = true;
         [SerializeField]
         private ButtonBase _buttonUp;
         [SerializeField]
@@ -59,7 +59,7 @@ namespace Code.UI
             PlayExitAnimation();
         }
         
-        protected virtual void OnSubmit()
+        public virtual void OnSubmit()
         {
             onSubmit.Invoke();
         }
