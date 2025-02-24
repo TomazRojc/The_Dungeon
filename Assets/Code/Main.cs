@@ -1,4 +1,5 @@
-﻿using Code.Gameplay;
+﻿using Code.Configs;
+using Code.Gameplay;
 using UnityEngine;
 
 namespace Code
