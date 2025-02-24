@@ -17,7 +17,7 @@ namespace Code.UI
         private GameObject[] playerReadyButtons = new GameObject[4];
         
         [SerializeField]
-        private Button startGameButton;
+        private ButtonBase startGameButton;
         
         public void UpdateDisplay(List<PlayerData> players)
         {

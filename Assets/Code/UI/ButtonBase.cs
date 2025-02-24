@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Code.Utils;
 using UnityEngine;
 using UnityEngine.Events;
@@ -15,19 +16,22 @@ namespace Code.UI
         [SerializeField]
         private bool _isSharedButton = true;
         [SerializeField]
-        private ButtonBase _buttonUp;
+        private int _lobbyIndex;
         [SerializeField]
-        private ButtonBase _buttonDown;
+        private List<ButtonBase> _buttonsUp;
         [SerializeField]
-        private ButtonBase _buttonLeft;
+        private List<ButtonBase> _buttonsDown;
         [SerializeField]
-        private ButtonBase _buttonRight;
+        private List<ButtonBase> _buttonsLeft;
+        [SerializeField]
+        private List<ButtonBase> _buttonsRight;
 
         private bool _isSelected;
 
         private SimpleTimer _idleBreakTimer;
         
         public bool IsSharedButton => _isSharedButton;
+        public int LobbyIndex => _lobbyIndex;
         
         protected abstract void PlayEnterAnimation();
         protected abstract void PlayExitAnimation();
@@ -64,18 +68,18 @@ namespace Code.UI
             onSubmit.Invoke();
         }
 
-        public ButtonBase GetNextButton(Direction direction)
+        public List<ButtonBase> GetNextButtons(Direction direction)
         {
             switch (direction)
             {
                 case Direction.Up:
-                    return _buttonUp;
+                    return _buttonsUp;
                 case Direction.Down:
-                    return _buttonDown;
+                    return _buttonsDown;
                 case Direction.Left:
-                    return _buttonLeft;
+                    return _buttonsLeft;
                 case Direction.Right:
-                    return _buttonRight;
+                    return _buttonsRight;
             }
             throw new ArgumentException($"Invalid Direction for button {name}");
         }

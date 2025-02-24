@@ -105,5 +105,18 @@ namespace Code.Gameplay
 
             return null;
         }
+        
+        public PlayerData GetPlayerData(int inputIndex)
+        {
+            foreach (var playerData in PlayersData)
+            {
+                if (playerData.InputIndex == inputIndex)
+                {
+                    return playerData;
+                }
+            }
+
+            return null;
+        }
     }
 }

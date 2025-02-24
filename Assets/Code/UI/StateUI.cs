@@ -77,9 +77,37 @@ namespace Code.UI
             _inputIndexToSelectedButton[inputIndex] = button;
         }
 
+        public ButtonBase SelectPlayerSpecificButton(int inputIndex, int lobbyIndex)
+        {
+            var button = _firstSelectedPlayerButtons[lobbyIndex];
+            if (button == null)
+            {
+                throw new ArgumentException($"Player specific button not linked in {name}");
+            }
+
+            SetCurrentlySelectedButton(inputIndex, button);
+            return button;
+        }
+
         public bool HasButtonAuthority(int inputIndex, ButtonBase button)
         {
-            return !button.IsSharedButton || _inputIndexInControl == -1 || _inputIndexInControl == inputIndex;
+            if (!button.IsSharedButton)
+            {
+                var lobbyIndex = _gameplaySession.GetPlayerData(inputIndex).LobbyIndex;
+                return lobbyIndex == button.LobbyIndex;
+            }
+            return _inputIndexInControl == -1 || _inputIndexInControl == inputIndex;
+        }
+        public ButtonBase GetButtonWithAuthority(int inputIndex, List<ButtonBase> buttons)
+        {
+            foreach (var button in buttons)
+            {
+                if (HasButtonAuthority(inputIndex, button))
+                {
+                    return button;
+                }
+            }
+            return null;
         }
     }
 }

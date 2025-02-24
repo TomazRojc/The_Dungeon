@@ -49,8 +49,8 @@ namespace Code
 		{
 			if (!_active) return false;
 
-			var playerDataIdx = GetPlayerDataIdx(inputIndex);
-			if (_players[playerDataIdx].IsJoined) return false;
+			var playerData = _gameplaySession.GetPlayerData(inputIndex);
+			if (playerData.IsJoined) return false;
 
 			var lobbyIndex = GetFirstFreePanelIndex();
 			if (lobbyIndex == Int32.MaxValue)
@@ -59,7 +59,7 @@ namespace Code
 				return false;
 			}
 
-			_players[playerDataIdx].SetValues($"Player {lobbyIndex + 1}", defaultPlayerColors[lobbyIndex], true, false, lobbyIndex, inputIndex);
+			playerData.SetValues($"Player {lobbyIndex + 1}", defaultPlayerColors[lobbyIndex], true, false, lobbyIndex, inputIndex);
 			_lobbyUI.UpdateDisplay(_players);
 			return true;
 		}
@@ -90,18 +90,6 @@ namespace Code
 			}
 			
 			return firstFreeIndex;
-		}
-
-		private int GetPlayerDataIdx(int inputIndex)
-		{
-			for (int i = 0; i < _players.Count; i++)
-			{
-				if (_players[i].InputIndex == inputIndex)
-				{
-					return i;
-				}
-			}
-			return -1;
 		}
 
 		private void ResetPlayersReady()

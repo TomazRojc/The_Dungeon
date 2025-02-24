@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Code.Gameplay;
 using Code.Utils;
 using UnityEngine;
 
@@ -27,6 +28,8 @@ namespace Code.UI
 		private GameObject _loadingPanel;
 		[SerializeField]
 		private GameObject _levelsPanel;
+
+		private GameplaySession _gameplaySession;
 		
 		private StateUI _currentState;
 
@@ -34,6 +37,8 @@ namespace Code.UI
 
 		private void Start()
 		{
+			_gameplaySession = Main.GameplaySession;
+			
 			Main.UiManager.OnNavigate += HandleNavigate;
 			Main.UiManager.OnSubmit += HandleSubmit;
 			Main.UiManager.OnCancel += HandleCancel;
@@ -55,10 +60,11 @@ namespace Code.UI
 			
 			if (currentButton == null) return;
 
-			var nextButton = currentButton.GetNextButton(inputDirection);
+			var nextButtons = currentButton.GetNextButtons(inputDirection);
+			if (nextButtons.Count == 0) return;
+
+			var nextButton = _currentState.GetButtonWithAuthority(inputIndex, nextButtons);
 			if (nextButton == null) return;
-			
-			if (!_currentState.HasButtonAuthority(inputIndex, nextButton)) return;
 
 			if (nextButton.IsSharedButton)
 			{
@@ -77,7 +83,11 @@ namespace Code.UI
         
 		private void HandleSubmit(int inputIndex)
 		{
-			if (_lobby.TryJoinPlayer(inputIndex)) return;
+			if (_lobby.TryJoinPlayer(inputIndex))
+			{
+				HandlePlayerJoined(inputIndex);
+				return;
+			}
 			var currentButton = _currentState.GetCurrentlySelectedButton(inputIndex);
 			
 			if (currentButton == null) return;
@@ -86,7 +96,27 @@ namespace Code.UI
 
 			currentButton.OnSubmit();
 		}
-        
+
+		private void HandlePlayerJoined(int inputIndex)
+		{
+			var playerData = _gameplaySession.GetPlayerData(inputIndex);
+			if (playerData == null) return;
+
+			var lobbyIndex = playerData.LobbyIndex;
+			if (lobbyIndex == -1)
+			{
+				throw new ArgumentException("Player not joined!");
+			}
+			var oldButton = _currentState.GetCurrentlySelectedButton(inputIndex);
+			var newButton = _currentState.SelectPlayerSpecificButton(inputIndex, lobbyIndex);
+
+			if (oldButton != null)
+			{
+				oldButton.OnDeselect();
+			}
+			newButton.OnSelect();
+		}
+
 		private void HandleCancel(int inputIndex)
 		{
 			throw new NotImplementedException();
