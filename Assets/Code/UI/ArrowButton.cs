@@ -63,9 +63,8 @@ namespace Code.UI
             }
         }
 
-        protected override void OnValidate()
+        private void OnValidate()
         {
-            base.OnValidate();
             arrowImage.color = buttonConfig.DefaultColor;
         }
     }

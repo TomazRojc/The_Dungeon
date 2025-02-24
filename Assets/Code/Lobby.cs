@@ -140,7 +140,7 @@ namespace Code
 
 		public void BackToMainMenu()
 		{
-			uiController.GoBackToMainMenu();
+			uiController.GoToMainMenu();
 			OnExit();
 		}
 	}

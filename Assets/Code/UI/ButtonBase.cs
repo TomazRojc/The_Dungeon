@@ -1,29 +1,40 @@
+using System;
 using Code.Utils;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
-using UnityEngine.UI;
 
 namespace Code.UI
 {
-    public abstract class ButtonBase : Selectable
+    public abstract class ButtonBase : MonoBehaviour
     {
         [SerializeField]
-        private UnityEvent onClick;
+        private UnityEvent onSubmit;
         [SerializeField]
         private float idleBreakTime;
-        
+        [SerializeField]
+        private bool _isSharedButton;
+        [SerializeField]
+        private ButtonBase _buttonUp;
+        [SerializeField]
+        private ButtonBase _buttonDown;
+        [SerializeField]
+        private ButtonBase _buttonLeft;
+        [SerializeField]
+        private ButtonBase _buttonRight;
+
         private bool _isSelected;
-        
+
         private SimpleTimer _idleBreakTimer;
+        
+        public bool IsSharedButton => _isSharedButton;
         
         protected abstract void PlayEnterAnimation();
         protected abstract void PlayExitAnimation();
         protected abstract void PlayIdleBreakAnimation();
 
-        protected override void Awake()
+        protected virtual void Awake()
         {
-            base.Awake();
             _idleBreakTimer.OnLoopComplete += PlayIdleBreakAnimation;
         }
         
@@ -35,30 +46,38 @@ namespace Code.UI
             }
         }
 
-        public override void OnSelect(BaseEventData eventData)
+        public virtual void OnSelect()
         {
-            base.OnSelect(eventData);
             _isSelected = true;
             PlayEnterAnimation();
             _idleBreakTimer.Start(idleBreakTime, true);
         }
         
-        public override void OnDeselect(BaseEventData eventData)
+        public virtual void OnDeselect()
         {
-            base.OnDeselect(eventData);
             _isSelected = false;
             PlayExitAnimation();
         }
         
-        public override void OnPointerUp(PointerEventData eventData)
+        protected virtual void OnSubmit()
         {
-            base.OnPointerUp(eventData);
-            OnClick();
+            onSubmit.Invoke();
         }
-        
-        protected virtual void OnClick()
+
+        public ButtonBase GetNextButton(Direction direction)
         {
-            onClick.Invoke();
+            switch (direction)
+            {
+                case Direction.Up:
+                    return _buttonUp;
+                case Direction.Down:
+                    return _buttonDown;
+                case Direction.Left:
+                    return _buttonLeft;
+                case Direction.Right:
+                    return _buttonRight;
+            }
+            throw new ArgumentException($"Invalid Direction for button {name}");
         }
     }
     

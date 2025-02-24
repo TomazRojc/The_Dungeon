@@ -85,9 +85,8 @@ namespace Code.UI
             }
         }
 
-        protected override void OnValidate()
+        private void OnValidate()
         {
-            base.OnValidate();
             lineImage.color = buttonConfig.DefaultColor;
             arrowImage.color = buttonConfig.DefaultColor;
             text.color = buttonConfig.DefaultColor;

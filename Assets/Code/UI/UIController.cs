@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Code.Utils;
 using UnityEngine;
 
@@ -8,28 +9,38 @@ namespace Code.UI
 	public class UIController : MonoBehaviour
 	{
 		[SerializeField]
+		private GameObject _UICamera;
+
+		[SerializeField]
 		private Lobby _lobby;
 
 		[Header("UIs")]
 		[SerializeField]
+		private StateUI _mainMenuPanelState;
+		[SerializeField]
+		private StateUI _settingsPanelState;
+		[SerializeField]
+		private StateUI _lobbyPanelState;
+		[SerializeField]
+		private StateUI _levelsPanelState;
+		[SerializeField]
 		private GameObject _loadingPanel;
 		[SerializeField]
-		private GameObject _mainMenuPanel;
-		[SerializeField]
-		private GameObject _settingsPanel;
-		[SerializeField]
-		private GameObject _lobbyPanel;
-		[SerializeField]
 		private GameObject _levelsPanel;
+		
+		private StateUI _currentState;
 
 		private SimpleTimer _timer;
 
-		private void Awake()
+		private void Start()
 		{
 			Main.UiManager.OnNavigate += HandleNavigate;
 			Main.UiManager.OnSubmit += HandleSubmit;
 			Main.UiManager.OnCancel += HandleCancel;
 			Main.UiManager.OnEscape += HandleEscape;
+
+			GoToMainMenu();
+			_UICamera.SetActive(true);
 		}
 		
 		private void Update()
@@ -40,7 +51,28 @@ namespace Code.UI
 
 		private void HandleNavigate(Direction inputDirection, int inputIndex)
 		{
-			throw new NotImplementedException();
+			var currentButton = _currentState.GetCurrentlySelectedButton(inputIndex);
+			
+			if (currentButton == null) return;
+
+			var nextButton = currentButton.GetNextButton(inputDirection);
+			if (nextButton == null) return;
+			
+			if (nextButton.IsSharedButton && _currentState.InputIndexInControl != -1 && _currentState.InputIndexInControl != inputIndex) return;
+
+			if (nextButton.IsSharedButton)
+			{
+				_currentState.SetPlayerInControl(inputIndex);
+			}
+
+			if (currentButton.IsSharedButton && !nextButton.IsSharedButton)
+			{
+				_currentState.ResetPlayerInControl();
+			}
+			
+			_currentState.SetCurrentlySelectedButton(inputIndex, nextButton);
+			currentButton.OnDeselect();
+			nextButton.OnSelect();
 		}
         
 		private void HandleSubmit(int inputIndex)
@@ -57,17 +89,27 @@ namespace Code.UI
 		{
 			throw new NotImplementedException();
 		}
+		
+		private void ChangeState(StateUI newState)
+		{
+			if (_currentState == newState) return;
 
+			if (_currentState != null)
+			{
+				_currentState.OnExit();
+			}
+			_currentState = newState;
+			newState.OnEnter();
+		}
+		
 		public void GoToLobby()
 		{
-			_lobbyPanel.SetActive(true);
+			ChangeState(_lobbyPanelState);
 		}
 
 		public void GoToLevelSelection()
 		{
-			_mainMenuPanel.SetActive(false);
-			_lobbyPanel.SetActive(false);
-			_levelsPanel.SetActive(true);
+			ChangeState(_levelsPanelState);
 		}
 
 		public void StartLevel(int levelNumber)
@@ -85,14 +127,12 @@ namespace Code.UI
 
 		public void GoToSettings()
 		{
-			_settingsPanel.SetActive(true);
+			ChangeState(_settingsPanelState);
 		}
 
-		public void GoBackToMainMenu()
+		public void GoToMainMenu()
 		{
-			_mainMenuPanel.SetActive(true);
-			_settingsPanel.SetActive(false);
-			_lobbyPanel.SetActive(false);
+			ChangeState(_mainMenuPanelState);
 		}
 
 		public void ExitGame()
