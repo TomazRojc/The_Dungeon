@@ -1,4 +1,5 @@
 ﻿using Code.UI;
+using Code.Utils;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -12,16 +13,23 @@ namespace Code
         private Vector2 _lookInput;
         private int _inputIndex;
 
+        private bool _navigationEnabled = true;
+        private float _onNavigateCooldown = 0.1f;
+        private SimpleTimer _onNavigateCooldownTimer;
+
         public int InputIndex => _inputIndex;
         public PlayerController Player => _player;
 
         private void Awake()
         {
             _inputIndex = GetComponent<PlayerInput>().playerIndex;
+            _onNavigateCooldownTimer = new SimpleTimer();
         }
 
         void Update()
         {
+            _onNavigateCooldownTimer.Update(Time.deltaTime);
+            
             if (_player == null) return;
             
             // invoke player movement/look
@@ -104,10 +112,16 @@ namespace Code
 
         public void OnNavigateUI(InputAction.CallbackContext context)
         {
-            if (context.performed)
-            {
-                Main.UiManager.OnNavigate?.Invoke(GetDirection(context.ReadValue<Vector2>()), _inputIndex);
-            }
+            if (!context.performed || !_navigationEnabled) return;
+
+            var direction = GetDirection(context.ReadValue<Vector2>());
+            if (direction == Direction.Center) return;
+
+            _navigationEnabled = false;
+
+            _onNavigateCooldownTimer.OnComplete += () => { _navigationEnabled = true; };
+            _onNavigateCooldownTimer.Start(_onNavigateCooldown);
+            Main.UiManager.OnNavigate?.Invoke(direction, _inputIndex);
         }
 
         public void OnSubmitUI(InputAction.CallbackContext context)
@@ -149,8 +163,12 @@ namespace Code
             {
                 return Direction.Down;
             }
+            if (direction.y > 0.9)
+            {
+                return Direction.Up;
+            }
             
-            return Direction.Up;
+            return Direction.Center;
         }
     }
 }

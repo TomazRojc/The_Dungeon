@@ -7,7 +7,8 @@ namespace Code.UI
         Up,
         Down,
         Left,
-        Right
+        Right,
+        Center
     }
     public class UiManager
     {

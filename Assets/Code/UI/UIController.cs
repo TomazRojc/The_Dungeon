@@ -110,6 +110,8 @@ namespace Code.UI
 			var oldButton = _currentState.GetCurrentlySelectedButton(inputIndex);
 			var newButton = _currentState.SelectPlayerSpecificButton(inputIndex, lobbyIndex);
 
+			_currentState.ResetPlayerInControl();
+			
 			if (oldButton != null)
 			{
 				oldButton.OnDeselect();
