@@ -114,7 +114,7 @@ namespace Code
 			}
 		}
 
-		public void StartGame()
+		public void OnStartGame()
 		{
 			_gameplaySession.OnEnterLevelsGameplay(Main.Instance.GameplayConfig.PlayerPrefab);
 		}

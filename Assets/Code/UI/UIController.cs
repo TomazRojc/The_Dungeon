@@ -35,6 +35,8 @@ namespace Code.UI
 
 		private SimpleTimer _timer;
 
+		private bool _UIActive;
+
 		private void Start()
 		{
 			_gameplaySession = Main.GameplaySession;
@@ -44,6 +46,7 @@ namespace Code.UI
 			Main.UiManager.OnCancel += HandleCancel;
 			Main.UiManager.OnEscape += HandleEscape;
 
+			_UIActive = true;
 			GoToMainMenu();
 			_UICamera.SetActive(true);
 		}
@@ -56,6 +59,8 @@ namespace Code.UI
 
 		private void HandleNavigate(Direction inputDirection, int inputIndex)
 		{
+			if (!_UIActive) return;
+			
 			var currentButton = _currentState.GetCurrentlySelectedButton(inputIndex);
 			
 			if (currentButton == null) return;
@@ -83,6 +88,8 @@ namespace Code.UI
         
 		private void HandleSubmit(int inputIndex)
 		{
+			if (!_UIActive) return;
+			
 			if (_lobby.TryJoinPlayer(inputIndex))
 			{
 				HandlePlayerJoined(inputIndex);
@@ -121,6 +128,7 @@ namespace Code.UI
 
 		private void HandleCancel(int inputIndex)
 		{
+			if (!_UIActive) return;
 			throw new NotImplementedException();
 		}
         
@@ -153,10 +161,14 @@ namespace Code.UI
 		public void GoToLevelSelection()
 		{
 			ChangeState(_levelsPanelState);
+			// TODO JanR: move this
+			_lobby.OnStartGame();
 		}
 
 		public void StartLevel(int levelNumber)
 		{
+			_UIActive = false;
+			
 			_loadingPanel.SetActive(true);
 			_levelsPanel.SetActive(false);
 			_timer.OnComplete += () =>

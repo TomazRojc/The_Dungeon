@@ -2943,7 +2943,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5142662879602761529, guid: 84771e8ee4652b34cb2e806814e6d114, type: 3}
       propertyPath: onSubmit.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_IntArgument
-      value: 10
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 5142662879602761529, guid: 84771e8ee4652b34cb2e806814e6d114, type: 3}
       propertyPath: _buttonsUp.Array.data[0]
@@ -3323,7 +3323,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5142662879602761529, guid: 84771e8ee4652b34cb2e806814e6d114, type: 3}
       propertyPath: onSubmit.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_IntArgument
-      value: 5
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 5142662879602761529, guid: 84771e8ee4652b34cb2e806814e6d114, type: 3}
       propertyPath: _buttonsDown.Array.data[0]
@@ -6819,6 +6819,10 @@ PrefabInstance:
       propertyPath: _buttonsDown.Array.data[0]
       value: 
       objectReference: {fileID: 750921342}
+    - target: {fileID: 5142662879602761529, guid: 84771e8ee4652b34cb2e806814e6d114, type: 3}
+      propertyPath: onSubmit.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_IntArgument
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5171688581846925650, guid: 84771e8ee4652b34cb2e806814e6d114, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
