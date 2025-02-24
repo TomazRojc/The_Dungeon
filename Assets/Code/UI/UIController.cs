@@ -2,7 +2,7 @@
 using Code.Utils;
 using UnityEngine;
 
-namespace Code
+namespace Code.UI
 {
 
 	public class UIController : MonoBehaviour

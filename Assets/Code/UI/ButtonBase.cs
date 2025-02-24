@@ -1,11 +1,10 @@
-using System;
 using Code.Utils;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-namespace Code
+namespace Code.UI
 {
     public abstract class ButtonBase : Selectable
     {

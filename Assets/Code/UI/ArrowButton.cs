@@ -2,7 +2,7 @@ using Code.Utils;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Code
+namespace Code.UI
 {
     public class ArrowButton : ButtonBase
     {

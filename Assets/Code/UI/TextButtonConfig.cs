@@ -1,9 +1,9 @@
 using UnityEngine;
 
-namespace Code
+namespace Code.UI
 {
-    [CreateAssetMenu(fileName = "ArrowButtonConfig", menuName = "ScriptableObjects/ArrowButtonConfig", order = 3)]
-    public class ArrowButtonConfig : ScriptableObject
+    [CreateAssetMenu(fileName = "TextButtonConfig", menuName = "ScriptableObjects/TextButtonConfig", order = 2)]
+    public class TextButtonConfig : ScriptableObject
     {
         [SerializeField]
         private Color defaultColor;
@@ -16,6 +16,8 @@ namespace Code
         [SerializeField]
         private float selectedScale;
         [SerializeField]
+        private Vector3 selectedOffset;
+        [SerializeField]
         private float idleBreakArrowScale;
         [SerializeField]
         private AnimationCurve animationCurve;
@@ -27,6 +29,7 @@ namespace Code
         public float AnimationDuration => animationDuration;
         public float IdleBreakAnimationDuration => idleBreakAnimationDuration;
         public float SelectedScale => selectedScale;
+        public Vector3 SelectedOffset => selectedOffset;
         public float IdleBreakArrowScale => idleBreakArrowScale;
         public AnimationCurve AnimationCurve => animationCurve;
         public AnimationCurve ScaleCurve => scaleCurve;
