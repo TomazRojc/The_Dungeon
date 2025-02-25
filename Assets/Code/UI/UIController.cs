@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using Code.Gameplay;
 using Code.Utils;
 using UnityEngine;
@@ -145,8 +144,17 @@ namespace Code.UI
 			{
 				_currentState.OnExit();
 			}
+
+			if (newState != null)
+			{
+				newState.OnEnter();
+			}
+			else
+			{
+				_UIActive = false;
+			}
+
 			_currentState = newState;
-			newState.OnEnter();
 			
 			// TODO JanR: move this
 			if (_currentState == _lobbyPanelState) _lobby.OnExit();
@@ -167,10 +175,9 @@ namespace Code.UI
 
 		public void StartLevel(int levelNumber)
 		{
-			_UIActive = false;
+			ChangeState(null);
 			
 			_loadingPanel.SetActive(true);
-			_levelsPanel.SetActive(false);
 			_timer.OnComplete += () =>
 			{
 				_loadingPanel.SetActive(false);

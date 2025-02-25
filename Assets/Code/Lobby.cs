@@ -18,9 +18,10 @@ namespace Code
 		[SerializeField]
 		private PlayerInputManager _playerInputManager;
 
+		private bool _active;
 		private GameplaySession _gameplaySession;
 		private List<PlayerData> _players;
-		private bool _active;
+		private Dictionary<int, PlayerData> _lobbyIndexToPlayerData = new Dictionary<int, PlayerData>(4);
 		
 		private void Awake()
 		{
@@ -60,12 +61,15 @@ namespace Code
 			}
 
 			playerData.SetValues($"Player {lobbyIndex + 1}", defaultPlayerColors[lobbyIndex], true, false, lobbyIndex, inputIndex);
+			_lobbyIndexToPlayerData.Add(lobbyIndex, playerData);
 			_lobbyUI.UpdateDisplay(_players);
 			return true;
 		}
 
-		public void OnPlayerLeft()
+		public void OnPlayerLeft(int inputIndex)
 		{
+			var lobbyIndex = _gameplaySession.GetPlayerData(inputIndex).LobbyIndex;
+			_lobbyIndexToPlayerData.Remove(lobbyIndex);
 			if (_active)
 			{
 				_lobbyUI.UpdateDisplay(_players);
@@ -105,9 +109,9 @@ namespace Code
 			}
 		}
 
-		public void OnPlayerReady(int buttonIndex)
+		public void OnPlayerReady(int lobbyIndex)
 		{
-			_players[buttonIndex].IsReady = !_players[buttonIndex].IsReady;
+			_lobbyIndexToPlayerData[lobbyIndex].IsReady = !_lobbyIndexToPlayerData[lobbyIndex].IsReady;
 			if (_active)
 			{
 				_lobbyUI.UpdateDisplay(_players);

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Code.Utils;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.EventSystems;
 
 namespace Code.UI
 {

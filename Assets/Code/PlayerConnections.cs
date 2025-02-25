@@ -53,7 +53,7 @@ namespace Code
             {
                 deviceToInputHandler.Remove(device);
                 _gameplaySession.RemovePlayerData(playerInputHandler.InputIndex);
-                lobby.OnPlayerLeft();
+                lobby.OnPlayerLeft(playerInputHandler.InputIndex);
                 _gameplaySession.RemovePlayerInput(playerInputHandler);
                 _gameplaySession.DespawnPlayer(playerInputHandler);
                 Destroy(playerInputHandler.gameObject);
