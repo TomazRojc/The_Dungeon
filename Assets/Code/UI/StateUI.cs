@@ -19,8 +19,6 @@ namespace Code.UI
         
         private int _inputIndexInControl;
 
-        public int InputIndexInControl => _inputIndexInControl;
-
         private void Awake()
         {
             _gameplaySession = Main.GameplaySession;

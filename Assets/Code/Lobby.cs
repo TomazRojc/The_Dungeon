@@ -18,10 +18,14 @@ namespace Code
 		[SerializeField]
 		private PlayerInputManager _playerInputManager;
 
-		private bool _active;
+		private bool _isActive;
 		private GameplaySession _gameplaySession;
 		private List<PlayerData> _players;
 		private Dictionary<int, PlayerData> _lobbyIndexToPlayerData = new Dictionary<int, PlayerData>(4);
+		
+		public int NumJoinedPlayers => _lobbyIndexToPlayerData.Count;
+		
+		public bool IsActive => _isActive;
 		
 		private void Awake()
 		{
@@ -31,7 +35,7 @@ namespace Code
 
 		public void OnEnter()
 		{
-			_active = true;
+			_isActive = true;
 
 			_playerInputManager.EnableJoining();
 
@@ -43,12 +47,11 @@ namespace Code
 		{
 			_playerInputManager.DisableJoining();
 			ResetPlayersReady();
-			_active = false;
+			_isActive = false;
 		}
 
 		public bool TryJoinPlayer(int inputIndex)
 		{
-			if (!_active) return false;
 
 			var playerData = _gameplaySession.GetPlayerData(inputIndex);
 			if (playerData.IsJoined) return false;
@@ -70,7 +73,7 @@ namespace Code
 		{
 			var lobbyIndex = _gameplaySession.GetPlayerData(inputIndex).LobbyIndex;
 			_lobbyIndexToPlayerData.Remove(lobbyIndex);
-			if (_active)
+			if (_isActive)
 			{
 				_lobbyUI.UpdateDisplay(_players);
 			}
@@ -103,7 +106,7 @@ namespace Code
 				_players[i].IsReady = false;
 			}
 
-			if (_active)
+			if (_isActive)
 			{
 				_lobbyUI.UpdateDisplay(_players);
 			}
@@ -112,7 +115,7 @@ namespace Code
 		public void OnPlayerReady(int lobbyIndex)
 		{
 			_lobbyIndexToPlayerData[lobbyIndex].IsReady = !_lobbyIndexToPlayerData[lobbyIndex].IsReady;
-			if (_active)
+			if (_isActive)
 			{
 				_lobbyUI.UpdateDisplay(_players);
 			}

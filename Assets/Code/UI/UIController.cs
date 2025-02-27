@@ -59,7 +59,11 @@ namespace Code.UI
 		private void HandleNavigate(Direction inputDirection, int inputIndex)
 		{
 			if (!_UIActive) return;
-			
+
+			if (_lobby.NumJoinedPlayers == 0)
+			{
+				TryJoinPlayer(inputIndex);
+			}
 			var currentButton = _currentState.GetCurrentlySelectedButton(inputIndex);
 			
 			if (currentButton == null) return;
@@ -84,16 +88,23 @@ namespace Code.UI
 			currentButton.OnDeselect();
 			nextButton.OnSelect();
 		}
-        
+
+		private bool TryJoinPlayer(int inputIndex)
+		{
+			if (_lobby.TryJoinPlayer(inputIndex))
+			{
+				if (_lobby.IsActive) HandleSelectedButtonsOnPlayerJoined(inputIndex);
+				return true;
+			}
+			return false;
+		}
+
 		private void HandleSubmit(int inputIndex)
 		{
 			if (!_UIActive) return;
+
+			if (TryJoinPlayer(inputIndex)) return;
 			
-			if (_lobby.TryJoinPlayer(inputIndex))
-			{
-				HandlePlayerJoined(inputIndex);
-				return;
-			}
 			var currentButton = _currentState.GetCurrentlySelectedButton(inputIndex);
 			
 			if (currentButton == null) return;
@@ -103,7 +114,7 @@ namespace Code.UI
 			currentButton.OnSubmit();
 		}
 
-		private void HandlePlayerJoined(int inputIndex)
+		private void HandleSelectedButtonsOnPlayerJoined(int inputIndex)
 		{
 			var playerData = _gameplaySession.GetPlayerData(inputIndex);
 			if (playerData == null) return;
