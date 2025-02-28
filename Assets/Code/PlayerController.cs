@@ -5,6 +5,16 @@ namespace Code
 {
 	public class PlayerController : MonoBehaviour
 	{
+		[Header("References")]
+		[SerializeField]
+		private BoxCollider2D _boxCollider;
+		[SerializeField]
+		private Rigidbody2D rigidBody;
+		
+		[Header("Parameters")]
+		[SerializeField]
+		private float _myGravityScale;
+		
 		public bool CanTeleport => _justTeleportedToPortal == null;
 		
 		public float moveSpeed = 15f;
@@ -17,7 +27,6 @@ namespace Code
 		public float dashFullTime = 0.1f;
 		public float dashCooldown = 0.4f;
 
-		private float _myGravityScale;
 		private float _currentDashTime;
 		private bool _canDash = true;
 		private bool _isDashing;
@@ -25,8 +34,6 @@ namespace Code
 		private float _lastMoveDirection = 1f;
 		private Portal _justTeleportedToPortal;
 		
-		private readonly List<int> _enteredPortalGuids = new List<int>();
-
 		// control variables (on keypress)
 		private bool _shouldJump;
 		private bool _shouldDoubleJump;
@@ -35,15 +42,10 @@ namespace Code
 
 		private Vector2 _myVectorUp = new Vector2(0, 1);
 		private Vector2 _myVectorRight = new Vector2(1, 0);
-		public Rigidbody2D rigidBody;
-		private BoxCollider2D _boxCollider;
 
 		void Start()
 		{
 			// GetComponent<SpriteRenderer>().color = displayColor;
-
-			_myGravityScale = rigidBody.mass * 50f; // F = m * g
-			_boxCollider = GetComponent<BoxCollider2D>();
 
 			SwitchGravity("down");
 			_currentDashTime = dashFullTime;
@@ -86,11 +88,19 @@ namespace Code
 			{
 				//TODO: tomazr slowly decrease left/right speed if controls are not being touched, otherwise give full control to player
 				var targetVelocity = (_myVectorRight * _moveLeftRight) + (VecAbs(_myVectorUp) * rigidBody.velocity);
-				rigidBody.velocity =
-					Vector2.Lerp(rigidBody.velocity, targetVelocity, Time.deltaTime * speedChangeFactor);
+				rigidBody.velocity = Vector2.Lerp(rigidBody.velocity, targetVelocity, Time.deltaTime * speedChangeFactor);
 			}
 
 
+			UpdateDashing();
+
+			// Gravity
+			rigidBody.AddForce(-_myVectorUp * _myGravityScale, ForceMode2D.Force);
+
+			UpdatePortalCheck();
+		}
+		
+		private void UpdateDashing() {
 			// handle dashing
 			_currentDashTime -= Time.fixedDeltaTime;
 			if (_isDashing)
@@ -102,11 +112,6 @@ namespace Code
 					rigidBody.velocity = VecAbs(_myVectorUp) * rigidBody.velocity;
 				}
 			}
-
-			// Gravity
-			rigidBody.AddForce(-_myVectorUp * _myGravityScale, ForceMode2D.Force);
-
-			UpdatePortalCheck();
 		}
 
 		private void UpdatePortalCheck() {
