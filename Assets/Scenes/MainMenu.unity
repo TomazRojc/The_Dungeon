@@ -1528,7 +1528,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _lobbyUI: {fileID: 7963712139352903059}
-  uiController: {fileID: 1508411021}
+  _UIController: {fileID: 0}
   defaultPlayerColors:
   - {r: 0.64705884, g: 0.8392157, b: 0.32941177, a: 1}
   - {r: 0.35644355, g: 0.4549662, b: 0.8490566, a: 1}

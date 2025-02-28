@@ -11,10 +11,14 @@ namespace Code
         
         private Vector2 _moveInput;
         private Vector2 _lookInput;
+        private Direction _navigateUIDirection;
         private int _inputIndex;
 
         private bool _navigationEnabled = true;
-        private float _onNavigateCooldown = 0.1f;
+        private float _joystickDirectionThreshold = 0.9f;
+        private float _onNavigateCooldownShort = 0.2f;
+        private float _onNavigateCooldownLong = 0.4f;
+        private bool _longCooldownFinished;
         private SimpleTimer _onNavigateCooldownTimer;
 
         public int InputIndex => _inputIndex;
@@ -24,12 +28,47 @@ namespace Code
         {
             _inputIndex = GetComponent<PlayerInput>().playerIndex;
             _onNavigateCooldownTimer = new SimpleTimer();
+            _longCooldownFinished = false;
         }
 
         void Update()
         {
+            HandleUIInputOnUpdate();
+
+            HandlePlayerInputOnUpdate();
+        }
+        
+        private void HandleUIInputOnUpdate()
+        {
+            if (!UIController.UIActive) return;
+
+            if (_navigateUIDirection == Direction.Center)
+            {
+                _navigationEnabled = true;
+                _longCooldownFinished = false;
+                _onNavigateCooldownTimer.Stop();
+                return;
+            }
+
             _onNavigateCooldownTimer.Update(Time.deltaTime);
-            
+
+            if (!_navigationEnabled) return;
+
+            _onNavigateCooldownTimer.OnComplete += () =>
+            {
+                _longCooldownFinished = true;
+                _navigationEnabled = true;
+            };
+
+            var cooldown = _longCooldownFinished ? _onNavigateCooldownShort : _onNavigateCooldownLong;
+            _onNavigateCooldownTimer.Start(cooldown);
+
+            _navigationEnabled = false;
+            Main.UiEventBus.OnNavigate?.Invoke(_navigateUIDirection, _inputIndex);
+        }
+        
+        private void HandlePlayerInputOnUpdate()
+        {
             if (UIController.UIActive || _player == null) return;
             
             // invoke player movement/look
@@ -45,125 +84,91 @@ namespace Code
         // WASD or Left Stick
         public void OnMove(InputAction.CallbackContext context)
         {
+            if (!context.performed) return;
+            
             _moveInput = context.ReadValue<Vector2>();
         }
 
         // Arrows or Right Stick
         public void OnLook(InputAction.CallbackContext context)
         {
+            if (!context.performed) return;
+            
             _lookInput = context.ReadValue<Vector2>();
         }
 
         // Q or North Button
         public void OnDropItem(InputAction.CallbackContext context)
         {
-            if (UIController.UIActive || _player == null) return;
-
-            if (context.started)
-            {
-                Debug.Log("Drop Item started");
-            }
-
-            if (context.canceled)
-            {
-                Debug.Log("Drop Item ended");
-            }
+            if (UIController.UIActive || !context.performed || _player == null) return;
         }
 
         // E or West Button
         public void OnUseItem(InputAction.CallbackContext context)
         {
-            if (UIController.UIActive || _player == null) return;
-
-            if (context.started)
-            {
-                Debug.Log("Use Item started");
-            }
-
-            if (context.canceled)
-            {
-                Debug.Log("Use Item ended");
-            }
+            if (UIController.UIActive || !context.performed || _player == null) return;
         }
 
         // Ctrl or East Button
         public void OnDash(InputAction.CallbackContext context)
         {
-            if (UIController.UIActive || _player == null) return;
+            if (UIController.UIActive || !context.performed || _player == null) return;
 
-            if (context.started)
-            {
-                _player.HandleDashInput();
-            }
+            _player.HandleDashInput();
         }
 
         // Space or South Button
         public void OnJump(InputAction.CallbackContext context)
         {
-            if (UIController.UIActive || _player == null) return;
+            if (UIController.UIActive || !context.performed || _player == null) return;
 
-            if (context.started)
-            {
-                _player.HandleJumpInput();
-            }
+            _player.HandleJumpInput();
         }
 
 #region UI
 
         public void OnNavigateUI(InputAction.CallbackContext context)
         {
-            if (!context.performed || !_navigationEnabled) return;
-
-            var direction = GetDirection(context.ReadValue<Vector2>());
-            if (direction == Direction.Center) return;
-
-            _navigationEnabled = false;
-
-            _onNavigateCooldownTimer.OnComplete += () => { _navigationEnabled = true; };
-            _onNavigateCooldownTimer.Start(_onNavigateCooldown);
-            Main.UiEventBus.OnNavigate?.Invoke(direction, _inputIndex);
+            _navigateUIDirection = GetDirection(context.ReadValue<Vector2>());
         }
 
         public void OnSubmitUI(InputAction.CallbackContext context)
         {
-             if (context.performed)
-             {
-                Main.UiEventBus.OnSubmit?.Invoke(_inputIndex);
-             }
+            if (!context.performed) return;
+
+            Main.UiEventBus.OnSubmit?.Invoke(_inputIndex);
         }
         
         public void OnCancelUI(InputAction.CallbackContext context)
         {
-            if (context.performed)
-            {
-                Main.UiEventBus.OnCancel?.Invoke(_inputIndex);
-            }
+            if (!context.performed) return;
+
+            Main.UiEventBus.OnCancel?.Invoke(_inputIndex);
         }
         
         public void OnEscapeUI(InputAction.CallbackContext context)
         {
-            if (context.performed)
-            {
-                Main.UiEventBus.OnEscape?.Invoke(_inputIndex);
-            }
+            if (!context.performed) return;
+
+            Main.UiEventBus.OnEscape?.Invoke(_inputIndex);
         }
         
         #endregion
 
         private Direction GetDirection(Vector2 direction) {
-            if (direction.x < -0.9)
+            if (direction.x < -_joystickDirectionThreshold)
             {
                 return Direction.Left;
             }
-            if (direction.x > 0.9)
+            if (direction.x > _joystickDirectionThreshold)
             {
                 return Direction.Right;
             }
-            if (direction.y < -0.9)
+            if (direction.y < -_joystickDirectionThreshold)
             {
                 return Direction.Down;
             }
-            if (direction.y > 0.9)
+            if (direction.y > _joystickDirectionThreshold)
             {
                 return Direction.Up;
             }

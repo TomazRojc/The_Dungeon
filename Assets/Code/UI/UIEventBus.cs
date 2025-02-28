@@ -4,11 +4,11 @@ namespace Code.UI
 {
     public enum Direction
     {
+        Center,
         Up,
         Down,
         Left,
-        Right,
-        Center
+        Right
     }
     public class UIEventBus
     {
