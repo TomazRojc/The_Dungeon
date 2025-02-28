@@ -71,7 +71,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6bc82190a0cad7c4dbddb9806adc7307, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  boxCollider: {fileID: 3036111852089008715}
   portal2: {fileID: 0}
+  portalLocalDirection: {x: 1, y: 0, z: 0}
 --- !u!1 &5615207925061016718
 GameObject:
   m_ObjectHideFlags: 0

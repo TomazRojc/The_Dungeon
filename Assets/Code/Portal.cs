@@ -4,35 +4,23 @@ namespace Code
 {
 	public class Portal : MonoBehaviour
 	{
+		[SerializeField] private BoxCollider2D boxCollider;
 		[SerializeField] private Portal portal2;
 		[SerializeField] private Vector3 portalLocalDirection = Vector3.right;
 
 		private Vector3 PortalGlobalDirection => (transform.rotation * portalLocalDirection).normalized;
-
-		private bool playerJustTeleported { get; set; }
+		public BoxCollider2D BoxCollider => boxCollider;
 
 		public void OnTriggerEnter2D(Collider2D coll)
 		{
 			var gamePlayer = GetPlayerFromCollider(coll);
 			if (gamePlayer == null) return;
 
-			if (playerJustTeleported)
-			{
-				return;
-			}
-
+			if (!gamePlayer.CanTeleport) return;
+			
 			gamePlayer.transform.position = portal2.transform.position + PortalGlobalDirection;
 			gamePlayer.SetDoubleJumped(false);
-			gamePlayer.PortalChangeVelocityDirection(PortalGlobalDirection, portal2.PortalGlobalDirection);
-			portal2.playerJustTeleported = true;
-		}
-
-		public void OnTriggerExit2D(Collider2D coll)
-		{
-			var gamePlayer = GetPlayerFromCollider(coll);
-			if (gamePlayer == null) return;
-
-			playerJustTeleported = false;
+			gamePlayer.TeleportPlayer(PortalGlobalDirection, portal2.PortalGlobalDirection, portal2);
 		}
 
 		private PlayerController GetPlayerFromCollider(Collider2D coll)

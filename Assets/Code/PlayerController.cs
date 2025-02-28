@@ -1,9 +1,12 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Code
 {
 	public class PlayerController : MonoBehaviour
 	{
+		public bool CanTeleport => _justTeleportedToPortal == null;
+		
 		public float moveSpeed = 15f;
 		public float jumpVelocity = 30f;
 		public float speedChangeFactor = 5f;
@@ -20,6 +23,9 @@ namespace Code
 		private bool _isDashing;
 		private bool _grounded;
 		private float _lastMoveDirection = 1f;
+		private Portal _justTeleportedToPortal;
+		
+		private readonly List<int> _enteredPortalGuids = new List<int>();
 
 		// control variables (on keypress)
 		private bool _shouldJump;
@@ -100,8 +106,18 @@ namespace Code
 			// Gravity
 			rigidBody.AddForce(-_myVectorUp * _myGravityScale, ForceMode2D.Force);
 
+			UpdatePortalCheck();
 		}
 
+		private void UpdatePortalCheck() {
+			if (_justTeleportedToPortal == null) return;
+			
+			if (!_boxCollider.bounds.Intersects(_justTeleportedToPortal.BoxCollider.bounds))
+			{
+				_justTeleportedToPortal = null;
+			}
+		}
+		
 		public void HandleJumpInput()
 		{
 			if (_grounded && !stunned)
@@ -197,8 +213,10 @@ namespace Code
 			return a;
 		}
 
-		public void PortalChangeVelocityDirection(Vector3 portal1Direction, Vector3 portal2Direction)
+		public void TeleportPlayer(Vector3 portal1Direction, Vector3 portal2Direction, Portal portal2)
 		{
+			_justTeleportedToPortal = portal2;
+			
 			var angle1 = Mathf.Atan2(portal1Direction.y, portal1Direction.x) * Mathf.Rad2Deg;
 			var angle2 = Mathf.Atan2(portal2Direction.y, portal2Direction.x) * Mathf.Rad2Deg;
 			var rotationDiff = angle2 - angle1;
