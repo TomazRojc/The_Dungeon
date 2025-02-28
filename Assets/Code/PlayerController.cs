@@ -31,7 +31,6 @@ namespace Code
 		private bool _canDash = true;
 		private bool _isDashing;
 		private bool _grounded;
-		private float _lastMoveDirection = 1f;
 		private Portal _justTeleportedToPortal;
 		
 		// control variables (on keypress)
@@ -39,6 +38,7 @@ namespace Code
 		private bool _shouldDoubleJump;
 		private bool _shouldDash;
 		private float _moveLeftRight;
+		private Vector2 _currentMoveInput;
 
 		private Vector2 _myVectorUp = new Vector2(0, 1);
 		private Vector2 _myVectorRight = new Vector2(1, 0);
@@ -77,8 +77,7 @@ namespace Code
 
 			if (_shouldDash)
 			{
-				if (_lastMoveDirection > 0) rigidBody.velocity = _myVectorRight * dashSpeed;
-				if (_lastMoveDirection < 0) rigidBody.velocity = -_myVectorRight * dashSpeed;
+				if (_currentMoveInput != Vector2.zero) rigidBody.velocity = _currentMoveInput * dashSpeed;
 				_currentDashTime = dashFullTime;
 				_isDashing = true;
 				_shouldDash = false;
@@ -148,11 +147,12 @@ namespace Code
 		{
 			if (!_isDashing && !stunned)
 			{
+				_currentMoveInput = direction;
 				_moveLeftRight = direction.x * moveSpeed;
-				_lastMoveDirection = _moveLeftRight;
 			}
 			else
 			{
+				_currentMoveInput = Vector2.zero;
 				_moveLeftRight = 0;
 			}
 		}
