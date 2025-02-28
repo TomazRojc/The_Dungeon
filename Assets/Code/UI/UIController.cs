@@ -34,16 +34,18 @@ namespace Code.UI
 
 		private SimpleTimer _timer;
 
-		private bool _UIActive;
+		private static bool _UIActive;
+		
+		public static bool UIActive => _UIActive;
 
 		private void Start()
 		{
 			_gameplaySession = Main.GameplaySession;
 			
-			Main.UiManager.OnNavigate += HandleNavigate;
-			Main.UiManager.OnSubmit += HandleSubmit;
-			Main.UiManager.OnCancel += HandleCancel;
-			Main.UiManager.OnEscape += HandleEscape;
+			Main.UiEventBus.OnNavigate += HandleNavigate;
+			Main.UiEventBus.OnSubmit += HandleSubmit;
+			Main.UiEventBus.OnCancel += HandleCancel;
+			Main.UiEventBus.OnEscape += HandleEscape;
 
 			_UIActive = true;
 			GoToMainMenu();

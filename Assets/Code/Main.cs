@@ -16,20 +16,20 @@ namespace Code
         
         private static GameplaySession _gameplaySession;
         private static LevelManager _levelManager;
-        private static UiManager _uiManager;
+        private static UIEventBus _uiEventBus;
         
         public GameplayConfig GameplayConfig => _gameplayConfig;
         
         public static GameplaySession GameplaySession => _gameplaySession;
         public static LevelManager LevelManager => _levelManager;
-        public static UiManager UiManager => _uiManager;
+        public static UIEventBus UiEventBus => _uiEventBus;
 
         private void Awake()
         {
             Instance = this;
             _gameplaySession = new GameplaySession(_gameplayConfig.MaxPlayers);
             _levelManager = new LevelManager(_levelsConfig.LevelPrefabs);
-            _uiManager = new UiManager();
+            _uiEventBus = new UIEventBus();
         }
     }
 }

@@ -10,7 +10,7 @@ namespace Code.UI
         Right,
         Center
     }
-    public class UiManager
+    public class UIEventBus
     {
         public Action<Direction, int> OnNavigate;
         public Action<int> OnSubmit;

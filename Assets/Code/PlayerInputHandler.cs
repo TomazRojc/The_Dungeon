@@ -30,7 +30,7 @@ namespace Code
         {
             _onNavigateCooldownTimer.Update(Time.deltaTime);
             
-            if (_player == null) return;
+            if (UIController.UIActive || _player == null) return;
             
             // invoke player movement/look
             _player.HandleMoveInput(_moveInput);
@@ -57,7 +57,7 @@ namespace Code
         // Q or North Button
         public void OnDropItem(InputAction.CallbackContext context)
         {
-            if (_player == null) return;
+            if (UIController.UIActive || _player == null) return;
 
             if (context.started)
             {
@@ -73,7 +73,7 @@ namespace Code
         // E or West Button
         public void OnUseItem(InputAction.CallbackContext context)
         {
-            if (_player == null) return;
+            if (UIController.UIActive || _player == null) return;
 
             if (context.started)
             {
@@ -89,7 +89,7 @@ namespace Code
         // Ctrl or East Button
         public void OnDash(InputAction.CallbackContext context)
         {
-            if (_player == null) return;
+            if (UIController.UIActive || _player == null) return;
 
             if (context.started)
             {
@@ -100,7 +100,7 @@ namespace Code
         // Space or South Button
         public void OnJump(InputAction.CallbackContext context)
         {
-            if (_player == null) return;
+            if (UIController.UIActive || _player == null) return;
 
             if (context.started)
             {
@@ -121,14 +121,14 @@ namespace Code
 
             _onNavigateCooldownTimer.OnComplete += () => { _navigationEnabled = true; };
             _onNavigateCooldownTimer.Start(_onNavigateCooldown);
-            Main.UiManager.OnNavigate?.Invoke(direction, _inputIndex);
+            Main.UiEventBus.OnNavigate?.Invoke(direction, _inputIndex);
         }
 
         public void OnSubmitUI(InputAction.CallbackContext context)
         {
              if (context.performed)
              {
-                Main.UiManager.OnSubmit?.Invoke(_inputIndex);
+                Main.UiEventBus.OnSubmit?.Invoke(_inputIndex);
              }
         }
         
@@ -136,7 +136,7 @@ namespace Code
         {
             if (context.performed)
             {
-                Main.UiManager.OnCancel?.Invoke(_inputIndex);
+                Main.UiEventBus.OnCancel?.Invoke(_inputIndex);
             }
         }
         
@@ -144,7 +144,7 @@ namespace Code
         {
             if (context.performed)
             {
-                Main.UiManager.OnEscape?.Invoke(_inputIndex);
+                Main.UiEventBus.OnEscape?.Invoke(_inputIndex);
             }
         }
         

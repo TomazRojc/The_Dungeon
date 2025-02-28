@@ -12,7 +12,7 @@ namespace Code
 		[SerializeField]
 		private LobbyUI _lobbyUI;
 		[SerializeField]
-		private UIController uiController;
+		private UIController _UIController;
 		[SerializeField]
 		private List<Color> defaultPlayerColors;
 		[SerializeField]
