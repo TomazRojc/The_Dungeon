@@ -84,16 +84,12 @@ namespace Code
         // WASD or Left Stick
         public void OnMove(InputAction.CallbackContext context)
         {
-            if (!context.performed) return;
-            
             _moveInput = context.ReadValue<Vector2>();
         }
 
         // Arrows or Right Stick
         public void OnLook(InputAction.CallbackContext context)
         {
-            if (!context.performed) return;
-            
             _lookInput = context.ReadValue<Vector2>();
         }
 
