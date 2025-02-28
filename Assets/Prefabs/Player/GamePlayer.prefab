@@ -150,6 +150,6 @@ MonoBehaviour:
   moveSpeed: 15
   jumpVelocity: 43
   speedChangeFactor: 20
-  dashSpeed: 100
-  dashFullTime: 0.12
+  dashSpeed: 70
+  dashFullTime: 0.15
   dashCooldown: 0.4
