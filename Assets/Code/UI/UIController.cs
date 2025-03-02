@@ -112,7 +112,7 @@ namespace Code.UI
 
 		private void HandleJoinLobby(int inputIndex)
 		{
-			// TODO handle de-joining?
+			// TODO: JanR handle de-joining?
 			TryJoinPlayer(inputIndex);
 		}
 
