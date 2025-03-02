@@ -176,11 +176,11 @@ namespace Code.UI
 				_UIActive = false;
 			}
 
-			_currentState = newState;
-			
 			// TODO JanR: move this
 			if (_currentState == _lobbyPanelState) _lobby.OnExit();
 			if (newState == _lobbyPanelState) _lobby.OnEnter();
+
+			_currentState = newState;
 		}
 		
 		public void GoToLobby()

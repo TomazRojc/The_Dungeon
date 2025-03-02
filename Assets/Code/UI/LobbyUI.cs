@@ -19,23 +19,27 @@ namespace Code.UI
         [SerializeField]
         private ButtonBase startGameButton;
         
+        private List<bool> _emptyLobbyIndices = new List<bool>(4);
+
+
+        private void Awake()
+        {
+            _emptyLobbyIndices = new List<bool> { true, true, true, true };
+        }
+
         public void UpdateDisplay(List<PlayerData> players)
         {
             HandleReadyToStart(players);
 
-            for (int i = 0; i < playerNameTexts.Length; i++)
-            {
-                playerNameTexts[i].text = "Press <b>\u25a1</b> or F to join...";
-                playerReadyTexts[i].text = string.Empty;
-                playerAvatars[i].SetActive(false);
-                playerReadyButtons[i].SetActive(false);
-            }
+            ResetEmptyIndicesList();
             
             for (int i = 0; i < players.Count; i++)
             {
                 if (!players[i].IsJoined) continue;
 
                 var lobbyIndex = players[i].LobbyIndex;
+
+                _emptyLobbyIndices[lobbyIndex] = false;
 
                 playerNameTexts[lobbyIndex].text = players[i].DisplayName;
                 playerReadyTexts[lobbyIndex].text = players[i].IsReady
@@ -45,8 +49,26 @@ namespace Code.UI
                 playerAvatars[lobbyIndex].GetComponent<Image>().color = players[i].Color;
                 playerReadyButtons[lobbyIndex].SetActive(true);
             }
+            
+            for (int i = 0; i < playerNameTexts.Length; i++)
+            {
+                if (!_emptyLobbyIndices[i]) continue;
+
+                playerNameTexts[i].text = "Press <b>\u25a1</b> or F to join...";
+                playerReadyTexts[i].text = string.Empty;
+                playerAvatars[i].SetActive(false);
+                playerReadyButtons[i].SetActive(false);
+            }
         }
-        
+
+        private void ResetEmptyIndicesList()
+        {
+            for (int i = 0; i < 4; i++)
+            {
+                _emptyLobbyIndices[i] = true;
+            }
+        }
+
         public void HandleReadyToStart(List<PlayerData> players)
         {
             var allReady = true;

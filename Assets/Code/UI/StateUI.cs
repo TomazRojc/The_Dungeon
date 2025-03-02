@@ -42,19 +42,17 @@ namespace Code.UI
                     button = _defaultPlayerButtons[playerData.LobbyIndex];
                 }
 
-                if (button == null) continue;
+                if (button == null)
+                {
+                    if (_defaultButton == null)
+                    {
+                        throw new ArgumentException($"There are no possible player specific buttons to select and '_firstSelectedButton' is not set on UI state: {name}");
+                    }
+                    button = _defaultButton;
+                }
 
                 _inputIndexToSelectedButton[playerData.InputIndex] = button;
                 button.OnSelect();
-            }
-
-            if (_inputIndexToSelectedButton.Count == 0)
-            {
-                if (_defaultButton == null)
-                {
-                    throw new ArgumentException($"There are no possible player specific buttons to select and '_firstSelectedButton' is not set on UI state: {name}");
-                }
-                _defaultButton.OnSelect();
             }
         }
         

@@ -39,7 +39,6 @@ namespace Code
 
 			_playerInputManager.EnableJoining();
 
-
 			_lobbyUI.UpdateDisplay(_players);
 		}
 
@@ -65,7 +64,10 @@ namespace Code
 
 			playerData.SetValues($"Player {lobbyIndex + 1}", defaultPlayerColors[lobbyIndex], true, false, lobbyIndex, inputIndex);
 			_lobbyIndexToPlayerData.Add(lobbyIndex, playerData);
-			_lobbyUI.UpdateDisplay(_players);
+			if (_isActive)
+			{
+				_lobbyUI.UpdateDisplay(_players);
+			}
 			return true;
 		}
 
