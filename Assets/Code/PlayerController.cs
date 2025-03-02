@@ -36,6 +36,7 @@ namespace Code
 		private bool stunned = false;
 		private SimpleTimer _dashTimer;
 		private bool _canDash = true;
+		private float _currentDashCooldown;
 		private bool _grounded;
 		private Portal _justTeleportedToPortal;
 		
@@ -59,6 +60,7 @@ namespace Code
 		void FixedUpdate()
 		{
 			_dashTimer.Update(Time.fixedDeltaTime);
+			_currentDashCooldown -= Time.fixedDeltaTime;
 			
 			_grounded = IsGrounded();
 			if (_grounded)
@@ -66,7 +68,7 @@ namespace Code
 				// jump available
 				_doubleJumped = false;
 			}
-			if (_grounded && !IsDashing)
+			if (_grounded && !IsDashing && _currentDashCooldown <= 0f)
 			{
 				// dash available
 				_canDash = true;
@@ -121,6 +123,7 @@ namespace Code
 		{
 			if (_canDash && !IsDashing && _currentMoveInput != Vector2.zero && !stunned) {
 				_dashTimer.Start(dashFullTime);
+				_currentDashCooldown = dashCooldown;
 			}
 		}
 		
