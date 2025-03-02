@@ -25,8 +25,9 @@ namespace Code.UI
         [SerializeField]
         private List<ButtonBase> _buttonsRight;
 
+        protected SimpleTimer _animationTimer;
+        
         private bool _isSelected;
-
         private SimpleTimer _idleBreakTimer;
         
         public bool IsSharedButton => _isSharedButton;
@@ -35,10 +36,16 @@ namespace Code.UI
         protected abstract void PlayEnterAnimation();
         protected abstract void PlayExitAnimation();
         protected abstract void PlayIdleBreakAnimation();
+        protected abstract void ResetButton();
 
         protected virtual void Awake()
         {
             _idleBreakTimer.OnLoopComplete += PlayIdleBreakAnimation;
+        }
+        
+        protected virtual void OnDisable() {
+            _idleBreakTimer.Stop();
+            ResetButton();
         }
         
         protected virtual void Update()
@@ -47,6 +54,7 @@ namespace Code.UI
             {
                 _idleBreakTimer.Update(Time.deltaTime);
             }
+            _animationTimer.Update(Time.deltaTime);
         }
 
         public virtual void OnSelect()

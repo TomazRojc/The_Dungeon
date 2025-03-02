@@ -13,14 +13,6 @@ namespace Code.UI
         [SerializeField]
         private Image arrowImage;
         
-        private SimpleTimer _animationTimer;
-        
-        protected override void Update()
-        {
-            base.Update();
-            _animationTimer.Update(Time.deltaTime);
-        }
-        
         protected override void PlayEnterAnimation()
         {
             PlayAnimation(buttonConfig.SelectedScale, buttonConfig.HighlightedColor);
@@ -45,6 +37,12 @@ namespace Code.UI
                 animationTransform.localRotation = Quaternion.Euler(Vector3.Lerp(Vector3.zero, new Vector3(0, 0, -360f), eval));
                 animationTransform.localScale = startScale + Vector3.one * ((buttonConfig.IdleBreakArrowScale - startScale.x) * scaleEval);
             }
+        }
+
+        protected override void ResetButton() {
+            animationTransform.localScale = Vector3.one;
+            animationTransform.localRotation = Quaternion.identity;
+            arrowImage.color = buttonConfig.DefaultColor;
         }
         
         private void PlayAnimation(float buttonScale, Color color)

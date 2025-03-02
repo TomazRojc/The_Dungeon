@@ -17,8 +17,6 @@ namespace Code.UI
         [SerializeField]
         private Text text;
         
-        private SimpleTimer _animationTimer;
-
         protected override void Awake()
         {
             base.Awake();
@@ -27,12 +25,6 @@ namespace Code.UI
                 lineImage.transform.localScale = Vector3.zero;
                 arrowImage.transform.localScale = Vector3.zero;
             }
-        }
-        
-        protected override void Update()
-        {
-            base.Update();
-            _animationTimer.Update(Time.deltaTime);
         }
         
         protected override void PlayEnterAnimation()
@@ -58,6 +50,19 @@ namespace Code.UI
                 arrowImage.transform.localRotation = Quaternion.Euler(Vector3.Lerp(Vector3.zero, new Vector3(0, 0, -360f), eval));
                 arrowImage.transform.localScale = Vector3.one + Vector3.one * ((buttonConfig.IdleBreakArrowScale - 1) * scaleEval);
             }
+        }
+        
+        protected override void ResetButton() {
+            _animationTimer.Stop();
+                
+            animationTransform.localScale = Vector3.one;
+            animationTransform.localPosition = Vector3.zero;
+            lineImage.color = buttonConfig.DefaultColor;
+            lineImage.transform.localScale = Vector3.zero;
+            arrowImage.color = buttonConfig.DefaultColor;
+            arrowImage.transform.localRotation = Quaternion.identity;
+            arrowImage.transform.localScale = Vector3.zero;
+            text.color = buttonConfig.DefaultColor;
         }
         
         private void PlayAnimation(float buttonScale, Vector3 position, Color color, float imagesScale, float direction)
