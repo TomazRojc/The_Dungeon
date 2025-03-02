@@ -63,10 +63,6 @@ namespace Code.UI
 		{
 			if (!_UIActive) return;
 
-			if (_lobby.NumJoinedPlayers == 0)
-			{
-				TryJoinPlayer(inputIndex);
-			}
 			var currentButton = _currentState.GetCurrentlySelectedButton(inputIndex);
 
 			if (currentButton == null)
@@ -99,7 +95,12 @@ namespace Code.UI
 		private void HandleSubmit(int inputIndex)
 		{
 			if (!_UIActive) return;
-			
+
+			if (_lobby.NumJoinedPlayers == 0)
+			{
+				TryJoinPlayer(inputIndex);
+			}
+
 			var currentButton = _currentState.GetCurrentlySelectedButton(inputIndex);
 			
 			if (currentButton == null) return;
