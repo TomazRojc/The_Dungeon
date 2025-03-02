@@ -21,6 +21,8 @@ namespace Code
 		[SerializeField]
 		private float speedChangeFactor = 5f;
 		[SerializeField]
+		private float superSonicSpeedChangeFactor = 5f;
+		[SerializeField]
 		private float dashSpeed = 100f;
 		[SerializeField]
 		private float dashFullTime = 0.1f;
@@ -75,9 +77,7 @@ namespace Code
 			
 			if (!IsDashing)
 			{
-				//TODO: tomazr slowly decrease left/right speed if controls are not being touched, otherwise give full control to player
-				var targetVelocity = (_myVectorRight * (_currentMoveInput.x * moveSpeed)) + (VecAbs(_myVectorUp) * rigidBody.velocity);
-				rigidBody.velocity = Vector2.Lerp(rigidBody.velocity, targetVelocity, Time.deltaTime * speedChangeFactor);
+				UpdateLeftRightMovement();
 			}
 
 
@@ -93,6 +93,17 @@ namespace Code
 			
 			var eval  = _dashSpeedCurve.Evaluate(normalizedTime);
 			rigidBody.velocity = _currentMoveInput.normalized * (dashSpeed * eval);
+		}
+
+		private void UpdateLeftRightMovement() {
+			var factor = speedChangeFactor;
+			var wantsToStop = Mathf.Abs(_currentMoveInput.x) > 0.1f && !MathUtils.HasSameSign(_currentMoveInput.x, (rigidBody.velocity * _myVectorRight).x);
+			var isMovingFast = (rigidBody.velocity * _myVectorRight).magnitude > moveSpeed;
+			if (isMovingFast && !wantsToStop) {
+				factor =  superSonicSpeedChangeFactor;
+			}
+			var targetVelocity = (_myVectorRight * (_currentMoveInput.x * moveSpeed)) + (VecAbs(_myVectorUp) * rigidBody.velocity);
+			rigidBody.velocity = Vector2.Lerp(rigidBody.velocity, targetVelocity, Time.deltaTime * factor);
 		}
 
 		private void UpdatePortalCheck() {

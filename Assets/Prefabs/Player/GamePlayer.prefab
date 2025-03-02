@@ -124,8 +124,8 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
-  m_LinearDrag: 2
-  m_AngularDrag: 0.05
+  m_LinearDrag: 0
+  m_AngularDrag: 0
   m_GravityScale: 0
   m_Material: {fileID: 0}
   m_Interpolate: 0
@@ -146,12 +146,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _boxCollider: {fileID: 2497796625287654599}
   rigidBody: {fileID: 1217428939650893469}
-  _myGravityScale: 130
+  _myGravityScale: 120
   moveSpeed: 15
-  jumpVelocity: 43
+  jumpVelocity: 34
   speedChangeFactor: 20
+  teleportSpeedChangeFactor: 4
   dashSpeed: 70
-  dashFullTime: 0.17
+  dashFullTime: 0.15
   dashCooldown: 0.4
   _dashSpeedCurve:
     serializedVersion: 2
