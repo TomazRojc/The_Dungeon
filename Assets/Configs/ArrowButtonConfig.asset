@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d8f58b0f857c43bb87fc2daf6b0e4396, type: 3}
   m_Name: ArrowButtonConfig
   m_EditorClassIdentifier: 
-  defaultColor: {r: 0.8, g: 0.8, b: 0.8, a: 1}
-  nonInteractableColor: {r: 0.48235294, g: 0.48235294, b: 0.48235294, a: 1}
-  defaultHighlightedColor: {r: 0.36862746, g: 0.6117647, b: 0.33333334, a: 1}
+  defaultColor: {r: 0.5686275, g: 0.5686275, b: 0.5686275, a: 1}
+  nonInteractableColor: {r: 0.32156864, g: 0.32156864, b: 0.32156864, a: 1}
+  defaultHighlightedColor: {r: 0.8, g: 0.8, b: 0.8, a: 1}
   animationDuration: 0.2
   idleBreakAnimationDuration: 0.3
   selectedScale: 1.1
