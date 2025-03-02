@@ -85,7 +85,6 @@ namespace Code.UI
                 }
             }
 
-            // TODO JanR: fix this to work with new buttons
             startGameButton.SetInteractable(allReady && !lobbyEmpty);
         }
     }
