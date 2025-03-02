@@ -19,7 +19,6 @@ namespace Code
 			if (!gamePlayer.CanTeleport) return;
 			
 			gamePlayer.transform.position = portal2.transform.position + PortalGlobalDirection;
-			gamePlayer.SetDoubleJumped(false);
 			gamePlayer.TeleportPlayer(PortalGlobalDirection, portal2.PortalGlobalDirection, portal2);
 		}
 

@@ -40,8 +40,6 @@ namespace Code
 		private Portal _justTeleportedToPortal;
 		
 		// control variables (on keypress)
-		private bool _shouldJump;
-		private bool _shouldDoubleJump;
 		private float _moveLeftRight;
 		private Vector2 _currentMoveInput;
 
@@ -65,23 +63,16 @@ namespace Code
 			_grounded = IsGrounded();
 			if (_grounded)
 			{
-				// jump/dash available
+				// jump available
 				_doubleJumped = false;
+			}
+			if (_grounded && !IsDashing)
+			{
+				// dash available
 				_canDash = true;
 			}
 			
-			if (_shouldJump)
-			{
-				rigidBody.velocity = _myVectorUp * jumpVelocity;
-				_shouldJump = false;
-			}
-
-			if (_shouldDoubleJump)
-			{
-				rigidBody.velocity = _myVectorUp * jumpVelocity;
-				_shouldDoubleJump = false;
-				_doubleJumped = true;
-			} else if (!IsDashing)
+			if (!IsDashing)
 			{
 				//TODO: tomazr slowly decrease left/right speed if controls are not being touched, otherwise give full control to player
 				var targetVelocity = (_myVectorRight * _moveLeftRight) + (VecAbs(_myVectorUp) * rigidBody.velocity);
@@ -116,12 +107,13 @@ namespace Code
 		{
 			if (_grounded && !stunned)
 			{
-				_shouldJump = true;
+				Jump();
 			}
 
 			if (!_grounded && !_doubleJumped && !stunned)
 			{
-				_shouldDoubleJump = true;
+				Jump();
+				_doubleJumped = true;
 			}
 		}
 		
@@ -192,6 +184,10 @@ namespace Code
 			}
 		}
 
+		private void Jump() {
+			rigidBody.velocity = _myVectorUp * jumpVelocity;
+		}
+
 		private bool IsGrounded()
 		{
 			int layerMask = ~(3 << 8); // 0000000011 -> 1100000000
@@ -210,6 +206,8 @@ namespace Code
 		public void TeleportPlayer(Vector3 portal1Direction, Vector3 portal2Direction, Portal portal2)
 		{
 			_dashTimer.Stop();
+			_canDash = true;
+			_doubleJumped = false;
 			_justTeleportedToPortal = portal2;
 			
 			var angle1 = Mathf.Atan2(portal1Direction.y, portal1Direction.x) * Mathf.Rad2Deg;
@@ -220,11 +218,6 @@ namespace Code
 			velocity = Quaternion.Euler(0, 0, rotationDiff + 180) * velocity; // rotate velocity vector for portal rotation diff
 			velocity = Vector2.Reflect(velocity, Quaternion.Euler(0f, 0f, 90f) * portal2Direction); // reflect velocity vector over direction vector of portal2
 			rigidBody.velocity = velocity;
-		}
-
-		public void SetDoubleJumped(bool value)
-		{
-			_doubleJumped = value;
 		}
 	}
 }
