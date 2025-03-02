@@ -41,7 +41,6 @@ namespace Code
 		private Portal _justTeleportedToPortal;
 		
 		// control variables (on keypress)
-		private float _moveLeftRight;
 		private Vector2 _currentMoveInput;
 
 		private Vector2 _myVectorUp = new Vector2(0, 1);
@@ -77,7 +76,7 @@ namespace Code
 			if (!IsDashing)
 			{
 				//TODO: tomazr slowly decrease left/right speed if controls are not being touched, otherwise give full control to player
-				var targetVelocity = (_myVectorRight * _moveLeftRight) + (VecAbs(_myVectorUp) * rigidBody.velocity);
+				var targetVelocity = (_myVectorRight * (_currentMoveInput.x * moveSpeed)) + (VecAbs(_myVectorUp) * rigidBody.velocity);
 				rigidBody.velocity = Vector2.Lerp(rigidBody.velocity, targetVelocity, Time.deltaTime * speedChangeFactor);
 			}
 
@@ -93,7 +92,7 @@ namespace Code
 			// rigidBody.velocity = _myVectorUp * dashSpeed;
 			
 			var eval  = _dashSpeedCurve.Evaluate(normalizedTime);
-			rigidBody.velocity = _currentMoveInput * (dashSpeed * eval);
+			rigidBody.velocity = _currentMoveInput.normalized * (dashSpeed * eval);
 		}
 
 		private void UpdatePortalCheck() {
@@ -132,12 +131,10 @@ namespace Code
 			if (!IsDashing)
 			{
 				_currentMoveInput = direction;
-				_moveLeftRight = direction.x * moveSpeed;
 			}
 			else if (stunned)
 			{
 				_currentMoveInput = Vector2.zero;
-				_moveLeftRight = 0;
 			}
 		}
 		
