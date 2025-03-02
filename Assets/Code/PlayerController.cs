@@ -14,20 +14,26 @@ namespace Code
 		[Header("Parameters")]
 		[SerializeField]
 		private float _myGravityScale;
+		[SerializeField]
+		private float moveSpeed = 15f;
+		[SerializeField]
+		private float jumpVelocity = 30f;
+		[SerializeField]
+		private float speedChangeFactor = 5f;
+		[SerializeField]
+		private float dashSpeed = 100f;
+		[SerializeField]
+		private float dashFullTime = 0.1f;
+		[SerializeField]
+		private float dashCooldown = 0.4f;
+		[SerializeField]
+		private AnimationCurve _dashSpeedCurve;
 		
 		public bool CanTeleport => _justTeleportedToPortal == null;
 		private bool IsDashing => _dashTimer.IsPlaying();
 		
-		public float moveSpeed = 15f;
-		public float jumpVelocity = 30f;
-		public float speedChangeFactor = 5f;
-
 		private bool _doubleJumped = false;
 		private bool stunned = false;
-		public float dashSpeed = 100f;
-		public float dashFullTime = 0.1f;
-		public float dashCooldown = 0.4f;
-
 		private SimpleTimer _dashTimer;
 		private bool _canDash = true;
 		private bool _grounded;
@@ -92,7 +98,9 @@ namespace Code
 		private void UpdateDashing(float normalizedTime) {
 			//TODO: tomazr what to do if gravity is switched?
 			// rigidBody.velocity = _myVectorUp * dashSpeed;
-			rigidBody.velocity = _currentMoveInput * dashSpeed;
+			
+			var eval  = _dashSpeedCurve.Evaluate(normalizedTime);
+			rigidBody.velocity = _currentMoveInput * (dashSpeed * eval);
 		}
 
 		private void UpdatePortalCheck() {

@@ -151,5 +151,29 @@ MonoBehaviour:
   jumpVelocity: 43
   speedChangeFactor: 20
   dashSpeed: 70
-  dashFullTime: 0.13
+  dashFullTime: 0.17
   dashCooldown: 0.4
+  _dashSpeedCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0.0013809204
+      value: 0.9990298
+      inSlope: -0.03135383
+      outSlope: -0.03135383
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.15842459
+    - serializedVersion: 3
+      time: 1
+      value: 0.2
+      inSlope: -2.2717173
+      outSlope: -2.2717173
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.07179674
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
