@@ -8,16 +8,18 @@ namespace Code.UI
     public class StateUI : MonoBehaviour
     {
         [SerializeField]
-        private ButtonBase _firstSelectedButton;
+        private ButtonBase _defaultButton;
 
         [SerializeField]
-        private List<ButtonBase> _firstSelectedPlayerButtons;
+        private List<ButtonBase> _defaultPlayerButtons;
 
         private GameplaySession _gameplaySession;
         
         private Dictionary<int, ButtonBase> _inputIndexToSelectedButton = new Dictionary<int, ButtonBase>(4);
         
         private int _inputIndexInControl;
+        
+        public ButtonBase DefaultButton => _defaultButton;
 
         private void Awake()
         {
@@ -27,25 +29,32 @@ namespace Code.UI
         public void OnEnter()
         {
             gameObject.SetActive(true);
+
+            _inputIndexToSelectedButton.Clear();
             _inputIndexInControl = -1;
-            
-            if (_firstSelectedButton != null)
-            {
-                foreach (var playerData in _gameplaySession.PlayersData)
-                {
-                    _inputIndexToSelectedButton[playerData.InputIndex] = _firstSelectedButton;
-                }
-                _firstSelectedButton.OnSelect();
-                return;
-            }
-            
+
             foreach (var playerData in _gameplaySession.PlayersData)
             {
-                if (!playerData.IsJoined) continue;
+                ButtonBase button = null;
+                // first try to assign a player specific button to the player
+                if (playerData.IsJoined && playerData.LobbyIndex < _defaultPlayerButtons.Count)
+                {
+                    button = _defaultPlayerButtons[playerData.LobbyIndex];
+                }
 
-                var button = _firstSelectedPlayerButtons[playerData.LobbyIndex];
+                if (button == null) continue;
+
                 _inputIndexToSelectedButton[playerData.InputIndex] = button;
                 button.OnSelect();
+            }
+
+            if (_inputIndexToSelectedButton.Count == 0)
+            {
+                if (_defaultButton == null)
+                {
+                    throw new ArgumentException($"There are no possible player specific buttons to select and '_firstSelectedButton' is not set on UI state: {name}");
+                }
+                _defaultButton.OnSelect();
             }
         }
         
@@ -77,7 +86,7 @@ namespace Code.UI
 
         public ButtonBase SelectPlayerSpecificButton(int inputIndex, int lobbyIndex)
         {
-            var button = _firstSelectedPlayerButtons[lobbyIndex];
+            var button = _defaultPlayerButtons[lobbyIndex];
             if (button == null)
             {
                 throw new ArgumentException($"Player specific button not linked in {name}");

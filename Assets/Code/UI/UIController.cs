@@ -67,8 +67,12 @@ namespace Code.UI
 				TryJoinPlayer(inputIndex);
 			}
 			var currentButton = _currentState.GetCurrentlySelectedButton(inputIndex);
-			
-			if (currentButton == null) return;
+
+			if (currentButton == null)
+			{
+				currentButton = _currentState.DefaultButton;
+				if (currentButton == null) throw new ArgumentException($"Player button not selected and DefaultButton not set on UI state {_currentState.name}");
+			}
 
 			var nextButtons = currentButton.GetNextButtons(inputDirection);
 			if (nextButtons.Count == 0) return;
@@ -126,16 +130,16 @@ namespace Code.UI
 			{
 				throw new ArgumentException("Player not joined!");
 			}
-			var oldButton = _currentState.GetCurrentlySelectedButton(inputIndex);
-			var newButton = _currentState.SelectPlayerSpecificButton(inputIndex, lobbyIndex);
+			var currentButton = _currentState.GetCurrentlySelectedButton(inputIndex);
+			var nextButton = _currentState.SelectPlayerSpecificButton(inputIndex, lobbyIndex);
 
 			_currentState.ResetPlayerInControl();
-			
-			if (oldButton != null)
+
+			if (currentButton != null)
 			{
-				oldButton.OnDeselect();
+				currentButton.OnDeselect();
 			}
-			newButton.OnSelect();
+			nextButton.OnSelect();
 		}
 
 		private void HandleCancel(int inputIndex)

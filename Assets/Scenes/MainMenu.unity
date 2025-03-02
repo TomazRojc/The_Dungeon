@@ -237,8 +237,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 808541606108418fa2a04585ffc2868f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _firstSelectedButton: {fileID: 576544687}
-  _firstSelectedPlayerButtons: []
+  _defaultButton: {fileID: 576544687}
+  _defaultPlayerButtons: []
 --- !u!1 &28944453
 GameObject:
   m_ObjectHideFlags: 0
@@ -5175,8 +5175,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 808541606108418fa2a04585ffc2868f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _firstSelectedButton: {fileID: 1026253185}
-  _firstSelectedPlayerButtons: []
+  _defaultButton: {fileID: 1026253185}
+  _defaultPlayerButtons: []
 --- !u!1 &1303109183
 GameObject:
   m_ObjectHideFlags: 0
@@ -5384,12 +5384,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 808541606108418fa2a04585ffc2868f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _firstSelectedButton: {fileID: 824868370}
-  _firstSelectedPlayerButtons:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  _defaultButton: {fileID: 824868370}
+  _defaultPlayerButtons: []
 --- !u!1 &1336292861
 GameObject:
   m_ObjectHideFlags: 0
@@ -8940,8 +8936,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 808541606108418fa2a04585ffc2868f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _firstSelectedButton: {fileID: 949655177}
-  _firstSelectedPlayerButtons:
+  _defaultButton: {fileID: 949655177}
+  _defaultPlayerButtons:
   - {fileID: 200602555}
   - {fileID: 263599764}
   - {fileID: 2124015311}
