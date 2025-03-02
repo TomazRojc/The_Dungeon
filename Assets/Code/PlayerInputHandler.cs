@@ -17,7 +17,7 @@ namespace Code
         private bool _navigationEnabled = true;
         private float _joystickDirectionThreshold = 0.9f;
         private float _onNavigateCooldownShort = 0.2f;
-        private float _onNavigateCooldownLong = 0.4f;
+        private float _onNavigateCooldownLong = 0.35f;
         private bool _longCooldownFinished;
         private SimpleTimer _onNavigateCooldownTimer;
 
