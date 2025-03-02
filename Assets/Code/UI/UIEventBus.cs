@@ -14,6 +14,7 @@ namespace Code.UI
     {
         public Action<Direction, int> OnNavigate;
         public Action<int> OnSubmit;
+        public Action<int> OnJoinLobby;
         public Action<int> OnCancel;
         public Action<int> OnEscape;
     }

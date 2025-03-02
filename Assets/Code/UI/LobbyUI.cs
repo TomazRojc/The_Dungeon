@@ -25,7 +25,7 @@ namespace Code.UI
 
             for (int i = 0; i < playerNameTexts.Length; i++)
             {
-                playerNameTexts[i].text = "Press X to join...";
+                playerNameTexts[i].text = "Press <b>\u25a1</b> or F to join...";
                 playerReadyTexts[i].text = string.Empty;
                 playerAvatars[i].SetActive(false);
                 playerReadyButtons[i].SetActive(false);

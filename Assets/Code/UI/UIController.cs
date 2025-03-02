@@ -44,6 +44,7 @@ namespace Code.UI
 			
 			Main.UiEventBus.OnNavigate += HandleNavigate;
 			Main.UiEventBus.OnSubmit += HandleSubmit;
+			Main.UiEventBus.OnJoinLobby += HandleJoinLobby;
 			Main.UiEventBus.OnCancel += HandleCancel;
 			Main.UiEventBus.OnEscape += HandleEscape;
 
@@ -95,21 +96,9 @@ namespace Code.UI
 			nextButton.OnSelect();
 		}
 
-		private bool TryJoinPlayer(int inputIndex)
-		{
-			if (_lobby.TryJoinPlayer(inputIndex))
-			{
-				if (_lobby.IsActive) HandleSelectedButtonsOnPlayerJoined(inputIndex);
-				return true;
-			}
-			return false;
-		}
-
 		private void HandleSubmit(int inputIndex)
 		{
 			if (!_UIActive) return;
-
-			if (TryJoinPlayer(inputIndex)) return;
 			
 			var currentButton = _currentState.GetCurrentlySelectedButton(inputIndex);
 			
@@ -118,6 +107,22 @@ namespace Code.UI
 			if (!_currentState.HasButtonAuthority(inputIndex, currentButton)) return;
 
 			currentButton.OnSubmit();
+		}
+
+		private void HandleJoinLobby(int inputIndex)
+		{
+			// TODO handle de-joining?
+			TryJoinPlayer(inputIndex);
+		}
+
+		private bool TryJoinPlayer(int inputIndex)
+		{
+			if (_lobby.TryJoinPlayer(inputIndex))
+			{
+				if (_lobby.IsActive) HandleSelectedButtonsOnPlayerJoined(inputIndex);
+				return true;
+			}
+			return false;
 		}
 
 		private void HandleSelectedButtonsOnPlayerJoined(int inputIndex)

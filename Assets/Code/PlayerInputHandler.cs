@@ -135,6 +135,13 @@ namespace Code
             Main.UiEventBus.OnSubmit?.Invoke(_inputIndex);
         }
         
+        public void OnJoinLobbyUI(InputAction.CallbackContext context)
+        {
+            if (!context.performed) return;
+
+            Main.UiEventBus.OnJoinLobby?.Invoke(_inputIndex);
+        }
+        
         public void OnCancelUI(InputAction.CallbackContext context)
         {
             if (!context.performed) return;
