@@ -113,8 +113,7 @@ namespace Code
 
 			if (!_grounded && !_doubleJumped && !stunned)
 			{
-				Jump();
-				_doubleJumped = true;
+				DoubleJump();
 			}
 		}
 		
@@ -186,6 +185,11 @@ namespace Code
 
 		private void Jump() {
 			rigidBody.velocity = _myVectorUp * jumpVelocity;
+		}
+		
+		private void DoubleJump() {
+			_doubleJumped = true;
+			Jump();
 		}
 
 		private bool IsGrounded()
