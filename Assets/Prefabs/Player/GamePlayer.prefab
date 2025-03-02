@@ -151,5 +151,5 @@ MonoBehaviour:
   jumpVelocity: 43
   speedChangeFactor: 20
   dashSpeed: 70
-  dashFullTime: 0.15
+  dashFullTime: 0.13
   dashCooldown: 0.4

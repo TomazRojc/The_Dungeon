@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+using Code.Utils;
 using UnityEngine;
 
 namespace Code
@@ -16,6 +16,7 @@ namespace Code
 		private float _myGravityScale;
 		
 		public bool CanTeleport => _justTeleportedToPortal == null;
+		private bool IsDashing => _dashTimer.IsPlaying();
 		
 		public float moveSpeed = 15f;
 		public float jumpVelocity = 30f;
@@ -27,16 +28,14 @@ namespace Code
 		public float dashFullTime = 0.1f;
 		public float dashCooldown = 0.4f;
 
-		private float _currentDashTime;
+		private SimpleTimer _dashTimer;
 		private bool _canDash = true;
-		private bool _isDashing;
 		private bool _grounded;
 		private Portal _justTeleportedToPortal;
 		
 		// control variables (on keypress)
 		private bool _shouldJump;
 		private bool _shouldDoubleJump;
-		private bool _shouldDash;
 		private float _moveLeftRight;
 		private Vector2 _currentMoveInput;
 
@@ -48,11 +47,15 @@ namespace Code
 			// GetComponent<SpriteRenderer>().color = displayColor;
 
 			SwitchGravity("down");
-			_currentDashTime = dashFullTime;
+
+			_dashTimer.OnUpdate += UpdateDashing;
+			_dashTimer.OnStart += () => { _canDash = false; };
 		}
 
 		void FixedUpdate()
 		{
+			_dashTimer.Update(Time.fixedDeltaTime);
+			
 			_grounded = IsGrounded();
 			if (_grounded)
 			{
@@ -72,18 +75,7 @@ namespace Code
 				rigidBody.velocity = _myVectorUp * jumpVelocity;
 				_shouldDoubleJump = false;
 				_doubleJumped = true;
-				_canDash = true;
-			}
-
-			if (_shouldDash)
-			{
-				if (_currentMoveInput != Vector2.zero) rigidBody.velocity = _currentMoveInput * dashSpeed;
-				_currentDashTime = dashFullTime;
-				_isDashing = true;
-				_shouldDash = false;
-				_canDash = false;
-			}
-			else if (!_isDashing)
+			} else if (!IsDashing)
 			{
 				//TODO: tomazr slowly decrease left/right speed if controls are not being touched, otherwise give full control to player
 				var targetVelocity = (_myVectorRight * _moveLeftRight) + (VecAbs(_myVectorUp) * rigidBody.velocity);
@@ -91,26 +83,16 @@ namespace Code
 			}
 
 
-			UpdateDashing();
-
 			// Gravity
 			rigidBody.AddForce(-_myVectorUp * _myGravityScale, ForceMode2D.Force);
 
 			UpdatePortalCheck();
 		}
 		
-		private void UpdateDashing() {
-			// handle dashing
-			_currentDashTime -= Time.fixedDeltaTime;
-			if (_isDashing)
-			{
-				if (_currentDashTime <= 0)
-				{
-					// dash just ended
-					_isDashing = false;
-					rigidBody.velocity = VecAbs(_myVectorUp) * rigidBody.velocity;
-				}
-			}
+		private void UpdateDashing(float normalizedTime) {
+			//TODO: tomazr what to do if gravity is switched?
+			// rigidBody.velocity = _myVectorUp * dashSpeed;
+			rigidBody.velocity = _currentMoveInput * dashSpeed;
 		}
 
 		private void UpdatePortalCheck() {
@@ -137,20 +119,19 @@ namespace Code
 		
 		public void HandleDashInput()
 		{
-			if (_canDash && _currentDashTime <= -dashCooldown && !stunned)
-			{
-				_shouldDash = true;
+			if (_canDash && !IsDashing && _currentMoveInput != Vector2.zero && !stunned) {
+				_dashTimer.Start(dashFullTime);
 			}
 		}
 		
 		public void HandleMoveInput(Vector2 direction)
 		{
-			if (!_isDashing && !stunned)
+			if (!IsDashing)
 			{
 				_currentMoveInput = direction;
 				_moveLeftRight = direction.x * moveSpeed;
 			}
-			else
+			else if (stunned)
 			{
 				_currentMoveInput = Vector2.zero;
 				_moveLeftRight = 0;
