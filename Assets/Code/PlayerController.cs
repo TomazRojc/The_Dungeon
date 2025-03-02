@@ -209,6 +209,7 @@ namespace Code
 
 		public void TeleportPlayer(Vector3 portal1Direction, Vector3 portal2Direction, Portal portal2)
 		{
+			_dashTimer.Stop();
 			_justTeleportedToPortal = portal2;
 			
 			var angle1 = Mathf.Atan2(portal1Direction.y, portal1Direction.x) * Mathf.Rad2Deg;
@@ -216,11 +217,8 @@ namespace Code
 			var rotationDiff = angle2 - angle1;
 
 			var velocity = new Vector3(rigidBody.velocity.x, rigidBody.velocity.y, 0);
-			velocity = Quaternion.Euler(0, 0, rotationDiff + 180) *
-			           velocity; // rotate velocity vector for portal rotation diff
-			velocity = Vector2.Reflect(velocity,
-				Quaternion.Euler(0f, 0f, 90f) *
-				portal2Direction); // reflect velocity vector over direction vector of portal2
+			velocity = Quaternion.Euler(0, 0, rotationDiff + 180) * velocity; // rotate velocity vector for portal rotation diff
+			velocity = Vector2.Reflect(velocity, Quaternion.Euler(0f, 0f, 90f) * portal2Direction); // reflect velocity vector over direction vector of portal2
 			rigidBody.velocity = velocity;
 		}
 
