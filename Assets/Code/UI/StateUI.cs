@@ -96,6 +96,8 @@ namespace Code.UI
 
         public bool HasButtonAuthority(int inputIndex, ButtonBase button)
         {
+            if (!button.IsInteractable) return false;
+
             if (!button.IsSharedButton)
             {
                 var lobbyIndex = _gameplaySession.GetPlayerData(inputIndex).LobbyIndex;

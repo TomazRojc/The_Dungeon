@@ -26,15 +26,39 @@ namespace Code.UI
                 arrowImage.transform.localScale = Vector3.zero;
             }
         }
+
+        protected override void ChangeInteractableState(bool isInteractable)
+        {
+            if (_isSelected) return;
+
+            Color color;
+            if (isInteractable)
+            {
+                color = buttonConfig.DefaultColor;
+            }
+            else
+            {
+                color = buttonConfig.NonInteractableColor;
+            }
+
+            lineImage.color = color;
+            arrowImage.color = color;
+            text.color = color;
+        }
         
         protected override void PlayEnterAnimation()
         {
-            PlayAnimation(buttonConfig.SelectedScale, buttonConfig.SelectedOffset, buttonConfig.HighlightedColor, 1f, -1f);
+            PlayAnimation(buttonConfig.SelectedScale, buttonConfig.SelectedOffset, buttonConfig.DefaultHighlightedColor, 1f, -1f);
         }
         
         protected override void PlayExitAnimation()
         {
-            PlayAnimation(1f, Vector3.zero, buttonConfig.DefaultColor, 0f, 1f);
+            var exitColor = buttonConfig.DefaultColor;
+            if (!_isInteractable)
+            {
+                exitColor = buttonConfig.NonInteractableColor;
+            }
+            PlayAnimation(1f, Vector3.zero, exitColor, 0f, 1f);
         }
         
         protected override void PlayIdleBreakAnimation()

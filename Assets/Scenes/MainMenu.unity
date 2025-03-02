@@ -9129,7 +9129,7 @@ MonoBehaviour:
   - {fileID: 263599762}
   - {fileID: 2124015309}
   - {fileID: 299120033}
-  startGameButton: {fileID: 0}
+  startGameButton: {fileID: 400536579}
 --- !u!114 &7963712139352903060
 MonoBehaviour:
   m_ObjectHideFlags: 0

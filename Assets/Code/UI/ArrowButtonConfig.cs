@@ -8,7 +8,9 @@ namespace Code.UI
         [SerializeField]
         private Color defaultColor;
         [SerializeField]
-        private Color highlightedColor;
+        private Color nonInteractableColor;
+        [SerializeField]
+        private Color defaultHighlightedColor;
         [SerializeField]
         private float animationDuration;
         [SerializeField]
@@ -23,7 +25,8 @@ namespace Code.UI
         private AnimationCurve scaleCurve;
 
         public Color DefaultColor => defaultColor;
-        public Color HighlightedColor => highlightedColor;
+        public Color NonInteractableColor => nonInteractableColor;
+        public Color DefaultHighlightedColor => defaultHighlightedColor;
         public float AnimationDuration => animationDuration;
         public float IdleBreakAnimationDuration => idleBreakAnimationDuration;
         public float SelectedScale => selectedScale;

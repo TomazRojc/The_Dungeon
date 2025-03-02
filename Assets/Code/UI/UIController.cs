@@ -103,7 +103,7 @@ namespace Code.UI
 
 			var currentButton = _currentState.GetCurrentlySelectedButton(inputIndex);
 			
-			if (currentButton == null) return;
+			if (currentButton == null || !currentButton.IsInteractable) return;
 
 			if (!_currentState.HasButtonAuthority(inputIndex, currentButton)) return;
 

@@ -13,9 +13,26 @@ namespace Code.UI
         [SerializeField]
         private Image arrowImage;
         
+        protected override void ChangeInteractableState(bool isInteractable)
+        {
+            if (_isSelected) return;
+
+            Color color;
+            if (isInteractable)
+            {
+                color = buttonConfig.DefaultColor;
+            }
+            else
+            {
+                color = buttonConfig.NonInteractableColor;
+            }
+
+            arrowImage.color = color;
+        }
+        
         protected override void PlayEnterAnimation()
         {
-            PlayAnimation(buttonConfig.SelectedScale, buttonConfig.HighlightedColor);
+            PlayAnimation(buttonConfig.SelectedScale, buttonConfig.DefaultHighlightedColor);
         }
         
         protected override void PlayExitAnimation()

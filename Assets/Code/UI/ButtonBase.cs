@@ -27,12 +27,16 @@ namespace Code.UI
 
         protected SimpleTimer _animationTimer;
         
-        private bool _isSelected;
-        private SimpleTimer _idleBreakTimer;
+        protected bool _isSelected;
+        protected bool _isInteractable = true;
         
+        private SimpleTimer _idleBreakTimer;
+
+        public bool IsInteractable => _isInteractable;
         public bool IsSharedButton => _isSharedButton;
         public int LobbyIndex => _lobbyIndex;
         
+        protected abstract void ChangeInteractableState(bool isInteractable);
         protected abstract void PlayEnterAnimation();
         protected abstract void PlayExitAnimation();
         protected abstract void PlayIdleBreakAnimation();
@@ -59,6 +63,11 @@ namespace Code.UI
 
         public virtual void OnSelect()
         {
+            if (!_isInteractable)
+            {
+                return;
+            }
+            
             _isSelected = true;
             PlayEnterAnimation();
             _idleBreakTimer.Start(idleBreakTime, true);
@@ -72,9 +81,19 @@ namespace Code.UI
         
         public virtual void OnSubmit()
         {
+            if (!_isInteractable)
+            {
+                return;
+            }
             onSubmit.Invoke();
         }
 
+        public void SetInteractable(bool isInteractable)
+        {
+            _isInteractable = isInteractable;
+            ChangeInteractableState(isInteractable);
+        }
+        
         public List<ButtonBase> GetNextButtons(Direction direction)
         {
             switch (direction)
