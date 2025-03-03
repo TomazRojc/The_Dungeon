@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Code.Gameplay;
 using Code.Utils;
 using UnityEngine;
@@ -32,9 +33,13 @@ namespace Code.UI
 		
 		private StateUI _currentState;
 
-		private SimpleTimer _timer;
-
 		private static bool _UIActive;
+		
+		private int _inputIndexInControl;
+		
+		private Dictionary<int, ButtonBase> _inputIndexToSelectedButton = new Dictionary<int, ButtonBase>(4);
+
+		private SimpleTimer _timer;
 		
 		public static bool UIActive => _UIActive;
 
@@ -48,9 +53,7 @@ namespace Code.UI
 			Main.UiEventBus.OnCancel += HandleCancel;
 			Main.UiEventBus.OnEscape += HandleEscape;
 
-			_UIActive = true;
 			GoToMainMenu();
-			_UICamera.SetActive(true);
 		}
 		
 		private void Update()
@@ -58,12 +61,18 @@ namespace Code.UI
 			_timer.Update(Time.deltaTime);
 		}
 		
+		private void ToggleUI()
+		{
+			var turnOn = !_UIActive;
+			_UIActive = turnOn;
+			_UICamera.SetActive(turnOn);
+		}
 
 		private void HandleNavigate(Direction inputDirection, int inputIndex)
 		{
 			if (!_UIActive) return;
 
-			var currentButton = _currentState.GetCurrentlySelectedButton(inputIndex);
+			_inputIndexToSelectedButton.TryGetValue(inputIndex, out var currentButton);
 
 			if (currentButton == null)
 			{
@@ -74,20 +83,21 @@ namespace Code.UI
 			var nextButtons = currentButton.GetNextButtons(inputDirection);
 			if (nextButtons.Count == 0) return;
 
-			var nextButton = _currentState.GetButtonWithAuthority(inputIndex, nextButtons);
+			var nextButton = GetButtonWithAuthority(inputIndex, nextButtons);
 			if (nextButton == null) return;
 
 			if (nextButton.IsSharedButton)
 			{
-				_currentState.SetPlayerInControl(inputIndex);
+				_inputIndexInControl = inputIndex;
 			}
 
 			if (currentButton.IsSharedButton && !nextButton.IsSharedButton)
 			{
-				_currentState.ResetPlayerInControl();
+				_inputIndexInControl = -1;
 			}
 			
-			_currentState.SetCurrentlySelectedButton(inputIndex, nextButton);
+			_inputIndexToSelectedButton[inputIndex] = nextButton;
+			
 			currentButton.OnDeselect();
 			nextButton.OnSelect();
 		}
@@ -101,51 +111,21 @@ namespace Code.UI
 				TryJoinPlayer(inputIndex);
 			}
 
-			var currentButton = _currentState.GetCurrentlySelectedButton(inputIndex);
+			_inputIndexToSelectedButton.TryGetValue(inputIndex, out var currentButton);
 			
 			if (currentButton == null || !currentButton.IsInteractable) return;
 
-			if (!_currentState.HasButtonAuthority(inputIndex, currentButton)) return;
+			if (!HasButtonAuthority(inputIndex, currentButton)) return;
 
 			currentButton.OnSubmit();
 		}
 
 		private void HandleJoinLobby(int inputIndex)
 		{
+			if (!_UIActive) return;
+			
 			// TODO: JanR handle de-joining?
 			TryJoinPlayer(inputIndex);
-		}
-
-		private bool TryJoinPlayer(int inputIndex)
-		{
-			if (_lobby.TryJoinPlayer(inputIndex))
-			{
-				if (_lobby.IsActive) HandleSelectedButtonsOnPlayerJoined(inputIndex);
-				return true;
-			}
-			return false;
-		}
-
-		private void HandleSelectedButtonsOnPlayerJoined(int inputIndex)
-		{
-			var playerData = _gameplaySession.GetPlayerData(inputIndex);
-			if (playerData == null) return;
-
-			var lobbyIndex = playerData.LobbyIndex;
-			if (lobbyIndex == -1)
-			{
-				throw new ArgumentException("Player not joined!");
-			}
-			var currentButton = _currentState.GetCurrentlySelectedButton(inputIndex);
-			var nextButton = _currentState.SelectPlayerSpecificButton(inputIndex, lobbyIndex);
-
-			_currentState.ResetPlayerInControl();
-
-			if (currentButton != null)
-			{
-				currentButton.OnDeselect();
-			}
-			nextButton.OnSelect();
 		}
 
 		private void HandleCancel(int inputIndex)
@@ -172,16 +152,118 @@ namespace Code.UI
 			{
 				newState.OnEnter();
 			}
-			else
+			
+			if (_currentState == null || newState == null)
 			{
-				_UIActive = false;
+				ToggleUI();
 			}
 
 			// TODO JanR: move this
 			if (_currentState == _lobbyPanelState) _lobby.OnExit();
 			if (newState == _lobbyPanelState) _lobby.OnEnter();
 
+			ResetSelectedButtons(newState);
+
 			_currentState = newState;
+		}
+
+
+		private bool TryJoinPlayer(int inputIndex)
+		{
+			if (!_lobby.TryJoinPlayer(inputIndex)) return false;
+
+			if (_currentState == _lobbyPanelState)
+			{
+				UpdateSelectedButtonsOnPlayerJoined(inputIndex);
+			}
+			
+			return true;
+		}
+
+		private void UpdateSelectedButtonsOnPlayerJoined(int inputIndex)
+		{
+			var playerData = _gameplaySession.GetPlayerData(inputIndex);
+
+			var lobbyIndex = playerData.LobbyIndex;
+			if (lobbyIndex == -1)
+			{
+				throw new ArgumentException("Player not joined!");
+			}
+
+			if (_inputIndexInControl == inputIndex)
+			{
+				_inputIndexInControl = -1;
+			}
+
+			// current button
+			_inputIndexToSelectedButton.TryGetValue(inputIndex, out var currentButton);
+
+			// next button
+			var nextButton = _currentState.DefaultPlayerButtons[lobbyIndex];
+			if (nextButton == null)
+			{
+				throw new ArgumentException($"Player specific button not linked in {_currentState.name}");
+			}
+
+			_inputIndexToSelectedButton[inputIndex] = nextButton;
+			if (currentButton != null)
+			{
+				currentButton.OnDeselect();
+			}
+			nextButton.OnSelect();
+		}
+
+		private void ResetSelectedButtons(StateUI state)
+		{
+			if (state == null) return;
+			
+			_inputIndexToSelectedButton.Clear();
+			_inputIndexInControl = -1;
+
+			foreach (var playerData in _gameplaySession.PlayersData)
+			{
+				ButtonBase button = null;
+				// first try to assign a player specific button to the player
+				if (playerData.IsJoined && playerData.LobbyIndex < state.DefaultPlayerButtons.Count)
+				{
+					button = state.DefaultPlayerButtons[playerData.LobbyIndex];
+				}
+
+				if (button == null)
+				{
+					if (state.DefaultButton == null)
+					{
+						throw new ArgumentException($"There are no possible player specific buttons to select and '_firstSelectedButton' is not set on UI state: {state.name}");
+					}
+					button = state.DefaultButton;
+				}
+
+				_inputIndexToSelectedButton[playerData.InputIndex] = button;
+				button.OnSelect();
+			}
+		}
+
+		private bool HasButtonAuthority(int inputIndex, ButtonBase button)
+		{
+			if (!button.IsInteractable) return false;
+
+			if (!button.IsSharedButton)
+			{
+				var lobbyIndex = _gameplaySession.GetPlayerData(inputIndex).LobbyIndex;
+				return lobbyIndex == button.LobbyIndex;
+			}
+			return _inputIndexInControl == -1 || _inputIndexInControl == inputIndex;
+		}
+		private ButtonBase GetButtonWithAuthority(int inputIndex, List<ButtonBase> buttons)
+		{
+			foreach (var button in buttons)
+			{
+				if (HasButtonAuthority(inputIndex, button))
+				{
+					return button;
+				}
+			}
+			return null;
 		}
 		
 		public void GoToLobby()
