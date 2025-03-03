@@ -50,21 +50,21 @@ namespace Code.Gameplay
 
         public void OnEnterLevelsGameplay(GameObject playerPrefab)
         {
-            var playerGameobjects = new List<GameObject>();
+            var playerGameObjects = new List<GameObject>();
             foreach (var playerData in PlayersData)
             {
                 if (!playerData.IsJoined) continue;
                 
                 var inputHandler = GetInputHandler(playerData.InputIndex);
-                var playerGameobject = SpawnPlayer(playerPrefab, playerData.Color);
-                playerGameobjects.Add(playerGameobject);
+                var playerGameObject = SpawnPlayer(playerPrefab, playerData.Color);
+                playerGameObjects.Add(playerGameObject);
                 
-                var playerController = playerGameobject.GetComponent<PlayerController>();
+                var playerController = playerGameObject.GetComponent<PlayerController>();
                 inputHandler.ConnectPlayerController(playerController);
                 PlayerControllers.Add(playerController);
             }
             
-            Main.LevelManager.Init(playerGameobjects);
+            Main.LevelManager.Init(playerGameObjects);
         }
 
         private GameObject SpawnPlayer(GameObject playerPrefab, Color color)

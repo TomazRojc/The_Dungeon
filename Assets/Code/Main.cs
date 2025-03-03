@@ -28,7 +28,7 @@ namespace Code
         {
             Instance = this;
             _gameplaySession = new GameplaySession(_gameplayConfig.MaxPlayers);
-            _levelManager = new LevelManager(_levelsConfig.LevelPrefabs);
+            _levelManager = new LevelManager(_levelsConfig);
             _uiEventBus = new UIEventBus();
         }
     }

@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f66b08b00e7c47699d5e7dea3310ec31, type: 3}
   m_Name: LevelsConfig
   m_EditorClassIdentifier: 
+  levelCameraPrefab: {fileID: 4731505436230385603, guid: f55478626a2219f4eaf2719d1147e73c, type: 3}
   levelPrefabs:
   - {fileID: 3790556733599164298, guid: c5b114b2fa34d324eb9ac646873d934b, type: 3}

@@ -7,8 +7,11 @@ namespace Code.Configs
     public class LevelsConfig : ScriptableObject
     {
         [SerializeField]
+        private GameObject levelCameraPrefab;
+        [SerializeField]
         private List<GameObject> levelPrefabs;
 
         public List<GameObject> LevelPrefabs => levelPrefabs;
+        public GameObject LevelCameraPrefab => levelCameraPrefab;
     }
 }
