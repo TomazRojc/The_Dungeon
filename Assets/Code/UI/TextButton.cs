@@ -46,9 +46,9 @@ namespace Code.UI
             text.color = color;
         }
         
-        protected override void PlayEnterAnimation()
+        protected override void PlayEnterAnimation(Color? highlightColor)
         {
-            PlayAnimation(buttonConfig.SelectedScale, buttonConfig.SelectedOffset, buttonConfig.DefaultHighlightedColor, 1f, -1f);
+            PlayAnimation(buttonConfig.SelectedScale, buttonConfig.SelectedOffset, highlightColor ?? buttonConfig.DefaultHighlightedColor, 1f, -1f);
         }
         
         protected override void PlayExitAnimation()

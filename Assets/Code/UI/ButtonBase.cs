@@ -37,7 +37,7 @@ namespace Code.UI
         public int LobbyIndex => _lobbyIndex;
         
         protected abstract void ChangeInteractableState(bool isInteractable);
-        protected abstract void PlayEnterAnimation();
+        protected abstract void PlayEnterAnimation(Color? highlightColor);
         protected abstract void PlayExitAnimation();
         protected abstract void PlayIdleBreakAnimation();
         protected abstract void ResetButton();
@@ -61,7 +61,7 @@ namespace Code.UI
             _animationTimer.Update(Time.deltaTime);
         }
 
-        public virtual void OnSelect()
+        public virtual void OnSelect(Color? highlightColor)
         {
             if (!_isInteractable)
             {
@@ -69,7 +69,7 @@ namespace Code.UI
             }
             
             _isSelected = true;
-            PlayEnterAnimation();
+            PlayEnterAnimation(highlightColor);
             _idleBreakTimer.Start(idleBreakTime, true);
         }
         

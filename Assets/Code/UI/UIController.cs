@@ -98,8 +98,22 @@ namespace Code.UI
 			
 			_inputIndexToSelectedButton[inputIndex] = nextButton;
 			
+			var highlightColor = GetHighlightColor(inputIndex);
+			
 			currentButton.OnDeselect();
-			nextButton.OnSelect();
+			nextButton.OnSelect(highlightColor);
+		}
+
+		private Color? GetHighlightColor(PlayerData playerData)
+		{
+			if (!playerData.IsJoined) return null;
+			return playerData.Color;
+		}
+		
+		private Color? GetHighlightColor(int inputIndex)
+		{
+			var playerData = _gameplaySession.GetPlayerData(inputIndex);
+			return GetHighlightColor(playerData);
 		}
 
 		private void HandleSubmit(int inputIndex)
@@ -206,11 +220,13 @@ namespace Code.UI
 			}
 
 			_inputIndexToSelectedButton[inputIndex] = nextButton;
+			
+			var highlightColor = GetHighlightColor(playerData);
 			if (currentButton != null)
 			{
 				currentButton.OnDeselect();
 			}
-			nextButton.OnSelect();
+			nextButton.OnSelect(highlightColor);
 		}
 
 		private void ResetSelectedButtons(StateUI state)
@@ -223,10 +239,12 @@ namespace Code.UI
 			foreach (var playerData in _gameplaySession.PlayersData)
 			{
 				ButtonBase button = null;
+				Color? highlightColor = null;
 				// first try to assign a player specific button to the player
 				if (playerData.IsJoined && playerData.LobbyIndex < state.DefaultPlayerButtons.Count)
 				{
 					button = state.DefaultPlayerButtons[playerData.LobbyIndex];
+					highlightColor = GetHighlightColor(playerData);
 				}
 
 				if (button == null)
@@ -236,10 +254,12 @@ namespace Code.UI
 						throw new ArgumentException($"There are no possible player specific buttons to select and '_firstSelectedButton' is not set on UI state: {state.name}");
 					}
 					button = state.DefaultButton;
+					highlightColor = null;
 				}
 
 				_inputIndexToSelectedButton[playerData.InputIndex] = button;
-				button.OnSelect();
+				
+				button.OnSelect(highlightColor);
 			}
 		}
 

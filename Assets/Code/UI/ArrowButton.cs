@@ -30,9 +30,9 @@ namespace Code.UI
             arrowImage.color = color;
         }
         
-        protected override void PlayEnterAnimation()
+        protected override void PlayEnterAnimation(Color? highlightColor)
         {
-            PlayAnimation(buttonConfig.SelectedScale, buttonConfig.DefaultHighlightedColor);
+            PlayAnimation(buttonConfig.SelectedScale, highlightColor ?? buttonConfig.DefaultHighlightedColor);
         }
         
         protected override void PlayExitAnimation()
