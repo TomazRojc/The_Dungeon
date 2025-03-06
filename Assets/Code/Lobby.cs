@@ -12,8 +12,6 @@ namespace Code
 		[SerializeField]
 		private LobbyUI _lobbyUI;
 		[SerializeField]
-		private UIController _UIController;
-		[SerializeField]
 		private List<Color> defaultPlayerColors;
 		[SerializeField]
 		private PlayerInputManager _playerInputManager;

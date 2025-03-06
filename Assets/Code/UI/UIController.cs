@@ -18,15 +18,15 @@ namespace Code.UI
 
 		[Header("UIs")]
 		[SerializeField]
-		private StateUI _mainMenuPanelState;
+		private BaseUIState _mainMenuPanelState;
 		[SerializeField]
-		private StateUI _settingsPanelState;
+		private BaseUIState _settingsPanelState;
 		[SerializeField]
-		private StateUI _lobbyPanelState;
+		private BaseUIState _lobbyPanelState;
 		[SerializeField]
-		private StateUI _levelsPanelState;
+		private BaseUIState _levelsPanelState;
 		[SerializeField]
-		private StateUI _pauseMenuState;
+		private BaseUIState _pauseMenuState;
 		[SerializeField]
 		private GameObject _loadingPanel;
 		[SerializeField]
@@ -34,7 +34,7 @@ namespace Code.UI
 
 		private GameplaySession _gameplaySession;
 		
-		private StateUI _currentState;
+		private BaseUIState _currentState;
 
 		private static bool _UIActive;
 		
@@ -159,7 +159,7 @@ namespace Code.UI
 			}
 		}
 		
-		private void ChangeState(StateUI newState)
+		private void ChangeState(BaseUIState newState)
 		{
 			if (_currentState == newState) return;
 
@@ -235,7 +235,7 @@ namespace Code.UI
 			nextButton.OnSelect(highlightColor);
 		}
 
-		private void ResetSelectedButtons(StateUI state)
+		private void ResetSelectedButtons(BaseUIState state)
 		{
 			if (state == null) return;
 			

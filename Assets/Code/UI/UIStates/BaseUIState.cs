@@ -10,7 +10,7 @@ namespace Code.UI.UiStates
         LevelSelection,
         PauseMenu,
     }
-    public class StateUI : MonoBehaviour
+    public class BaseUIState : MonoBehaviour
     {
         [SerializeField]
         private StateUiName _stateUiName;

@@ -1,7 +1,7 @@
 using UnityEngine;
 
 namespace Code.UI.UiStates {
-    public class PauseMenuStateUi : StateUI {
+    public class PauseMenuUIState : BaseUIState {
 
         public override void OnEnter() {
             base.OnEnter();
