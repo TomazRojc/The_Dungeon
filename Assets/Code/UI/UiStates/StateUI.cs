@@ -3,8 +3,17 @@ using UnityEngine;
 
 namespace Code.UI
 {
+    public enum StateUiName {
+        MainMenu,
+        Settings,
+        Lobby,
+        LevelSelection,
+        PauseMenu,
+    }
     public class StateUI : MonoBehaviour
     {
+        [SerializeField]
+        private StateUiName _stateUiName;
         [SerializeField]
         private ButtonBase _defaultButton;
 
@@ -12,15 +21,16 @@ namespace Code.UI
         private List<ButtonBase> _defaultPlayerButtons;
 
         public ButtonBase DefaultButton => _defaultButton;
+        public StateUiName StateUiName => _stateUiName;
         
         public List<ButtonBase> DefaultPlayerButtons => _defaultPlayerButtons;
 
-        public void OnEnter()
+        public virtual void OnEnter()
         {
             gameObject.SetActive(true);
         }
         
-        public void OnExit()
+        public virtual void OnExit()
         {
             gameObject.SetActive(false);
         }

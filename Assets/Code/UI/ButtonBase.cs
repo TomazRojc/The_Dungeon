@@ -56,9 +56,9 @@ namespace Code.UI
         {
             if (_isSelected)
             {
-                _idleBreakTimer.Update(Time.deltaTime);
+                _idleBreakTimer.Update(Time.unscaledDeltaTime);
             }
-            _animationTimer.Update(Time.deltaTime);
+            _animationTimer.Update(Time.unscaledDeltaTime);
         }
 
         public virtual void OnSelect(Color? highlightColor)

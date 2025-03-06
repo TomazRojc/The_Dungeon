@@ -25,6 +25,8 @@ namespace Code.UI
 		[SerializeField]
 		private StateUI _levelsPanelState;
 		[SerializeField]
+		private StateUI _pauseMenuState;
+		[SerializeField]
 		private GameObject _loadingPanel;
 		[SerializeField]
 		private GameObject _levelsPanel;
@@ -145,12 +147,15 @@ namespace Code.UI
 		private void HandleCancel(int inputIndex)
 		{
 			if (!_UIActive) return;
-			throw new NotImplementedException();
+			//TODO: @JanR povleci mi ga namesto da throwas exception usake 2 sekundi
 		}
         
-		private void HandleEscape(int inputIndex)
-		{
-			throw new NotImplementedException();
+		private void HandleEscape(int inputIndex) {
+			if (_UIActive && _currentState.StateUiName == StateUiName.PauseMenu) {
+				ChangeState(null);
+			} else if (!_UIActive && !_loadingPanel.activeInHierarchy) {
+				ChangeState(_pauseMenuState);
+			}
 		}
 		
 		private void ChangeState(StateUI newState)
