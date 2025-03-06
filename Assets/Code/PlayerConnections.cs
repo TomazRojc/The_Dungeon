@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Code.Gameplay;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -10,14 +11,13 @@ namespace Code
     public class PlayerConnections : MonoBehaviour
     {
         [SerializeField]
-        private Lobby lobby;
-
-        [SerializeField]
         private GameObject _playerInputPrefab;
 
         private Dictionary<InputDevice, PlayerInputHandler> deviceToInputHandler = new Dictionary<InputDevice, PlayerInputHandler>(4);
         
         private GameplaySession _gameplaySession;
+        
+        public static event Action OnPlayerLeft;
 
         private void Awake()
         {
@@ -51,12 +51,14 @@ namespace Code
         {
             if (deviceToInputHandler.TryGetValue(device, out var playerInputHandler))
             {
+                var lobbyIndex = _gameplaySession.GetPlayerData(playerInputHandler.InputIndex).LobbyIndex;
                 deviceToInputHandler.Remove(device);
+                _gameplaySession.LobbyIndexToPlayerData.Remove(lobbyIndex);
                 _gameplaySession.RemovePlayerData(playerInputHandler.InputIndex);
-                lobby.OnPlayerLeft(playerInputHandler.InputIndex);
                 _gameplaySession.RemovePlayerInput(playerInputHandler);
                 _gameplaySession.DespawnPlayer(playerInputHandler);
                 Destroy(playerInputHandler.gameObject);
+                OnPlayerLeft?.Invoke();
             }
         }
 

@@ -7,10 +7,12 @@ namespace Code.Gameplay
     public class GameplaySession
     {
         private List<PlayerInputHandler> _playerInputHandlers;
+        private Dictionary<int, PlayerData> _lobbyIndexToPlayerData = new Dictionary<int, PlayerData>(4);
         
         public bool GameLevelActive;
         public List<PlayerController> PlayerControllers;
         public List<PlayerData> PlayersData;
+        public Dictionary<int, PlayerData> LobbyIndexToPlayerData => _lobbyIndexToPlayerData;
         
         
         public GameplaySession(int maxPlayers)

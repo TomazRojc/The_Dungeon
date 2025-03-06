@@ -13,9 +13,6 @@ namespace Code.UI
 		[SerializeField]
 		private GameObject _UICamera;
 
-		[SerializeField]
-		private Lobby _lobby;
-
 		[Header("UIs")]
 		[SerializeField]
 		private BaseUIState _mainMenuPanelState;
@@ -123,7 +120,7 @@ namespace Code.UI
 		{
 			if (!_UIActive) return;
 
-			if (_lobby.NumJoinedPlayers == 0)
+			if (_currentState is LobbyUIState lobbyUIState && lobbyUIState.NumJoinedPlayers == 0)
 			{
 				TryJoinPlayer(inputIndex);
 			}
@@ -152,7 +149,7 @@ namespace Code.UI
 		}
         
 		private void HandleEscape(int inputIndex) {
-			if (_UIActive && _currentState.StateUiName == StateUiName.PauseMenu) {
+			if (_UIActive && _currentState is PauseMenuUIState) {
 				ChangeState(null);
 			} else if (!_UIActive && !_loadingPanel.activeInHierarchy) {
 				ChangeState(_pauseMenuState);
@@ -178,26 +175,17 @@ namespace Code.UI
 				ToggleUI();
 			}
 
-			// TODO JanR: move this, this is completely acoustic
-			if (_currentState == _lobbyPanelState) _lobby.OnExit();
-			if (newState == _lobbyPanelState) _lobby.OnEnter();
-
 			ResetSelectedButtons(newState);
-
 			_currentState = newState;
 		}
 
 
-		private bool TryJoinPlayer(int inputIndex)
+		private void TryJoinPlayer(int inputIndex)
 		{
-			if (!_lobby.TryJoinPlayer(inputIndex)) return false;
+			if (!(_currentState is LobbyUIState lobbyUIState)) return;
+			if (!lobbyUIState.TryJoinPlayer(inputIndex)) return;
 
-			if (_currentState == _lobbyPanelState)
-			{
-				UpdateSelectedButtonsOnPlayerJoined(inputIndex);
-			}
-			
-			return true;
+			UpdateSelectedButtonsOnPlayerJoined(inputIndex);
 		}
 
 		private void UpdateSelectedButtonsOnPlayerJoined(int inputIndex)
@@ -218,8 +206,11 @@ namespace Code.UI
 			// current button
 			_inputIndexToSelectedButton.TryGetValue(inputIndex, out var currentButton);
 
+			if (!(_currentState is LobbyUIState lobbyUIState)) {
+				throw new ArgumentException($"UpdateSelectedButtonsOnPlayerJoined({inputIndex}) called from {_currentState.name}, but should only be called in lobby!");
+			}
 			// next button
-			var nextButton = _currentState.DefaultPlayerButtons[lobbyIndex];
+			var nextButton = lobbyUIState.DefaultPlayerButtons[lobbyIndex];
 			if (nextButton == null)
 			{
 				throw new ArgumentException($"Player specific button not linked in {_currentState.name}");
@@ -247,9 +238,9 @@ namespace Code.UI
 				ButtonBase button = null;
 				Color? highlightColor = null;
 				// first try to assign a player specific button to the player
-				if (playerData.IsJoined && playerData.LobbyIndex < state.DefaultPlayerButtons.Count)
+				if (playerData.IsJoined && state is MultiplayerUIState multiplayerUIState && playerData.LobbyIndex < multiplayerUIState.DefaultPlayerButtons.Count)
 				{
-					button = state.DefaultPlayerButtons[playerData.LobbyIndex];
+					button = multiplayerUIState.DefaultPlayerButtons[playerData.LobbyIndex];
 					highlightColor = GetHighlightColor(playerData);
 				}
 
@@ -292,6 +283,13 @@ namespace Code.UI
 			return null;
 		}
 		
+		public void OnPlayerReady(int lobbyIndex)
+		{
+			if (_currentState is LobbyUIState lobbyUIState) {
+				lobbyUIState.OnPlayerReady(lobbyIndex);
+			}
+		}
+		
 		public void GoToLobby()
 		{
 			ChangeState(_lobbyPanelState);
@@ -299,9 +297,13 @@ namespace Code.UI
 
 		public void GoToLevelSelection()
 		{
-			ChangeState(_levelsPanelState);
 			// TODO JanR: move this
-			_lobby.OnStartGame();
+			if (_currentState is LobbyUIState lobbyUIState) {
+				lobbyUIState.OnStartGame();
+				ChangeState(_levelsPanelState);
+			} else {
+				throw new ArgumentException($"Trying to change state to LevelsPanelState while not in lobby!");
+			}
 		}
 
 		public void StartLevel(int levelNumber)
