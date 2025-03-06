@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Code.UI
+namespace Code.UI.UiStates
 {
     public enum StateUiName {
         MainMenu,

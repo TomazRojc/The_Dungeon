@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Code.Gameplay;
+using Code.UI.UiStates;
 using Code.Utils;
 using UnityEngine;
 
@@ -177,7 +178,7 @@ namespace Code.UI
 				ToggleUI();
 			}
 
-			// TODO JanR: move this
+			// TODO JanR: move this, this is completely acoustic
 			if (_currentState == _lobbyPanelState) _lobby.OnExit();
 			if (newState == _lobbyPanelState) _lobby.OnEnter();
 
