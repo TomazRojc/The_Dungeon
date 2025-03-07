@@ -301,14 +301,8 @@ namespace Code.UI
 		{
 			ChangeState(_levelsPanelState);
 		}
-
-		public void ExitGameplay()
-		{
-			Main.LevelManager.OnGameplayExit();
-			GoToLevelSelection();
-		}
-
-		public void StartLevel(int levelNumber)
+		
+		public void EnterGameplay(int levelNumber)
 		{
 			ChangeState(null);
 			
@@ -319,7 +313,13 @@ namespace Code.UI
 			};
 			_timer.Start(0.7f);
 			
-			Main.LevelManager.StartLevel(levelNumber-1);
+			Main.LevelManager.OnGameplayEnter(levelNumber-1);
+		}
+
+		public void ExitGameplay()
+		{
+			Main.LevelManager.OnGameplayExit();
+			GoToLevelSelection();
 		}
 
 		public void GoToSettings()

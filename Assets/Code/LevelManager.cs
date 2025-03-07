@@ -18,11 +18,16 @@ namespace Code
             _gameplayConfig = gameplayConfig;
         }
         
-        private void OnGameplayEnter(GameObject playerPrefab)
+        public void OnGameplayEnter(int levelIndex)
         {
             _worldGameObject = new GameObject("3D");
             _worldGameObject.transform.position = new Vector3(0, 0, 0);
-            SpawnPlayers(playerPrefab);
+            SpawnPlayers(_gameplayConfig.PlayerPrefab);
+            
+            var level = Object.Instantiate(_levelsConfig.LevelPrefabs[levelIndex], _worldGameObject.transform);
+            var camera = Object.Instantiate(_levelsConfig.LevelCameraPrefab, level.transform).GetComponent<CameraFollow>();
+            var levelComponent = level.GetComponent<LevelComponent>();
+            levelComponent.StartLevel(_playerGameObjects, camera);
         }
         
         public void OnGameplayExit() {
@@ -83,16 +88,6 @@ namespace Code
             }
 
             return null;
-        }
-
-        public void StartLevel(int levelIndex)
-        {
-            OnGameplayEnter(_gameplayConfig.PlayerPrefab);
-            
-            var level = Object.Instantiate(_levelsConfig.LevelPrefabs[levelIndex], _worldGameObject.transform);
-            var camera = Object.Instantiate(_levelsConfig.LevelCameraPrefab, level.transform).GetComponent<CameraFollow>();
-            var levelComponent = level.GetComponent<LevelComponent>();
-            levelComponent.StartLevel(_playerGameObjects, camera);
         }
     }
 }

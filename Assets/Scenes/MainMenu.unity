@@ -3186,7 +3186,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5142662879602761529, guid: 84771e8ee4652b34cb2e806814e6d114, type: 3}
       propertyPath: onSubmit.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: StartLevel
+      value: EnterGameplay
       objectReference: {fileID: 0}
     - target: {fileID: 5142662879602761529, guid: 84771e8ee4652b34cb2e806814e6d114, type: 3}
       propertyPath: onSubmit.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
@@ -3566,7 +3566,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5142662879602761529, guid: 84771e8ee4652b34cb2e806814e6d114, type: 3}
       propertyPath: onSubmit.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: StartLevel
+      value: EnterGameplay
       objectReference: {fileID: 0}
     - target: {fileID: 5142662879602761529, guid: 84771e8ee4652b34cb2e806814e6d114, type: 3}
       propertyPath: onSubmit.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
@@ -4880,7 +4880,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1508411021}
         m_TargetAssemblyTypeName: Code.UIController, Assembly-CSharp
-        m_MethodName: StartLevel
+        m_MethodName: EnterGameplay
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -7355,7 +7355,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5142662879602761529, guid: 84771e8ee4652b34cb2e806814e6d114, type: 3}
       propertyPath: onSubmit.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: StartLevel
+      value: EnterGameplay
       objectReference: {fileID: 0}
     - target: {fileID: 5142662879602761529, guid: 84771e8ee4652b34cb2e806814e6d114, type: 3}
       propertyPath: onSubmit.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
