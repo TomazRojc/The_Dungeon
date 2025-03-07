@@ -81,6 +81,11 @@ namespace Code
             _player = player;
         }
 
+        public void DisconnectPlayerController()
+        {
+            _player = null;
+        }
+
         // WASD or Left Stick
         public void OnMove(InputAction.CallbackContext context)
         {

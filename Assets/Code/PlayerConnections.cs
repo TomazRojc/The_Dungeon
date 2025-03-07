@@ -16,12 +16,14 @@ namespace Code
         private Dictionary<InputDevice, PlayerInputHandler> deviceToInputHandler = new Dictionary<InputDevice, PlayerInputHandler>(4);
         
         private GameplaySession _gameplaySession;
+        private LevelManager _levelManager;
         
         public static event Action OnPlayerLeft;
 
         private void Awake()
         {
             _gameplaySession = Main.GameplaySession;
+            _levelManager = Main.LevelManager;
             InputSystem.onDeviceChange += OnDeviceChange;
             AssignExistingDevices();
         }
@@ -56,7 +58,7 @@ namespace Code
                 _gameplaySession.LobbyIndexToPlayerData.Remove(lobbyIndex);
                 _gameplaySession.RemovePlayerData(playerInputHandler.InputIndex);
                 _gameplaySession.RemovePlayerInput(playerInputHandler);
-                _gameplaySession.DespawnPlayer(playerInputHandler);
+                _levelManager.DespawnPlayer(playerInputHandler);
                 Destroy(playerInputHandler.gameObject);
                 OnPlayerLeft?.Invoke();
             }

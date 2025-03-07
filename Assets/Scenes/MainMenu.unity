@@ -1261,7 +1261,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5142662879602761529, guid: 4cb5ecfff4896304c99e2a10c8f9781a, type: 3}
       propertyPath: onSubmit.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: GoToMainMenu
+      value: ExitGameplay
       objectReference: {fileID: 0}
     - target: {fileID: 5142662879602761529, guid: 4cb5ecfff4896304c99e2a10c8f9781a, type: 3}
       propertyPath: onSubmit.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
@@ -9512,11 +9512,6 @@ MonoBehaviour:
     playerAvatar: {fileID: 8208144709622620742}
     playerReadyButton: {fileID: 643137171}
   startGameButton: {fileID: 400536579}
-  defaultPlayerColors:
-  - {r: 0.64705884, g: 0.8392157, b: 0.32941177, a: 1}
-  - {r: 0.35644355, g: 0.4549662, b: 0.8490566, a: 1}
-  - {r: 1, g: 0.58619905, b: 0.3066038, a: 1}
-  - {r: 1, g: 0.35162953, b: 0.3066038, a: 1}
   _playerInputManager: {fileID: 2110455154}
 --- !u!224 &8020206877338263721
 RectTransform:

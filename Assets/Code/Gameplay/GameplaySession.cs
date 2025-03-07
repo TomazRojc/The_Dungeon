@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -10,15 +11,15 @@ namespace Code.Gameplay
         private Dictionary<int, PlayerData> _lobbyIndexToPlayerData = new Dictionary<int, PlayerData>(4);
         
         public bool GameLevelActive;
-        public List<PlayerController> PlayerControllers;
         public List<PlayerData> PlayersData;
         public Dictionary<int, PlayerData> LobbyIndexToPlayerData => _lobbyIndexToPlayerData;
+        public int NumJoinedPlayers => LobbyIndexToPlayerData.Count;
+        public List<PlayerInputHandler> PlayerInputHandlers => _playerInputHandlers;
         
         
         public GameplaySession(int maxPlayers)
         {
             GameLevelActive = false;
-            PlayerControllers = new List<PlayerController>(maxPlayers);
             _playerInputHandlers = new List<PlayerInputHandler>(maxPlayers);
             PlayersData = new List<PlayerData>(maxPlayers);
         }
@@ -49,64 +50,6 @@ namespace Code.Gameplay
                 }
             }
         }
-
-        public void OnEnterLevelsGameplay(GameObject playerPrefab)
-        {
-            var playerGameObjects = new List<GameObject>();
-            foreach (var playerData in PlayersData)
-            {
-                if (!playerData.IsJoined) continue;
-                
-                var inputHandler = GetInputHandler(playerData.InputIndex);
-                var playerGameObject = SpawnPlayer(playerPrefab, playerData.Color);
-                playerGameObjects.Add(playerGameObject);
-                
-                var playerController = playerGameObject.GetComponent<PlayerController>();
-                inputHandler.ConnectPlayerController(playerController);
-                PlayerControllers.Add(playerController);
-            }
-            
-            Main.LevelManager.Init(playerGameObjects);
-        }
-
-        private GameObject SpawnPlayer(GameObject playerPrefab, Color color)
-        {
-            var playerObject = Object.Instantiate(playerPrefab, Vector3.zero, Quaternion.identity);
-            var spriteRenderer = playerObject.GetComponent<SpriteRenderer>();
-            spriteRenderer.color = color;
-            return playerObject;
-        }
-
-        public void DespawnPlayer(int inputIndex)
-        {
-            foreach (var playerInputHandler in _playerInputHandlers)
-            {
-                if (playerInputHandler.InputIndex != inputIndex) continue;
-                DespawnPlayer(playerInputHandler);                
-            }
-        }
-        
-        public void DespawnPlayer(PlayerInputHandler playerInputHandler)
-        {
-            var player = playerInputHandler.Player;
-            if (playerInputHandler.Player != null)
-            {
-                Object.Destroy(player);
-            }
-        }
-
-        private PlayerInputHandler GetInputHandler(int inputIndex)
-        {
-            foreach (var playerInputHandler in _playerInputHandlers)
-            {
-                if (playerInputHandler.InputIndex == inputIndex)
-                {
-                    return playerInputHandler;
-                }
-            }
-
-            return null;
-        }
         
         public PlayerData GetPlayerData(int inputIndex)
         {
@@ -119,6 +62,43 @@ namespace Code.Gameplay
             }
 
             return null;
+        }
+        
+        public bool TryJoinPlayer(int inputIndex) {
+        
+            var playerData = GetPlayerData(inputIndex);
+            if (playerData.IsJoined) return false;
+
+            var lobbyIndex = GetFirstFreePanelIndex();
+            if (lobbyIndex == Int32.MaxValue)
+            {
+                Debug.LogWarning("Trying to join player but lobby is full.");
+                return false;
+            }
+
+            playerData.SetValues($"Player {lobbyIndex + 1}", Main.Instance.GameplayConfig.DefaultPlayerColors[lobbyIndex], true, false, lobbyIndex, inputIndex);
+            LobbyIndexToPlayerData.Add(lobbyIndex, playerData);
+            return true;
+        }
+        
+        private int GetFirstFreePanelIndex()
+        {
+            var firstFreeIndex = -1;
+            for (int i = 0; i < 4; i++)
+            {
+                firstFreeIndex = i;
+                foreach (var player in PlayersData)
+                {
+                    if (player.LobbyIndex == firstFreeIndex)
+                    {
+                        firstFreeIndex = -1;
+                        break;
+                    }
+                }
+                if (firstFreeIndex != -1) return firstFreeIndex;
+            }
+        	
+            return firstFreeIndex;
         }
     }
 }

@@ -24,16 +24,10 @@ namespace Code.UI.UiStates {
         private ButtonBase startGameButton;
         
         [SerializeField]
-        private List<Color> defaultPlayerColors;
-        [SerializeField]
         private PlayerInputManager _playerInputManager;
 
         private GameplaySession _gameplaySession;
         private List<PlayerData> _players;
-        
-		
-        public int NumJoinedPlayers => _gameplaySession.LobbyIndexToPlayerData.Count;
-        
         private List<bool> _emptyLobbyIndices = new List<bool>(4);
 
         private void Awake()
@@ -59,7 +53,7 @@ namespace Code.UI.UiStates {
             PlayerConnections.OnPlayerLeft -= OnPlayerLeft;
         }
 
-        private void UpdateDisplay()
+        public void UpdateDisplay()
         {
             HandleReadyToStart(_players);
 
@@ -119,49 +113,10 @@ namespace Code.UI.UiStates {
 
             startGameButton.SetInteractable(allReady && !lobbyEmpty);
         }
-        
-        public bool TryJoinPlayer(int inputIndex) {
-        
-        	var playerData = _gameplaySession.GetPlayerData(inputIndex);
-        	if (playerData.IsJoined) return false;
-
-        	var lobbyIndex = GetFirstFreePanelIndex();
-        	if (lobbyIndex == Int32.MaxValue)
-        	{
-        		Debug.LogWarning("Trying to join player but lobby is full.");
-        		return false;
-        	}
-
-        	playerData.SetValues($"Player {lobbyIndex + 1}", defaultPlayerColors[lobbyIndex], true, false, lobbyIndex, inputIndex);
-	        _gameplaySession.LobbyIndexToPlayerData.Add(lobbyIndex, playerData);
-        	UpdateDisplay();
-        	
-        	return true;
-        }
 
         private void OnPlayerLeft()
         {
         	UpdateDisplay();
-        }
-
-        private int GetFirstFreePanelIndex()
-        {
-        	var firstFreeIndex = -1;
-        	for (int i = 0; i < 4; i++)
-        	{
-        		firstFreeIndex = i;
-        		foreach (var player in _players)
-        		{
-        			if (player.LobbyIndex == firstFreeIndex)
-        			{
-        				firstFreeIndex = -1;
-        				break;
-        			}
-        		}
-        		if (firstFreeIndex != -1) return firstFreeIndex;
-        	}
-        	
-        	return firstFreeIndex;
         }
 
         private void ResetPlayersReady()
@@ -178,11 +133,6 @@ namespace Code.UI.UiStates {
         {
 	        _gameplaySession.LobbyIndexToPlayerData[lobbyIndex].IsReady = !_gameplaySession.LobbyIndexToPlayerData[lobbyIndex].IsReady;
 	        UpdateDisplay();
-        }
-
-        public void OnStartGame()
-        {
-        	_gameplaySession.OnEnterLevelsGameplay(Main.Instance.GameplayConfig.PlayerPrefab);
         }
     }
 }

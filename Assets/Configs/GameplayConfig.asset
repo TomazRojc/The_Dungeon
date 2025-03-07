@@ -14,3 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxPlayers: 4
   playerPrefab: {fileID: 4901961623559103299, guid: 97e85a1bd7747a649a06c41b4f95b1b9, type: 3}
+  defaultPlayerColors:
+  - {r: 0.64705884, g: 0.8392157, b: 0.32941177, a: 1}
+  - {r: 0.35686275, g: 0.45490196, b: 0.8509804, a: 1}
+  - {r: 1, g: 0.58431375, b: 0.30588236, a: 1}
+  - {r: 1, g: 0.3529412, b: 0.30588236, a: 1}

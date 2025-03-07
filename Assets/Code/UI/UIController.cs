@@ -120,7 +120,7 @@ namespace Code.UI
 		{
 			if (!_UIActive) return;
 
-			if (_currentState is LobbyUIState lobbyUIState && lobbyUIState.NumJoinedPlayers == 0)
+			if (_gameplaySession.NumJoinedPlayers == 0)
 			{
 				TryJoinPlayer(inputIndex);
 			}
@@ -182,10 +182,12 @@ namespace Code.UI
 
 		private void TryJoinPlayer(int inputIndex)
 		{
-			if (!(_currentState is LobbyUIState lobbyUIState)) return;
-			if (!lobbyUIState.TryJoinPlayer(inputIndex)) return;
-
-			UpdateSelectedButtonsOnPlayerJoined(inputIndex);
+			if(!_gameplaySession.TryJoinPlayer(inputIndex)) return;
+			if (_currentState is LobbyUIState lobbyUIState) {
+				lobbyUIState.UpdateDisplay();
+				UpdateSelectedButtonsOnPlayerJoined(inputIndex);
+			}
+			
 		}
 
 		private void UpdateSelectedButtonsOnPlayerJoined(int inputIndex)
@@ -297,13 +299,13 @@ namespace Code.UI
 
 		public void GoToLevelSelection()
 		{
-			// TODO JanR: move this
-			if (_currentState is LobbyUIState lobbyUIState) {
-				lobbyUIState.OnStartGame();
-				ChangeState(_levelsPanelState);
-			} else {
-				throw new ArgumentException($"Trying to change state to LevelsPanelState while not in lobby!");
-			}
+			ChangeState(_levelsPanelState);
+		}
+
+		public void ExitGameplay()
+		{
+			Main.LevelManager.OnGameplayExit();
+			GoToLevelSelection();
 		}
 
 		public void StartLevel(int levelNumber)

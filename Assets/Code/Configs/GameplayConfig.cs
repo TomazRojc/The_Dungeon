@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Code.Configs
@@ -9,8 +10,11 @@ namespace Code.Configs
         private int maxPlayers;
         [SerializeField]
         private GameObject playerPrefab;
+        [SerializeField]
+        private List<Color> defaultPlayerColors;
 
         public int MaxPlayers => maxPlayers;
         public GameObject PlayerPrefab => playerPrefab;
+        public List<Color> DefaultPlayerColors => defaultPlayerColors;
     }
 }
