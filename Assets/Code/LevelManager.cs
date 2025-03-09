@@ -42,19 +42,17 @@ namespace Code
                 if (!playerData.IsJoined) continue;
                 
                 var inputHandler = GetInputHandler(playerData.InputIndex);
-                var playerGameObject = InstantiatePlayerGameObject(playerPrefab, playerData.Color);
-                playerGameObject.transform.SetParent(_worldGameObject.transform);
-                _playerControllers.Add(playerGameObject);
-                
-                var playerController = playerGameObject.GetComponent<PlayerController>();
+                var playerController = InstantiatePlayerController(playerPrefab, playerData.Color);
+                _playerControllers.Add(playerController);
                 inputHandler.ConnectPlayerController(playerController);
             }
         }
         
-        private PlayerController InstantiatePlayerGameObject(GameObject playerPrefab, Color color)
+        private PlayerController InstantiatePlayerController(GameObject playerPrefab, Color color)
         {
             var playerObject = Object.Instantiate(playerPrefab, Vector3.zero, Quaternion.identity);
             var playerController = playerObject.GetComponent<PlayerController>();
+            playerController.transform.SetParent(_worldGameObject.transform);
             playerController.Init(color);
             return playerController;
         }

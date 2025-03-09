@@ -7,6 +7,8 @@ namespace Code
 	{
 		private static readonly int EmissionColor = Shader.PropertyToID("_EmissionColor");
 		private static readonly int AlbedoColor = Shader.PropertyToID("_Color");
+		
+		private readonly Color _blackZeroAlpha = new Color(0f, 0f, 0f, 0f);
 
 		[Header("References")]
 		[SerializeField]
@@ -52,7 +54,7 @@ namespace Code
 		private float _currentDashCooldown;
 		private bool _grounded;
 		private Portal _justTeleportedToPortal;
-		private Color _blackZeroAlpha = new Color(0f, 0f, 0f, 0f);
+		private Transform _defaultParent;
 		
 		// control variables (on keypress)
 		private Vector2 _currentMoveInput;
@@ -70,6 +72,7 @@ namespace Code
 		public void Init(Color color)
 		{
 			spriteRenderer.color = color;
+			_defaultParent = transform.parent;
 			trailRenderer.material.SetColor(EmissionColor, color);
 			trailRenderer.material.SetColor(AlbedoColor, _blackZeroAlpha);
 			
@@ -241,8 +244,8 @@ namespace Code
 
 		private bool IsGrounded()
 		{
-			RaycastHit2D raycast = Physics2D.BoxCast(_raycastPosition.position, _boxCastSize, 0f,
-				-_myVectorUp, 0, _raycastLayer);
+			RaycastHit2D raycast = Physics2D.BoxCast(_raycastPosition.position, _boxCastSize, 0f, -_myVectorUp, 0, _raycastLayer);
+			transform.SetParent(raycast.collider != null ? raycast.collider.transform : _defaultParent);
 			return raycast.collider != null;
 		}
 
