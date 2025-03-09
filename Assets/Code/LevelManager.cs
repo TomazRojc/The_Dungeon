@@ -11,6 +11,8 @@ namespace Code
         private List<PlayerController> _playerControllers;
         private LevelsConfig _levelsConfig;
         private GameplayConfig _gameplayConfig;
+        
+        public GameObject WorldGameObject => _worldGameObject;
 
         public LevelManager(LevelsConfig levelsConfig, GameplayConfig gameplayConfig)
         {

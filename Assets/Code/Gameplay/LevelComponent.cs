@@ -20,8 +20,8 @@ namespace Code.Gameplay
         private CameraFollow _cameraFollow;
 
         public void StartLevel(List<PlayerController> players, CameraFollow cameraFollow) {
-            _cameraFollow = cameraFollow;
             SpawnPlayers(players);
+            _cameraFollow = cameraFollow;
             _cameraFollow.Init(players, _levelBounds);
         }
         
