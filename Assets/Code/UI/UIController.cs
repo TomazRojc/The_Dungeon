@@ -302,6 +302,12 @@ namespace Code.UI
 			ChangeState(_levelsPanelState);
 		}
 		
+		public void DbgEnterGameplay(int levelNumber)
+		{
+			ChangeState(null);
+			Main.LevelManager.OnGameplayEnter(levelNumber - 1);
+		}
+		
 		public void EnterGameplay(int levelNumber)
 		{
 			ChangeState(null);
@@ -313,7 +319,7 @@ namespace Code.UI
 			};
 			_timer.Start(0.7f);
 			
-			Main.LevelManager.OnGameplayEnter(levelNumber-1);
+			Main.LevelManager.OnGameplayEnter(levelNumber - 1);
 		}
 
 		public void ExitGameplay()
