@@ -43,12 +43,12 @@ namespace Code.Gameplay {
         }
 
         private void OnDrawGizmos() {
-            CenterPlatform();
             Gizmos.color = Color.blue;
             if (Application.isPlaying) {
                 Gizmos.DrawLine(_targetPosition, _oppositePosition);
             } else {
                 Gizmos.DrawLine(_firstound.position, _secondBound.position);
+                CenterPlatform();
             }
         }
     }
