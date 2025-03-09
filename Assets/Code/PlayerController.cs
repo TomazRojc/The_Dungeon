@@ -5,11 +5,18 @@ namespace Code
 {
 	public class PlayerController : MonoBehaviour
 	{
+		private static readonly int EmissionColor = Shader.PropertyToID("_EmissionColor");
+		private static readonly int AlbedoColor = Shader.PropertyToID("_Color");
+
 		[Header("References")]
 		[SerializeField]
 		private BoxCollider2D _boxCollider;
 		[SerializeField]
 		private Rigidbody2D rigidBody;
+		[SerializeField]
+		private TrailRenderer trailRenderer;
+		[SerializeField]
+		private SpriteRenderer spriteRenderer;
 		
 		[Header("Parameters")]
 		[SerializeField]
@@ -41,6 +48,7 @@ namespace Code
 		private float _currentDashCooldown;
 		private bool _grounded;
 		private Portal _justTeleportedToPortal;
+		private Color _blackZeroAlpha = new Color(0f, 0f, 0f, 0f);
 		
 		// control variables (on keypress)
 		private Vector2 _currentMoveInput;
@@ -48,14 +56,23 @@ namespace Code
 		private Vector2 _myVectorUp = new Vector2(0, 1);
 		private Vector2 _myVectorRight = new Vector2(1, 0);
 
-		void Start()
+		public void Init(Color color)
 		{
-			// GetComponent<SpriteRenderer>().color = displayColor;
-
-			SwitchGravity("down");
-
+			spriteRenderer.color = color;
+			trailRenderer.material.SetColor(EmissionColor, color);
+			trailRenderer.material.SetColor(AlbedoColor, _blackZeroAlpha);
+			
 			_dashTimer.OnUpdate += UpdateDashing;
-			_dashTimer.OnStart += () => { _canDash = false; };
+			_dashTimer.OnStart += () => {
+				_canDash = false;
+				trailRenderer.material.SetColor(AlbedoColor, Color.black);
+			};
+			_dashTimer.OnComplete += StopDashing;
+		}
+		
+		public void OnSpawn()
+		{
+			SwitchGravity("down");
 		}
 
 		void FixedUpdate()
@@ -93,6 +110,14 @@ namespace Code
 			
 			var eval  = _dashSpeedCurve.Evaluate(normalizedTime);
 			rigidBody.velocity = _currentMoveInput.normalized * (dashSpeed * eval);
+			
+			var currentColor = Color.Lerp(Color.black, _blackZeroAlpha, normalizedTime);
+			trailRenderer.material.SetColor(AlbedoColor, currentColor);
+		}
+
+		private void StopDashing() {
+			_dashTimer.Stop();
+			trailRenderer.material.SetColor(AlbedoColor, _blackZeroAlpha);
 		}
 
 		private void UpdateLeftRightMovement() {
@@ -220,7 +245,7 @@ namespace Code
 
 		public void TeleportPlayer(Vector3 portal1Direction, Vector3 portal2Direction, Portal portal2)
 		{
-			_dashTimer.Stop();
+			StopDashing();
 			_canDash = true;
 			_doubleJumped = false;
 			_justTeleportedToPortal = portal2;

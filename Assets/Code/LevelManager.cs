@@ -8,7 +8,7 @@ namespace Code
     public class LevelManager
     {
         private GameObject _worldGameObject;
-        private List<GameObject> _playerGameObjects;
+        private List<PlayerController> _playerControllers;
         private LevelsConfig _levelsConfig;
         private GameplayConfig _gameplayConfig;
 
@@ -27,7 +27,7 @@ namespace Code
             var level = Object.Instantiate(_levelsConfig.LevelPrefabs[levelIndex], _worldGameObject.transform);
             var camera = Object.Instantiate(_levelsConfig.LevelCameraPrefab, level.transform).GetComponent<CameraFollow>();
             var levelComponent = level.GetComponent<LevelComponent>();
-            levelComponent.StartLevel(_playerGameObjects, camera);
+            levelComponent.StartLevel(_playerControllers, camera);
         }
         
         public void OnGameplayExit() {
@@ -36,7 +36,7 @@ namespace Code
         }
 
         private void SpawnPlayers(GameObject playerPrefab) {
-            _playerGameObjects = new List<GameObject>();
+            _playerControllers = new List<PlayerController>();
             foreach (var playerData in Main.GameplaySession.PlayersData)
             {
                 if (!playerData.IsJoined) continue;
@@ -44,19 +44,19 @@ namespace Code
                 var inputHandler = GetInputHandler(playerData.InputIndex);
                 var playerGameObject = InstantiatePlayerGameObject(playerPrefab, playerData.Color);
                 playerGameObject.transform.SetParent(_worldGameObject.transform);
-                _playerGameObjects.Add(playerGameObject);
+                _playerControllers.Add(playerGameObject);
                 
                 var playerController = playerGameObject.GetComponent<PlayerController>();
                 inputHandler.ConnectPlayerController(playerController);
             }
         }
         
-        private GameObject InstantiatePlayerGameObject(GameObject playerPrefab, Color color)
+        private PlayerController InstantiatePlayerGameObject(GameObject playerPrefab, Color color)
         {
             var playerObject = Object.Instantiate(playerPrefab, Vector3.zero, Quaternion.identity);
-            var spriteRenderer = playerObject.GetComponent<SpriteRenderer>();
-            spriteRenderer.color = color;
-            return playerObject;
+            var playerController = playerObject.GetComponent<PlayerController>();
+            playerController.Init(color);
+            return playerController;
         }
         
         private void DespawnPlayers()
@@ -65,7 +65,7 @@ namespace Code
             {
                 DespawnPlayer(playerInputHandler);                
             }
-            _playerGameObjects.Clear();
+            _playerControllers.Clear();
         }
         
         public void DespawnPlayer(PlayerInputHandler playerInputHandler)

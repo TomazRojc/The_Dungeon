@@ -19,7 +19,7 @@ namespace Code
 		private List<Transform> _players = new List<Transform>();
 		private float _cameraZPos;
 
-		public void Init(List<GameObject> players, LevelBounds bounds) {
+		public void Init(List<PlayerController> players, LevelBounds bounds) {
 			_leftBound = bounds._left.position.x;
 			_rightBound = bounds._right.position.x;
 			_upBound = bounds._up.position.y;
