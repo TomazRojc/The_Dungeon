@@ -17,6 +17,8 @@ namespace Code
 		private TrailRenderer trailRenderer;
 		[SerializeField]
 		private SpriteRenderer spriteRenderer;
+		[SerializeField]
+		private Transform _raycastPosition;
 		
 		[Header("Parameters")]
 		[SerializeField]
@@ -37,6 +39,8 @@ namespace Code
 		private float dashCooldown = 0.4f;
 		[SerializeField]
 		private AnimationCurve _dashSpeedCurve;
+		[SerializeField]
+		private LayerMask _raycastLayer;
 		
 		public bool CanTeleport => _justTeleportedToPortal == null;
 		private bool IsDashing => _dashTimer.IsPlaying();
@@ -55,6 +59,13 @@ namespace Code
 
 		private Vector2 _myVectorUp = new Vector2(0, 1);
 		private Vector2 _myVectorRight = new Vector2(1, 0);
+		
+		private Vector2 _boxCastSize;
+
+		private void Awake()
+		{
+			_boxCastSize = new Vector2(_boxCollider.bounds.size.x * 0.99f, 0.01f);
+		}
 
 		public void Init(Color color)
 		{
@@ -230,10 +241,9 @@ namespace Code
 
 		private bool IsGrounded()
 		{
-			int layerMask = ~(3 << 8); // 0000000011 -> 1100000000
-			RaycastHit2D raycast = Physics2D.BoxCast(_boxCollider.bounds.center, _boxCollider.bounds.size, 0f,
-				-_myVectorUp, 0.1f, layerMask);
-			return (raycast.collider != null);
+			RaycastHit2D raycast = Physics2D.BoxCast(_raycastPosition.position, _boxCastSize, 0f,
+				-_myVectorUp, 0, _raycastLayer);
+			return raycast.collider != null;
 		}
 
 		private Vector2 VecAbs(Vector2 a)

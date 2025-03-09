@@ -26,17 +26,7 @@ namespace Code
 		{
 			if (!coll.CompareTag("Player")) return null;
 
-			GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
-			foreach (GameObject player in players)
-			{
-				var gamePlayer = player.GetComponent<PlayerController>();
-				if (coll.gameObject.GetInstanceID() == player.GetInstanceID())
-				{
-					return gamePlayer;
-				}
-			}
-
-			return null;
+			return coll.gameObject.GetComponentInParent<PlayerController>();
 		}
 
 		private void OnDrawGizmos()
