@@ -1,4 +1,5 @@
-﻿using Code.UI;
+﻿using Code.Gameplay;
+using Code.UI;
 using Code.Utils;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -8,6 +9,7 @@ namespace Code
     public class PlayerInputHandler : MonoBehaviour
     {
         private PlayerController _player;
+        private ItemController _playerItemController;
         
         private Vector2 _moveInput;
         private Vector2 _lookInput;
@@ -79,11 +81,13 @@ namespace Code
         public void ConnectPlayerController(PlayerController player)
         {
             _player = player;
+            _playerItemController = _player.GetComponent<ItemController>();
         }
 
         public void DisconnectPlayerController()
         {
             _player = null;
+            _playerItemController = null;
         }
 
         // WASD or Left Stick
@@ -99,11 +103,11 @@ namespace Code
         }
 
         // Q or North Button
-        public void OnDropItem(InputAction.CallbackContext context)
+        public void OnPickUpOrDropItem(InputAction.CallbackContext context)
         {
             if (UIController.UIActive || !context.performed || _player == null) return;
             
-            _player.HandlePickUpItemInput();
+            _playerItemController.TryPickUpItem();
         }
 
         // E or West Button
@@ -111,7 +115,7 @@ namespace Code
         {
             if (UIController.UIActive || !context.performed || _player == null) return;
             
-            _player.HandleUseItemInput();
+            _playerItemController.TryUseItem();
         }
 
         // Ctrl or East Button

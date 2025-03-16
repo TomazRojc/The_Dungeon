@@ -95,7 +95,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 9174368965177241536}
         m_TargetAssemblyTypeName: PlayerInputHandler, Assembly-CSharp
-        m_MethodName: OnDropItem
+        m_MethodName: OnPickUpOrDropItem
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

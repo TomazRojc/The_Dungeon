@@ -171,16 +171,6 @@ namespace Code
 			}
 		}
 
-		public void HandlePickUpItemInput()
-		{
-			_itemController.TryPickUpItem();
-		}
-		
-		public void HandleUseItemInput()
-		{
-			_itemController.TryUseItem();
-		}
-		
 		public void HandleDashInput()
 		{
 			if (_canDash && !IsDashing && _currentMoveInput != Vector2.zero && !stunned) {
