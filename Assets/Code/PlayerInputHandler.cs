@@ -107,7 +107,7 @@ namespace Code
         {
             if (UIController.UIActive || !context.performed || _player == null) return;
             
-            _playerItemController.TryPickUpItem();
+            _playerItemController.TryPickUpOrDropItem();
         }
 
         // E or West Button

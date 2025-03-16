@@ -26,12 +26,11 @@ namespace Code.Gameplay
             _overlappingColliders = new List<Collider2D>(1);
         }
 
-        public void TryPickUpItem()
+        public void TryPickUpOrDropItem()
         {
             if (_currentItem != null)
             {
-                _currentItem.transform.parent = Main.LevelManager.WorldGameObject.transform;
-                _currentItem = null;
+                DropItem();
                 return;
             }
             
@@ -40,14 +39,35 @@ namespace Code.Gameplay
 
             if (_overlappingColliders.Count > 0)
             {
-                _currentItem = _overlappingColliders[0].GetComponent<ItemBaseComponent>();
-                _currentItem.transform.parent = _itemSnapPoint.transform;
+                PickUpItem();
             }
         }
-        
+
+        private void PickUpItem()
+        {
+            _currentItem = _overlappingColliders[0].GetComponent<ItemBaseComponent>();
+            _currentItem.transform.parent = _itemSnapPoint.transform;
+                
+            var localOffset = _currentItem.transform.InverseTransformPoint(_currentItem.AttachPoint.transform.position);
+            var newPosition = _itemSnapPoint.transform.position - localOffset;
+            _currentItem.transform.position = newPosition;
+            
+            _currentItem?.onPickUpItem?.Invoke();
+        }
+
+        private void DropItem()
+        {
+            _currentItem.transform.parent = Main.LevelManager.WorldGameObject.transform;
+            var newPosition = _currentItem.transform.position;
+            _currentItem.transform.position = newPosition;
+            
+            _currentItem?.onDropItem?.Invoke();
+            _currentItem = null;
+        }
+
         public void TryUseItem()
         {
-            _currentItem?.OnUseItem();
+            _currentItem?.onUseItem?.Invoke();
         }
     }
 }
