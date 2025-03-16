@@ -141,7 +141,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4353896297938144186}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -4}
+  m_LocalPosition: {x: 0, y: 0, z: -3.85}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 7429551601101165771}
@@ -5040,7 +5040,7 @@ GameObject:
   - component: {fileID: 6076126097420986593}
   - component: {fileID: 261963201361016798}
   m_Layer: 0
-  m_Name: MagicTorch 1
+  m_Name: MagicTorch
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
