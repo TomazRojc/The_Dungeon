@@ -102,12 +102,16 @@ namespace Code
         public void OnDropItem(InputAction.CallbackContext context)
         {
             if (UIController.UIActive || !context.performed || _player == null) return;
+            
+            _player.HandlePickUpItemInput();
         }
 
         // E or West Button
         public void OnUseItem(InputAction.CallbackContext context)
         {
             if (UIController.UIActive || !context.performed || _player == null) return;
+            
+            _player.HandleUseItemInput();
         }
 
         // Ctrl or East Button

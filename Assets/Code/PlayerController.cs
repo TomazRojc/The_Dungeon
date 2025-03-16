@@ -1,3 +1,4 @@
+using Code.Gameplay;
 using Code.Utils;
 using UnityEngine;
 
@@ -11,6 +12,8 @@ namespace Code
 		private readonly Color _blackZeroAlpha = new Color(0f, 0f, 0f, 0f);
 
 		[Header("References")]
+		[SerializeField]
+		private ItemController _itemController;
 		[SerializeField]
 		private BoxCollider2D _boxCollider;
 		[SerializeField]
@@ -44,6 +47,7 @@ namespace Code
 		[SerializeField]
 		private LayerMask _raycastLayer;
 		
+		public BoxCollider2D BoxCollider => _boxCollider;
 		public bool CanTeleport => _justTeleportedToPortal == null;
 		private bool IsDashing => _dashTimer.IsPlaying();
 		
@@ -165,6 +169,16 @@ namespace Code
 			{
 				DoubleJump();
 			}
+		}
+
+		public void HandlePickUpItemInput()
+		{
+			_itemController.TryPickUpItem();
+		}
+		
+		public void HandleUseItemInput()
+		{
+			_itemController.TryUseItem();
 		}
 		
 		public void HandleDashInput()
