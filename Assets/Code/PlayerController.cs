@@ -6,11 +6,6 @@ namespace Code
 {
 	public class PlayerController : MonoBehaviour
 	{
-		private static readonly int EmissionColor = Shader.PropertyToID("_EmissionColor");
-		private static readonly int AlbedoColor = Shader.PropertyToID("_Color");
-		
-		private readonly Color _blackZeroAlpha = new Color(0f, 0f, 0f, 0f);
-
 		[Header("References")]
 		[SerializeField]
 		private ItemController _itemController;
@@ -19,7 +14,7 @@ namespace Code
 		[SerializeField]
 		private Rigidbody2D rigidBody;
 		[SerializeField]
-		private TrailRenderer trailRenderer;
+		private PlayerTrailController _playerTrailController;
 		[SerializeField]
 		private SpriteRenderer spriteRenderer;
 		[SerializeField]
@@ -77,13 +72,11 @@ namespace Code
 		{
 			spriteRenderer.color = color;
 			_defaultParent = transform.parent;
-			trailRenderer.material.SetColor(EmissionColor, color);
-			trailRenderer.material.SetColor(AlbedoColor, _blackZeroAlpha);
+			_playerTrailController.Init(color);
 			
 			_dashTimer.OnUpdate += UpdateDashing;
 			_dashTimer.OnStart += () => {
 				_canDash = false;
-				trailRenderer.material.SetColor(AlbedoColor, Color.black);
 			};
 			_dashTimer.OnComplete += StopDashing;
 		}
@@ -96,6 +89,7 @@ namespace Code
 		void FixedUpdate()
 		{
 			_dashTimer.Update(Time.fixedDeltaTime);
+			_playerTrailController.OnUpdate(Time.fixedDeltaTime);
 			_currentDashCooldown -= Time.fixedDeltaTime;
 			
 			_grounded = IsGrounded();
@@ -128,14 +122,10 @@ namespace Code
 			
 			var eval  = _dashSpeedCurve.Evaluate(normalizedTime);
 			rigidBody.velocity = _currentMoveInput.normalized * (dashSpeed * eval);
-			
-			var currentColor = Color.Lerp(Color.black, _blackZeroAlpha, normalizedTime);
-			trailRenderer.material.SetColor(AlbedoColor, currentColor);
 		}
 
 		private void StopDashing() {
 			_dashTimer.Stop();
-			trailRenderer.material.SetColor(AlbedoColor, _blackZeroAlpha);
 		}
 
 		private void UpdateLeftRightMovement() {
@@ -263,6 +253,7 @@ namespace Code
 		public void TeleportPlayer(Vector3 portal1Direction, Vector3 portal2Direction, Portal portal2)
 		{
 			StopDashing();
+			_playerTrailController.TeleportPlayer();
 			_canDash = true;
 			_doubleJumped = false;
 			_justTeleportedToPortal = portal2;

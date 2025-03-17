@@ -103,7 +103,7 @@ MonoBehaviour:
   _itemController: {fileID: 4387684146523849759}
   _boxCollider: {fileID: 6847343069532702587}
   rigidBody: {fileID: 1217428939650893469}
-  trailRenderer: {fileID: 6088848374874447331}
+  _playerTrailController: {fileID: 5826073632003874620}
   spriteRenderer: {fileID: 8813289160887848793}
   _raycastPosition: {fileID: 2370205109657042193}
   _myGravityScale: 120
@@ -347,6 +347,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2905870291986651053, guid: 7b4876c0fdcb8354caff70844d68d7be, type: 3}
+      propertyPath: rigidbody
+      value: 
+      objectReference: {fileID: 1217428939650893469}
     - target: {fileID: 4543060572776736132, guid: 7b4876c0fdcb8354caff70844d68d7be, type: 3}
       propertyPath: m_Name
       value: PlayerTrail
@@ -358,8 +362,14 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 282852363908714020, guid: 7b4876c0fdcb8354caff70844d68d7be, type: 3}
   m_PrefabInstance: {fileID: 8685727050480601233}
   m_PrefabAsset: {fileID: 0}
---- !u!96 &6088848374874447331 stripped
-TrailRenderer:
-  m_CorrespondingSourceObject: {fileID: 3239787899620611442, guid: 7b4876c0fdcb8354caff70844d68d7be, type: 3}
+--- !u!114 &5826073632003874620 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2905870291986651053, guid: 7b4876c0fdcb8354caff70844d68d7be, type: 3}
   m_PrefabInstance: {fileID: 8685727050480601233}
   m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b71cb337efb84ab7b51d22c7f89ced7f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
