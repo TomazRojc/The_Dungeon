@@ -114,7 +114,7 @@ namespace Code.UI.UiStates {
             startGameButton.SetInteractable(allReady && !lobbyEmpty);
         }
 
-        private void OnPlayerLeft()
+        private void OnPlayerLeft(int inputIndex)
         {
         	UpdateDisplay();
         }

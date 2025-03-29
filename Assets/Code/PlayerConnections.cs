@@ -18,7 +18,7 @@ namespace Code
         private GameplaySession _gameplaySession;
         private LevelManager _levelManager;
         
-        public static event Action OnPlayerLeft;
+        public static event Action<int> OnPlayerLeft;
 
         private void Awake()
         {
@@ -60,7 +60,7 @@ namespace Code
                 _gameplaySession.RemovePlayerInput(playerInputHandler);
                 _levelManager.DespawnPlayer(playerInputHandler);
                 Destroy(playerInputHandler.gameObject);
-                OnPlayerLeft?.Invoke();
+                OnPlayerLeft?.Invoke(playerInputHandler.InputIndex);
             }
         }
 

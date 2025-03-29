@@ -53,6 +53,8 @@ namespace Code.UI
 			Main.UiEventBus.OnCancel += HandleCancel;
 			Main.UiEventBus.OnEscape += HandleEscape;
 
+			PlayerConnections.OnPlayerLeft += HandlePlayerLeft;
+			
 			GoToMainMenu();
 		}
 		
@@ -179,6 +181,22 @@ namespace Code.UI
 			_currentState = newState;
 		}
 
+		private void HandlePlayerLeft(int inputIndex)
+		{
+			if (!_UIActive) return;
+			
+			_inputIndexToSelectedButton.TryGetValue(inputIndex, out var currentButton);
+			
+			if (currentButton == null) return;
+
+			if (_inputIndexInControl == inputIndex)
+			{
+				_inputIndexInControl = -1;
+			}
+			
+			_inputIndexToSelectedButton.Remove(inputIndex);
+			currentButton.OnDeselect();
+		}
 
 		private void TryJoinPlayer(int inputIndex)
 		{
