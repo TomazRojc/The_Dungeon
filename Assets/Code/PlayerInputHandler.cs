@@ -12,7 +12,6 @@ namespace Code
         private ItemController _playerItemController;
         
         private Vector2 _moveInput;
-        private Vector2 _lookInput;
         private Direction _navigateUIDirection;
         private int _inputIndex;
 
@@ -75,7 +74,6 @@ namespace Code
             
             // invoke player movement/look
             _player.HandleMoveInput(_moveInput);
-            _player.HandleLookInput(_lookInput);
         }
 
         public void ConnectPlayerController(PlayerController player)
@@ -94,12 +92,6 @@ namespace Code
         public void OnMove(InputAction.CallbackContext context)
         {
             _moveInput = context.ReadValue<Vector2>();
-        }
-
-        // Arrows or Right Stick
-        public void OnLook(InputAction.CallbackContext context)
-        {
-            _lookInput = context.ReadValue<Vector2>();
         }
 
         // Q or North Button

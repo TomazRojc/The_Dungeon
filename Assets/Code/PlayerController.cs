@@ -180,26 +180,6 @@ namespace Code
 				_currentMoveInput = Vector2.zero;
 			}
 		}
-		
-		public void HandleLookInput(Vector2 direction)
-		{
-			if (direction.x < -0.9)
-			{
-				SwitchGravity("left");
-			}
-			else if (direction.x > 0.9)
-			{
-				SwitchGravity("right");
-			}
-			else if (direction.y < -0.9)
-			{
-				SwitchGravity("down");
-			}
-			else if (direction.y > 0.9)
-			{
-				SwitchGravity("up");
-			}
-		}
 
 		private void SwitchGravity(string direction)
 		{
