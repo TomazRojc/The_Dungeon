@@ -70,6 +70,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3498271347788460218}
   - component: {fileID: -407693548106851739}
+  - component: {fileID: 6351214655049192279}
   - component: {fileID: 1232347988883779842}
   - component: {fileID: 2815236517596135562}
   m_Layer: 0
@@ -110,6 +111,22 @@ MonoBehaviour:
   _firstound: {fileID: 6993436796843936705}
   _secondBound: {fileID: 3285819689895828648}
   _movementDuration: 3
+--- !u!114 &6351214655049192279
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7231693711040769315}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e72c6c820edb37440aa11ab7415253db, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _spriteRenderers:
+  - {fileID: 1232347988883779842}
+  _trailRenderers: []
+  _particleSystemRenderers: []
 --- !u!212 &1232347988883779842
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -149,7 +166,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 2
   m_Sprite: {fileID: 21300000, guid: ecda04fee4b643c42ac5fd578f60e65c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0

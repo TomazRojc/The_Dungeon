@@ -135,7 +135,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 50
   m_Sprite: {fileID: 21300022, guid: 7810966f0f690954c87305933cabf2b0, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -5034,7 +5034,7 @@ ParticleSystemRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 52
   m_RenderMode: 0
   m_SortMode: 0
   m_MinParticleSize: 0
@@ -5071,6 +5071,7 @@ GameObject:
   - component: {fileID: 6076126097420986593}
   - component: {fileID: 261963201361016798}
   - component: {fileID: 6831831765435329741}
+  - component: {fileID: 1147280109712446479}
   m_Layer: 10
   m_Name: MagicTorch
   m_TagString: Untagged
@@ -5132,6 +5133,24 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 3, y: 3}
   m_EdgeRadius: 0
+--- !u!114 &1147280109712446479
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6076126097420986595}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e72c6c820edb37440aa11ab7415253db, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _spriteRenderers:
+  - {fileID: 1235869660276204171}
+  _trailRenderers: []
+  _particleSystemRenderers:
+  - {fileID: 6239180245184025914}
+  - {fileID: 6239478153446699252}
 --- !u!1 &6077150252710314374
 GameObject:
   m_ObjectHideFlags: 0
@@ -9918,7 +9937,7 @@ ParticleSystemRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 51
   m_RenderMode: 0
   m_SortMode: 0
   m_MinParticleSize: 0
