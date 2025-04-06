@@ -7,6 +7,7 @@ namespace Code.Gameplay
     {
         [SerializeField]
         GameObject _itemSnapPoint;
+        
         [SerializeField]
         private LayerMask _itemsLayer;
         
@@ -52,7 +53,7 @@ namespace Code.Gameplay
             var newPosition = _itemSnapPoint.transform.position - localOffset;
             _currentItem.transform.position = newPosition;
             
-            _currentItem?.onPickUpItem?.Invoke();
+            _currentItem?.PickUpItem();
         }
 
         private void DropItem()
@@ -61,13 +62,13 @@ namespace Code.Gameplay
             var newPosition = _currentItem.transform.position;
             _currentItem.transform.position = newPosition;
             
-            _currentItem?.onDropItem?.Invoke();
+            _currentItem?.DropItem();
             _currentItem = null;
         }
 
         public void TryUseItem()
         {
-            _currentItem?.onUseItem?.Invoke();
+            _currentItem?.UseItem();
         }
     }
 }

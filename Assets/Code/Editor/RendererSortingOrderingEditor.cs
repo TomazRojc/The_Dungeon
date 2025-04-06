@@ -4,11 +4,11 @@ using UnityEngine;
 
 namespace Code.Editor
 {
-    [CustomEditor(typeof(RendererSortingOrderingComponent))]
+    [CustomEditor(typeof(RenderSortOrderingComponent))]
     public class RendererSortingOrderingEditor : UnityEditor.Editor
     {
 
-        private RendererSortingOrderingComponent _targetComponent;
+        private RenderSortOrderingComponent _targetComponent;
         private int _allChangeValue;
     
         public override void OnInspectorGUI()
@@ -18,7 +18,7 @@ namespace Code.Editor
 
             if (_targetComponent == null)
             {
-                _targetComponent = (RendererSortingOrderingComponent)target;
+                _targetComponent = (RenderSortOrderingComponent)target;
             }
         
             GUILayout.Space(10f);

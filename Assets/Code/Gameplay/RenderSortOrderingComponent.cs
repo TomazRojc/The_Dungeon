@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Code.Gameplay
 {
-    public class RendererSortingOrderingComponent : MonoBehaviour
+    public class RenderSortOrderingComponent : MonoBehaviour
     {
 
         [SerializeField]

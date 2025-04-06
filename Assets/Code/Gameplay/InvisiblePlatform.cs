@@ -5,13 +5,13 @@ namespace Code.Gameplay
 {
     public class InvisiblePlatform : MonoBehaviour
     {
-        private MagicTorchComponent[] _magicTorches;
+        private MagicTorchItem[] _magicTorches;
         private Material _material;
         private int _numTorches;
         
         void Start()
         {
-            _magicTorches = Main.LevelManager.WorldGameObject.GetComponentsInChildren<MagicTorchComponent>();
+            _magicTorches = Main.LevelManager.WorldGameObject.GetComponentsInChildren<MagicTorchItem>();
             _numTorches = _magicTorches.Length;
             _material = GetComponentsInChildren<Renderer>()[0].material;
             _material.SetFloat("_TorchCount", _numTorches);
