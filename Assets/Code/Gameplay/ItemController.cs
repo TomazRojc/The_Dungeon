@@ -29,24 +29,54 @@ namespace Code.Gameplay
 
         public void TryPickUpOrDropItem()
         {
+            var overlappingCollider = GetOverlappingCollider();
+            
+            if (overlappingCollider != null)
+            {
+                var interactable = overlappingCollider.GetComponent<InteractableEnvironmentBaseComponent>();
+                if (interactable != null)
+                {
+                    interactable.Interact();
+                    return;
+                }
+            }
+
             if (_currentItem != null)
             {
                 DropItem();
-                return;
+            }
+
+            if (overlappingCollider != null)
+            {
+                var item = overlappingCollider.GetComponent<ItemBaseComponent>();
+                if (item != null)
+                {
+                    PickUpItem(item);
+                }
             }
             
-            _overlappingColliders.Clear();
-            Physics2D.OverlapCollider(_playerCollider, _colliderFilter, _overlappingColliders);
-
-            if (_overlappingColliders.Count > 0)
-            {
-                PickUpItem();
-            }
         }
 
-        private void PickUpItem()
+        private Collider2D GetOverlappingCollider()
         {
-            _currentItem = _overlappingColliders[0].GetComponent<ItemBaseComponent>();
+            _overlappingColliders.Clear();
+            Physics2D.OverlapCollider(_playerCollider, _colliderFilter, _overlappingColliders);
+            var currentItemCollider = _currentItem != null? _currentItem.GetComponent<Collider2D>() : null;
+            
+            foreach (var candidateCollider in _overlappingColliders)
+            {
+                if (candidateCollider != currentItemCollider)
+                {
+                    return candidateCollider;
+                }
+            }
+            
+            return null;
+        }
+
+        private void PickUpItem(ItemBaseComponent item)
+        {
+            _currentItem = item;
             _currentItem.transform.parent = _itemSnapPoint.transform;
                 
             var localOffset = _currentItem.transform.InverseTransformPoint(_currentItem.AttachPoint.transform.position);
