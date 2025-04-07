@@ -77,22 +77,12 @@ namespace Code.Gameplay
         private void PickUpItem(ItemBaseComponent item)
         {
             _currentItem = item;
-            _currentItem.transform.parent = _itemSnapPoint.transform;
-                
-            var localOffset = _currentItem.transform.InverseTransformPoint(_currentItem.AttachPoint.transform.position);
-            var newPosition = _itemSnapPoint.transform.position - localOffset;
-            _currentItem.transform.position = newPosition;
-            
-            _currentItem?.PickUpItem();
+            _currentItem.PickUpItem(_itemSnapPoint.transform);
         }
 
         private void DropItem()
         {
-            _currentItem.transform.parent = Main.LevelManager.WorldGameObject.transform;
-            var newPosition = _currentItem.transform.position;
-            _currentItem.transform.position = newPosition;
-            
-            _currentItem?.DropItem();
+            _currentItem.DropItem();
             _currentItem = null;
         }
 
